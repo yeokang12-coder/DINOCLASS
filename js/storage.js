@@ -302,18 +302,35 @@ class StorageManager {
     return true;
   }
 
-  // 8. 云端漫游合并远程班级列表
+  // 8. 云端漫游合并远程班级列表（实时同步新增班级与班级改名）
   mergeRemoteClassesList(remoteList) {
     if (!Array.isArray(remoteList) || remoteList.length === 0) return;
     let changed = false;
     remoteList.forEach(rc => {
-      if (rc && rc.id && !this.classesList.some(lc => lc.id === rc.id)) {
-        this.classesList.push(rc);
+      if (!rc || !rc.id) return;
+      const existing = this.classesList.find(lc => lc.id === rc.id);
+      if (existing) {
+        // 如果云端修改了班级名称，立刻同步更新本地班级名称！
+        if (rc.name && existing.name !== rc.name) {
+          console.log(`[Storage] 🔄 Class name synced from cloud: [${existing.id}] ${existing.name} -> ${rc.name}`);
+          existing.name = rc.name;
+          changed = true;
+          // 若恰好是当前正在显示的班级，同步更新内存中的名称
+          if (existing.id === this.currentClassId && this.data) {
+            this.data.className = rc.name;
+          }
+        }
+      } else {
+        // 发现云端新增的班级，加入本地列表
+        this.classesList.push({ id: rc.id, name: rc.name || '未命名班级' });
         changed = true;
       }
     });
     if (changed) {
       this.saveClassesList();
+      if (window.dinoApp && typeof window.dinoApp.renderClassSelector === 'function') {
+        window.dinoApp.renderClassSelector();
+      }
     }
   }
 
@@ -323,7 +340,18 @@ class StorageManager {
 
     // 严格绑定班级身份
     remoteData.classId = classId;
-    if (!remoteData.className) {
+
+    // 如果远程数据带有最新班级名称，同步更新本地班级元数据目录
+    if (remoteData.className) {
+      const foundInList = this.classesList.find(c => c.id === classId);
+      if (foundInList && foundInList.name !== remoteData.className) {
+        foundInList.name = remoteData.className;
+        this.saveClassesList();
+        if (window.dinoApp && typeof window.dinoApp.renderClassSelector === 'function') {
+          window.dinoApp.renderClassSelector();
+        }
+      }
+    } else {
       remoteData.className = this.getClassNameById(classId);
     }
 
