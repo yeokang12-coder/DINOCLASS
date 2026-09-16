@@ -1,0 +1,17 @@
+{
+  "name": "DinoClass — 班级恐龙激励养成系统",
+  "short_name": "DinoClass",
+  "description": "专为班主任打造的班级激励管理应用。每个学生拥有一头可进化的专属恐龙，通过日常优秀表现加分，从恐龙蛋破壳升级为霸王圣龙！",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "icon.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,3997 @@
+/* ==========================================================================
+   DinoClass (恐龙班级小帮手) - Main Stylesheet
+   Design System: Gamified Classroom, Glassmorphism, Dynamic Dino Themes
+   ========================================================================== */
+
+:root {
+  /* Color Palette - Vibrant Gamified Theme */
+  --bg-dark: #0f172a;
+  --bg-card: rgba(30, 41, 59, 0.75);
+  --bg-card-hover: rgba(51, 65, 85, 0.85);
+  --border-glass: rgba(255, 255, 255, 0.12);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  
+  /* Primary & Accent Colors */
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --accent-gold: #f59e0b;
+  --accent-green: #10b981;
+  --accent-red: #ef4444;
+  --accent-purple: #8b5cf6;
+  --accent-cyan: #06b6d4;
+
+  /* Evolution Stage Colors */
+  --stage-egg: #d97706;       /* 蛋: 暖琥珀 */
+  --stage-baby: #10b981;      /* 幼龙: 翡翠绿 */
+  --stage-teen: #3b82f6;      /* 青年龙: 璀璨蓝 */
+  --stage-apex: #ef4444;      /* 霸王龙: 烈焰红 */
+  --stage-legend: #a855f7;    /* 圣龙: 幻彩紫 */
+
+  /* UI Spacing & Radius */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
+  --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+}
+
+/* Global Reset & Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  user-select: none;
+}
+
+body {
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(at 10% 20%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+    radial-gradient(at 90% 80%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  padding: 10px 20px;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-glass);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  gap: 16px;
+  overflow-x: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.app-header::-webkit-scrollbar {
+  display: none;
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.brand-logo-img {
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.6), 0 4px 12px rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(245, 158, 11, 0.55);
+  object-fit: cover;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+.brand-logo-img:hover {
+  transform: scale(1.08) rotate(-3deg);
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.85), 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.brand-title {
+  font-size: 1.4rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #ffffff 0%, #fbbf24 50%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.6px;
+  line-height: 1.15;
+  white-space: nowrap;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.brand-tag {
+  font-size: 0.7rem;
+  background: rgba(245, 158, 11, 0.22);
+  color: #fbbf24;
+  padding: 2px 9px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  font-weight: 700;
+  display: inline-block;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.nav-tabs {
+  display: flex;
+  align-items: center;
+  background: rgba(30, 41, 59, 0.7);
+  padding: 3px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 3px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.nav-tab {
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.86rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.nav-tab:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-tab.active {
+  background: linear-gradient(135deg, var(--primary), #4338ca);
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.45);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.header-divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 0 4px;
+}
+
+/* 独立强化的恐龙大草原乐园按键 */
+.btn-park-launch {
+  background: linear-gradient(135deg, #10b981 0%, #059669 45%, #2563eb 100%);
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: 0.88rem;
+  padding: 7px 16px;
+  border-radius: 50px;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.45);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-park-launch:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.65), 0 0 14px rgba(37, 99, 235, 0.5);
+  border-color: #ffffff;
+}
+
+.btn-park-launch.active {
+  background: linear-gradient(135deg, #059669 0%, #3b82f6 100%);
+  box-shadow: 0 0 22px rgba(59, 130, 246, 0.8), 0 0 14px rgba(251, 191, 36, 0.6);
+  border-color: #fbbf24;
+}
+
+.park-icon-anim {
+  font-size: 1.15rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  animation: parkIconBounce 2.5s ease-in-out infinite;
+}
+
+@keyframes parkIconBounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-3px) rotate(-6deg); }
+}
+
+.btn-sm {
+  padding: 6px 10px;
+  font-size: 0.82rem;
+}
+
+/* Button System */
+.btn {
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), #4338ca);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.5);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5);
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+}
+
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.5);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #ffffff;
+}
+
+.btn-secondary {
+  background: rgba(30, 41, 59, 0.8);
+  color: var(--text-main);
+  border: 1px solid var(--border-glass);
+}
+
+.btn-secondary:hover {
+  background: rgba(51, 65, 85, 0.9);
+}
+
+.btn-icon {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: var(--radius-md);
+  font-size: 1.1rem;
+}
+
+/* Main Container Layout */
+.app-content {
+  flex: 1;
+  padding: 24px 28px;
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.tab-pane {
+  display: none;
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+/* ── Park override: always kept in layout so CSS animations never pause ── */
+#view-park {
+  display: block !important;
+  visibility: hidden;
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -9999;
+  opacity: 0;
+}
+
+#view-park.active {
+  visibility: visible;
+  position: relative;
+  left: 0;
+  top: 0;
+  width: auto;
+  height: auto;
+  pointer-events: auto;
+  z-index: auto;
+  opacity: 1;
+  padding: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   🌟 ELECTRONIC SPOTLIGHT SHELF (电子光荣榜置顶展台)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 🌟 Electronic Spotlight Shelf (电子光荣榜置顶展台) */
+.spotlight-shelf-container {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.85));
+  border: 1.5px solid rgba(245, 158, 11, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.spotlight-shelf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+}
+
+.spotlight-shelf-cards {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+}
+
+.spotlight-shelf-card {
+  flex: 0 0 140px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1.5px solid rgba(251, 191, 36, 0.5);
+  border-radius: var(--radius-md);
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+}
+
+.spotlight-shelf-card:hover {
+  transform: translateY(-4px) scale(1.05);
+  border-color: #fbbf24;
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.45);
+}
+
+.spotlight-shelf-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.15);
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  white-space: nowrap;
+}
+
+.spotlight-shelf-dino {
+  width: 70px;
+  height: 70px;
+  position: relative;
+  margin-bottom: 4px;
+}
+
+.spotlight-shelf-name {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.spotlight-shelf-score {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Console Toolbar & Stats Summary Bar */
+.console-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  background: var(--bg-card);
+  padding: 16px 20px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(12px);
+}
+
+.stats-group {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.search-input, .select-input {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-glass);
+  color: var(--text-main);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.search-input:focus, .select-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+}
+
+/* Dinosaur Student Cards Grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+  gap: 16px;
+  row-gap: 32px;
+}
+
+/* Student Card Design */
+.dino-card, .projection-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-glass);
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: visible;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  backdrop-filter: blur(8px);
+}
+
+.dino-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: var(--shadow-card);
+}
+
+/* 闪耀金冠边框装扮 (Super Dazzling Crowned Card Shimmer FX - 支持管理台、班级大屏 & 积分商城试穿) */
+.dino-card.crowned,
+.projection-card.crowned,
+.dino-mannequin-box.crowned,
+.fitting-mannequin-wrap.crowned {
+  border: 2.5px solid #f1c40f !important;
+  box-shadow: 
+    0 0 25px rgba(241, 196, 15, 0.75),
+    0 0 50px rgba(243, 156, 18, 0.45),
+    inset 0 0 20px rgba(241, 196, 15, 0.35) !important;
+  animation: crownBorderGlow 2.5s ease-in-out infinite;
+  background: linear-gradient(135deg, rgba(45, 32, 10, 0.95), rgba(20, 25, 45, 0.95)) !important;
+}
+
+.dino-card.crowned::before,
+.projection-card.crowned::before,
+.dino-mannequin-box.crowned::before,
+.fitting-mannequin-wrap.crowned::before {
+  content: '✨ 金冠尊享 ✨';
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(90deg, #f1c40f, #e67e22, #f1c40f);
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 10px rgba(241, 196, 15, 0.7);
+  letter-spacing: 0.5px;
+  z-index: 16;
+}
+
+.crowned-floating-crown {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2.4rem;
+  filter: drop-shadow(0 0 12px rgba(241, 196, 15, 0.9));
+  animation: crownFloatDazzle 2.2s ease-in-out infinite;
+  z-index: 10;
+}
+
+/* 🏆 烫金琉璃荣耀称号勋章 (Dazzling Royal Gold Title Badge Tag) */
+.title-badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 0.76rem;
+  font-weight: 900;
+  padding: 3px 12px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.95), rgba(217, 119, 6, 0.95), rgba(168, 85, 247, 0.95));
+  color: #ffffff;
+  border: 1.5px solid #fbbf24;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.5), 0 0 12px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  animation: titleBadgeShimmer 3s ease-in-out infinite alternate;
+  position: relative;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.title-badge-tag::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  transform: skewX(-20deg);
+  animation: titleBadgeSweep 3.5s infinite;
+  pointer-events: none;
+}
+
+@keyframes titleBadgeShimmer {
+  0%   { filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.6)); transform: scale(1); }
+  100% { filter: drop-shadow(0 0 14px rgba(251, 191, 36, 0.9)); transform: scale(1.03); }
+}
+
+@keyframes titleBadgeSweep {
+  0%   { left: -100%; }
+  35%  { left: 160%; }
+  100% { left: 160%; }
+}
+
+/* Dynamic Dino Part Animation System (摇尾巴、抓痒、点点头、眨眼睛) */
+.dino-avatar-wrap {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 130px;
+  height: 130px;
+  overflow: visible !important;
+  transform: translateZ(0);
+  will-change: transform;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dino-avatar-wrap:hover {
+  transform: scale(1.08) translateZ(0);
+}
+
+/* 萌趣宠物心理状态气泡 (Pet Mood Bubble) */
+.dino-mood-bubble {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.95);
+  color: #fbbf24;
+  border: 1.5px solid rgba(251, 191, 36, 0.6);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.5), 0 0 12px rgba(251, 191, 36, 0.3);
+  padding: 3px 10px;
+  border-radius: 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 15;
+  animation: bubbleFloat 4.5s ease-in-out infinite;
+}
+
+.dino-mood-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px 6px 0;
+  border-style: solid;
+  border-color: rgba(251, 191, 36, 0.7) transparent transparent;
+}
+
+/* 抚摸宠物跳出的爱心粒子 (Floating Pet Heart) */
+.pet-heart-particle {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  font-size: 1.6rem;
+  pointer-events: none;
+  z-index: 25;
+  animation: heartPopUp 1.2s ease-out forwards;
+}
+
+.dino-part-tail {
+  transform-origin: 35px 75px;
+  animation: tailWiggle 3s ease-in-out infinite;
+}
+
+.dino-part-arm {
+  transform-origin: 36px 72px;
+  animation: armScratch 4s ease-in-out infinite;
+}
+
+.dino-part-head {
+  transform-origin: 60px 50px;
+  animation: headNod 4.5s ease-in-out infinite;
+}
+
+.dino-part-eye {
+  transform-origin: 45px 35px;
+  animation: eyeBlink 4s infinite;
+}
+
+/* Click Reaction: Happy Pet Touch & Jump */
+.dino-avatar-wrap:active svg,
+.dino-avatar-wrap.scratching svg,
+.dino-avatar-wrap.pet-bounce svg {
+  animation: dinoScratchReact 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* Active Student Privileges Tag & Countdown */
+.privileges-list-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  margin-top: 6px;
+  width: 100%;
+}
+
+.privilege-tag-active {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Tools Grid and Card Styles */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.tool-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-glass);
+  padding: 16px;
+  text-align: center;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.tool-card:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.tool-actions button {
+  margin: 4px;
+}
+
+.privilege-timer-text {
+  font-size: 0.65rem;
+  color: #34d399;
+  font-weight: 800;
+}
+
+/* Fullscreen Immersive Wheel Overlay Modal */
+.modal-fullscreen-wheel {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(20px);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-fullscreen-wheel.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.fullscreen-wheel-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.fullscreen-wheel-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fbbf24, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+  font-family: 'ZCOOL KuaiLe', sans-serif;
+}
+
+.fullscreen-wheel-canvas-wrap {
+  width: 420px;
+  height: 420px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.fullscreen-wheel-canvas-wrap .wheel-pointer {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-top: 30px solid #fbbf24;
+  filter: drop-shadow(0 2px 8px rgba(245, 158, 11, 0.8));
+  z-index: 10;
+}
+
+.fullscreen-wheel-winner-reveal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(15, 23, 42, 0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2100;
+  animation: eggHatchPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.winner-dino-avatar {
+  width: 220px;
+  height: 220px;
+  margin-bottom: 20px;
+}
+
+.winner-student-name {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--accent-gold);
+  margin-bottom: 8px;
+  text-shadow: 0 0 20px rgba(245, 158, 11, 0.8);
+}
+
+@keyframes armScratch {
+  0%, 80%, 100% { transform: rotate(0deg) translateY(0); }
+  85% { transform: rotate(-25deg) translateY(-4px); }
+  90% { transform: rotate(-5deg) translateY(-2px); }
+  95% { transform: rotate(-25deg) translateY(-4px); }
+}
+
+@keyframes headNod {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  30% { transform: rotate(4deg) translateY(2px); }
+  60% { transform: rotate(-3deg) translateY(-1px); }
+}
+
+@keyframes eyeBlink {
+  0%, 94%, 98%, 100% { transform: scaleY(1); }
+  96% { transform: scaleY(0.1); }
+}
+
+@keyframes dinoScratchReact {
+  0% { transform: scale(1) rotate(0deg); }
+  20% { transform: scale(1.18) rotate(-10deg) translateY(-6px); }
+  40% { transform: scale(1.18) rotate(10deg) translateY(-6px); }
+  60% { transform: scale(1.15) rotate(-6deg) translateY(-4px); }
+  80% { transform: scale(1.1) rotate(4deg) translateY(-2px); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.dino-card.selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary), var(--shadow-card);
+}
+
+.card-select-checkbox {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  width: 20px;
+  height: 20px;
+  accent-color: var(--primary);
+  cursor: pointer;
+  z-index: 5;
+}
+
+.stage-badge {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stage-badge.egg { background: rgba(217, 119, 6, 0.25); color: #fbbf24; border: 1px solid rgba(217, 119, 6, 0.5); }
+.stage-badge.baby { background: rgba(16, 185, 129, 0.25); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.5); }
+.stage-badge.teen { background: rgba(59, 130, 246, 0.25); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.5); }
+.stage-badge.apex { background: rgba(239, 68, 68, 0.25); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.5); }
+.stage-badge.legend { background: rgba(168, 85, 247, 0.25); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.5); animation: pulseGlow 2s infinite; }
+
+/* Dinosaur Avatar Container */
+.dino-avatar-wrap {
+  width: 120px;
+  height: 120px;
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.dino-avatar-wrap svg.dino-svg-vivid {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 14px rgba(0,0,0,0.35));
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dino-card:hover .dino-avatar-wrap svg.dino-svg-vivid {
+  transform: scale(1.12);
+}
+
+/* Dynamic Dino Animation Classes */
+.dino-anim-wobble {
+  animation: dinoWobbleEgg 2.5s ease-in-out infinite;
+}
+
+.dino-anim-bounce {
+  animation: dinoBabyBounce 2s ease-in-out infinite;
+}
+
+.dino-anim-float {
+  animation: dinoTeenFloat 3s ease-in-out infinite;
+}
+
+.dino-anim-pulse {
+  animation: dinoApexPulse 1.8s ease-in-out infinite;
+}
+
+.dino-anim-glow {
+  animation: dinoLegendGlow 3s ease-in-out infinite;
+}
+
+/* Keyframe Animations for Vivid Dinosaurs */
+@keyframes dinoWobbleEgg {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  25% { transform: rotate(-5deg) translateY(-2px); }
+  75% { transform: rotate(5deg) translateY(-2px); }
+}
+
+@keyframes dinoBabyBounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-6px) scale(1.03); }
+}
+
+@keyframes dinoTeenFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+
+@keyframes dinoApexPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255, 71, 87, 0.5)); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(255, 165, 2, 0.8)); }
+}
+
+@keyframes dinoLegendGlow {
+  0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 15px rgba(224, 86, 253, 0.7)); }
+  50% { transform: translateY(-7px) scale(1.06); filter: drop-shadow(0 0 28px rgba(241, 196, 15, 0.95)); }
+}
+
+.student-info {
+  text-align: center;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.student-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.species-name {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Progress Bar & Level */
+.level-progress-wrap {
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.level-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.score-highlight {
+  color: var(--accent-gold);
+  font-weight: 800;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 10px;
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 1px solid var(--border-glass);
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, #3b82f6, #6366f1);
+  transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+.progress-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+
+/* Quick Score Action Buttons on Card */
+.card-actions {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+
+.score-btn {
+  flex: 1;
+  padding: 7px 0;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s;
+}
+
+.score-btn:active {
+  transform: scale(0.92);
+}
+
+.btn-add-1 { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+.btn-add-1:hover { background: #10b981; color: #fff; }
+
+.btn-add-5 { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+.btn-add-5:hover { background: #f59e0b; color: #fff; }
+
+.btn-sub-1 { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+.btn-sub-1:hover { background: #ef4444; color: #fff; }
+
+/* View 2: Classroom Big Screen Projection Mode */
+.big-screen-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.boss-banner {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+  border: 2px solid var(--accent-gold);
+  border-radius: var(--radius-lg);
+  padding: 20px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.boss-info h2 {
+  font-size: 1.4rem;
+  color: var(--accent-gold);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.boss-progress-bar {
+  width: 400px;
+  max-width: 100%;
+}
+
+.projection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 16px;
+  row-gap: 32px;
+}
+
+.projection-card {
+  background: rgba(30, 41, 59, 0.85);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-glass);
+  padding: 18px 12px;
+  text-align: center;
+  position: relative;
+  overflow: visible;
+  transition: transform 0.3s;
+}
+
+.btn-spotlight-view {
+  margin-top: 10px;
+  padding: 5px 14px;
+  font-size: 0.8rem;
+  border-radius: 50px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(234, 179, 8, 0.25));
+  border: 1px solid rgba(245, 158, 11, 0.6);
+  color: var(--accent-gold);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-spotlight-view:hover {
+  background: var(--accent-gold);
+  color: #0f172a;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+  transform: scale(1.05);
+}
+
+.projection-card:hover {
+  transform: scale(1.05);
+}
+
+/* ── 🎇 Fireworks Card Effect ───────────────────────────────────────── */
+/* ── 🎇 Fireworks Card Effect ───────────────────────────────────────── */
+.fireworks-card {
+  position: relative;
+  overflow: visible !important;
+  background: linear-gradient(135deg, rgba(20, 20, 50, 0.95), rgba(30, 10, 40, 0.95)) !important;
+  border-color: rgba(200, 100, 255, 0.5) !important;
+  box-shadow: 0 0 20px rgba(180, 60, 255, 0.3), 0 0 40px rgba(255, 100, 60, 0.15) !important;
+}
+
+.fireworks-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  z-index: 0;
+}
+
+.fireworks-particles span {
+  position: absolute;
+  bottom: -10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: fwRise 2.2s ease-in-out infinite;
+  opacity: 0;
+}
+
+.fireworks-particles span:nth-child(1) { left: 10%; background: #ff4d6d; animation-delay: 0s;    animation-duration: 2.0s; }
+.fireworks-particles span:nth-child(2) { left: 25%; background: #ffd166; animation-delay: 0.4s;  animation-duration: 2.4s; }
+.fireworks-particles span:nth-child(3) { left: 42%; background: #06d6a0; animation-delay: 0.8s;  animation-duration: 1.8s; }
+.fireworks-particles span:nth-child(4) { left: 58%; background: #118ab2; animation-delay: 0.2s;  animation-duration: 2.2s; }
+.fireworks-particles span:nth-child(5) { left: 74%; background: #a855f7; animation-delay: 0.6s;  animation-duration: 2.0s; }
+.fireworks-particles span:nth-child(6) { left: 88%; background: #f9c74f; animation-delay: 1.0s;  animation-duration: 1.9s; }
+
+@keyframes fwRise {
+  0%   { transform: translateY(0) scale(0.5) rotate(0deg);   opacity: 0; }
+  15%  { opacity: 1; }
+  70%  { opacity: 0.8; }
+  100% { transform: translateY(-160px) scale(1.4) rotate(360deg); opacity: 0; }
+}
+
+/* ── 💬 Dialogue Bubble ─────────────────────────────────────────────── */
+.dino-dialogue-bubble {
+  position: absolute;
+  top: -46px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.98));
+  border: 1.8px solid var(--accent-gold);
+  border-radius: 16px;
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #fff;
+  white-space: nowrap;
+  max-width: 190px;
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.7), inset 0 0 8px rgba(245, 158, 11, 0.25);
+  z-index: 500 !important;
+  pointer-events: none;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  animation: bubbleLoopCycle 8s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+}
+
+.dino-dialogue-bubble.forced-show {
+  animation: bubbleForcePop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.dino-dialogue-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid var(--accent-gold);
+}
+
+/* 8-second repeating cycle: 0-4s visible (0-50%), 4-8s hidden (50-100%) */
+@keyframes bubbleLoopCycle {
+  0%       { opacity: 0; transform: translateX(-50%) translateY(6px) scale(0.7); }
+  6%, 44%  { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+  50%, 100%{ opacity: 0; transform: translateX(-50%) translateY(6px) scale(0.7); }
+}
+
+@keyframes bubbleForcePop {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.7); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1.05); }
+}
+
+/* ── ✅ Already-Owned Permanent Item Button (Disabled) ──────────────── */
+.btn-perm-owned {
+  background: rgba(30, 41, 59, 0.6) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(52, 211, 153, 0.4) !important;
+  cursor: not-allowed !important;
+  font-size: 0.78rem !important;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+
+.wheel-section {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-glass);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.wheel-container {
+  width: 320px;
+  height: 320px;
+  position: relative;
+}
+
+.wheel-canvas {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   👗 DINOCLASS SHOP FITTING ROOM (恐龙魔法试衣间与轻量道具展柜)
+   ═══════════════════════════════════════════════════════════════ */
+.shop-fitting-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+/* Left Column: 👗 恐龙试衣舞台 */
+.shop-fitting-room {
+  flex: 0 0 310px;
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.92), rgba(15, 23, 42, 0.98));
+  border: 1.5px solid rgba(251, 191, 36, 0.4);
+  border-radius: var(--radius-lg);
+  padding: 20px 16px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  position: sticky;
+  top: 90px;
+  backdrop-filter: blur(16px);
+  z-index: 10;
+}
+
+.fitting-room-header {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.fitting-room-title {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #fff;
+  background: linear-gradient(135deg, #fff, #fde68a, #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+}
+
+.fitting-room-subtitle {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+/* 试穿模特聚光灯舞台 */
+.fitting-mannequin-wrap {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background: radial-gradient(circle at 50% 30%, rgba(99, 102, 241, 0.2), rgba(15, 23, 42, 0.95) 75%);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 14px;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.6);
+  overflow: visible;
+}
+
+.fitting-stage-pedestal {
+  position: absolute;
+  bottom: 12px;
+  width: 160px;
+  height: 22px;
+  background: radial-gradient(ellipse at center, rgba(251, 191, 36, 0.4), rgba(245, 158, 11, 0.05) 70%, transparent);
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(2px);
+}
+
+.fitting-mannequin-avatar {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  z-index: 5;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: translateZ(0);
+}
+
+.fitting-mannequin-avatar:hover {
+  transform: scale(1.06) translateZ(0);
+}
+
+.fitting-dino-stage-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 模特控制与试穿摘要 */
+.fitting-controls-box {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 12px;
+}
+
+.fitting-tryon-summary {
+  min-height: 48px;
+  max-height: 80px;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed rgba(251, 191, 36, 0.3);
+}
+
+.tryon-empty-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+  width: 100%;
+}
+
+.tryon-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.18);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  padding: 2px 8px;
+  border-radius: 50px;
+  white-space: nowrap;
+  animation: logoPulse 3s infinite;
+}
+
+/* Right Column: 🛍️ 道具展柜 */
+.shop-items-panel {
+  flex: 1 1 500px;
+  min-width: 0;
+}
+
+.shop-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.shop-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* 🗂️ Shop Section Containers & Clean Grouping */
+.shop-section-container {
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px 18px 18px;
+  backdrop-filter: blur(8px);
+  transition: border-color 0.2s ease;
+}
+
+.shop-section-container.sec-privilege { border-left: 3.5px solid #a855f7; }
+.shop-section-container.sec-skin      { border-left: 3.5px solid #f97316; }
+.shop-section-container.sec-accessory { border-left: 3.5px solid #fbbf24; }
+.shop-section-container.sec-fx        { border-left: 3.5px solid #38bdf8; }
+
+.shop-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.shop-section-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shop-section-title {
+  font-size: 1.08rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.3px;
+}
+
+.shop-section-count {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  padding: 1px 8px;
+  border-radius: 50px;
+}
+
+.shop-section-sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.shop-section-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 14px;
+}
+
+/* 🗂️ Shop Category Filter Pills */
+.shop-cat-pills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 4px;
+  border-radius: 50px;
+  border: 1px solid var(--border-glass);
+  flex-wrap: wrap;
+}
+
+.shop-cat-pill {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.shop-cat-pill:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.shop-cat-pill.active {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.9), rgba(217, 119, 6, 0.9));
+  color: #0f172a;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+}
+
+/* 超轻量商品卡 */
+.shop-item-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-glass);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  position: relative;
+  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  backdrop-filter: blur(8px);
+}
+
+.shop-item-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(245, 158, 11, 0.5);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.shop-item-card.tried-on-active {
+  border-color: #fbbf24;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(245, 158, 11, 0.08));
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.25), inset 0 1px 0 rgba(251, 191, 36, 0.4);
+}
+
+.shop-item-top {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.shop-item-icon-box {
+  flex: 0 0 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border-glass);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.shop-item-icon-box.icon-privilege, .shop-item-icon-box.privilege-icon-box {
+  border-color: rgba(168, 85, 247, 0.5);
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(15, 23, 42, 0.9));
+}
+
+.shop-item-icon-box.icon-skin {
+  border-color: rgba(249, 115, 22, 0.5);
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(249, 115, 22, 0.2));
+}
+
+.shop-item-icon-box.icon-accessory {
+  border-color: rgba(245, 158, 11, 0.5);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(15, 23, 42, 0.9));
+}
+
+.shop-item-icon-box.icon-fx {
+  border-color: rgba(56, 189, 248, 0.5);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(168, 85, 247, 0.2));
+}
+
+.shop-icon-symbol {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.4));
+}
+
+.shop-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.shop-item-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.shop-item-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+/* Category Badges */
+.shop-badge-privilege {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #e9d5ff;
+  background: rgba(168, 85, 247, 0.25);
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  padding: 1px 7px;
+  border-radius: 50px;
+}
+
+.shop-badge-skin {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #fed7aa;
+  background: rgba(249, 115, 22, 0.25);
+  border: 1px solid rgba(249, 115, 22, 0.5);
+  padding: 1px 7px;
+  border-radius: 50px;
+}
+
+.shop-badge-accessory {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #fef08a;
+  background: rgba(245, 158, 11, 0.25);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  padding: 1px 7px;
+  border-radius: 50px;
+}
+
+.shop-badge-fx {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #bae6fd;
+  background: rgba(14, 165, 233, 0.25);
+  border: 1px solid rgba(14, 165, 233, 0.5);
+  padding: 1px 7px;
+  border-radius: 50px;
+}
+
+.shop-badge-perm {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  padding: 1px 6px;
+  border-radius: 50px;
+}
+
+.shop-badge-duration {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  padding: 1px 6px;
+  border-radius: 50px;
+}
+
+.shop-item-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.shop-item-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.shop-item-cost {
+  font-size: 0.95rem;
+  color: #fbbf24;
+  font-weight: 800;
+  white-space: nowrap !important;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.shop-item-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.shop-item-actions .btn {
+  padding: 5px 9px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-tryon-active {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: #ffffff !important;
+  border-color: #34d399 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4) !important;
+}
+
+.wheel-pointer {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 25px solid var(--accent-gold);
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+  z-index: 10;
+}
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.projection-spotlight-box {
+  animation: spotlightPopIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  border: 2px solid var(--accent-gold) !important;
+  box-shadow: 0 0 50px rgba(245, 158, 11, 0.5), inset 0 0 30px rgba(245, 158, 11, 0.2) !important;
+}
+
+@keyframes spotlightPopIn {
+  0% { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.modal-card {
+  background: rgba(30, 41, 59, 0.95);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 540px;
+  padding: 24px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  transform: scale(0.9);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+.modal-overlay.active .modal-card {
+  transform: scale(1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.behavior-tags-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  max-height: 280px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.tag-card {
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-glass);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.15s;
+}
+
+.tag-card:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: var(--primary);
+}
+
+.tag-card.selected {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* Celebration Overlay Modal (Egg Hatch & Level Up) */
+.celebration-modal {
+  text-align: center;
+  max-width: 480px;
+  padding: 36px 24px;
+}
+
+.celebration-dino-wrap {
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 20px;
+  animation: eggHatchPop 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.celebration-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--accent-gold);
+  margin-bottom: 8px;
+}
+
+/* Keyframe Animations */
+@keyframes floatBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes dinoWobble {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-8deg) scale(1.05); }
+  75% { transform: rotate(8deg) scale(1.05); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); }
+  50% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.8); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes eggHatchPop {
+  0% { transform: scale(0.2) rotate(-15deg); opacity: 0; }
+  60% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); }
+}
+
+/* Detailed Body Part & Pet Mood Animations */
+@keyframes tailWiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-14deg); }
+  75% { transform: rotate(12deg); }
+}
+
+@keyframes armScratch {
+  0%, 100% { transform: rotate(0deg); }
+  35% { transform: rotate(20deg) translateY(-2px); }
+  65% { transform: rotate(-6deg); }
+}
+
+@keyframes headNod {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(4px) rotate(5deg); }
+}
+
+@keyframes eyeBlink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.08); }
+}
+
+@keyframes dinoScratchReact {
+  0% { transform: scale(1) translateY(0); }
+  35% { transform: scale(1.28) translateY(-18px) rotate(-8deg); }
+  65% { transform: scale(0.92) translateY(2px) rotate(4deg); }
+  100% { transform: scale(1) translateY(0) rotate(0deg); }
+}
+
+/* === Stage-Specific Dynamic Animations === */
+
+/* 1. LEGEND STAGE: Natural Symmetrical Dragon Wing Flapping */
+@keyframes wingFlapLeft {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  50%      { transform: rotate(16deg) translateY(-4px) scaleY(0.94); }
+}
+@keyframes wingFlapRight {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  50%      { transform: rotate(-16deg) translateY(-4px) scaleY(0.94); }
+}
+
+.dino-wing-left {
+  transform-origin: 35px 74px;
+  animation: wingFlapLeft 1.4s ease-in-out infinite;
+}
+.dino-wing-right {
+  transform-origin: 95px 74px;
+  animation: wingFlapRight 1.4s ease-in-out infinite;
+}
+
+/* 2. APEX STAGE: Fiery Flame Aura & Stomping Power */
+@keyframes apexFlameRiseLeft {
+  0%, 100% { transform: translateY(0) scale(1) rotate(-8deg); opacity: 0.85; filter: drop-shadow(0 0 10px #ff4757); }
+  50% { transform: translateY(-12px) scale(1.3) rotate(-15deg); opacity: 1; filter: drop-shadow(0 0 20px #ffa502) drop-shadow(0 0 30px #ff4757); }
+}
+@keyframes apexFlameRiseRight {
+  0%, 100% { transform: translateY(0) scale(1) rotate(8deg); opacity: 0.85; filter: drop-shadow(0 0 10px #ff4757); }
+  50% { transform: translateY(-12px) scale(1.3) rotate(15deg); opacity: 1; filter: drop-shadow(0 0 20px #ffa502) drop-shadow(0 0 30px #ff4757); }
+}
+
+.apex-flame-left {
+  position: absolute;
+  left: -8px;
+  bottom: 25px;
+  font-size: 26px;
+  pointer-events: none;
+  z-index: 25;
+  animation: apexFlameRiseLeft 1.5s ease-in-out infinite;
+}
+
+.apex-flame-right {
+  position: absolute;
+  right: -8px;
+  bottom: 25px;
+  font-size: 26px;
+  pointer-events: none;
+  z-index: 25;
+  animation: apexFlameRiseRight 1.5s ease-in-out infinite;
+}
+
+/* 3. EGG STAGE: Crack Light Pulse */
+@keyframes eggCrackPulse {
+  0%, 100% { opacity: 0.4; filter: drop-shadow(0 0 2px #ffa502); }
+  50% { opacity: 1; filter: drop-shadow(0 0 10px #ffe066); }
+}
+.egg-crack-line {
+  animation: eggCrackPulse 2s ease-in-out infinite;
+}
+
+@keyframes bubbleFloat {
+  0% { opacity: 0; transform: translate(-50%, 8px) scale(0.7); }
+  15% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  85% { opacity: 1; transform: translate(-50%, -4px) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -12px) scale(0.8); }
+}
+
+@keyframes heartPopUp {
+  0% { opacity: 1; transform: translate(-50%, 0) scale(0.6) rotate(-10deg); }
+  50% { opacity: 1; transform: translate(-50%, -40px) scale(1.3) rotate(12deg); }
+  100% { opacity: 0; transform: translate(-50%, -75px) scale(0.8) rotate(0deg); }
+}
+
+/* === Card-Level In-Place Evolution FX (非遮挡原位酷炫进化) === */
+@keyframes cardEvolveGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); transform: scale(1); }
+  50% { box-shadow: 0 0 45px rgba(255, 215, 0, 1), 0 0 70px rgba(255, 100, 0, 0.8); transform: scale(1.08); z-index: 100; }
+}
+
+@keyframes cardDinoEvolveMorph {
+  0% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+  35% { transform: scale(0.3) rotate(-20deg); filter: brightness(3); }
+  65% { transform: scale(1.4) rotate(12deg); filter: brightness(2); }
+  100% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+}
+
+@keyframes cardEvolutionBannerRise {
+  0% { opacity: 0; transform: translate(-50%, 15px) scale(0.6); }
+  20% { opacity: 1; transform: translate(-50%, -10px) scale(1.1); }
+  80% { opacity: 1; transform: translate(-50%, -18px) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -35px) scale(0.8); }
+}
+
+.dino-card.card-evolving {
+  animation: cardEvolveGlow 2.5s ease-in-out forwards;
+  z-index: 100 !important;
+  position: relative;
+}
+
+.dino-card.card-evolving .dino-avatar-wrap {
+  animation: cardDinoEvolveMorph 1.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.card-evolution-banner {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #ffd700, #ff7675);
+  color: #fff;
+  font-weight: 900;
+  font-size: 0.95rem;
+  padding: 6px 18px;
+  border-radius: 50px;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.9), 0 4px 12px rgba(0,0,0,0.3);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 150;
+  animation: cardEvolutionBannerRise 2.8s ease-in-out forwards;
+}
+
+/* === 🌟 电子光荣榜置顶特写 Spotlight Card Effects === */
+@keyframes spotlightGlowPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 35px rgba(255, 118, 117, 0.4); border-color: #ffd700; }
+  50% { box-shadow: 0 0 35px rgba(255, 215, 0, 1), 0 0 60px rgba(255, 165, 2, 0.8); border-color: #ffe066; }
+}
+
+.dino-card.spotlight-card,
+.projection-card.spotlight-projection-card {
+  animation: spotlightGlowPulse 2.5s ease-in-out infinite;
+  border: 2px solid #ffd700 !important;
+  position: relative;
+  overflow: visible !important;
+}
+
+.spotlight-top-badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #ffd700, #ff7675);
+  color: #fff;
+  font-weight: 900;
+  font-size: 0.78rem;
+  padding: 3px 12px;
+  border-radius: 50px;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
+  white-space: nowrap;
+  z-index: 30;
+}
+
+/* --- Deluxe Visual Rewards Animations & Effects --- */
+
+/* 1. 🌟 Starry Constellation Magic Circle (3D Rotating Star Platform) */
+@keyframes spinStarClockwise {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes spinStarCounterClockwise {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+@keyframes starMagicGlowPulse {
+  0%, 100% { 
+    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.95)) drop-shadow(0 0 20px rgba(250, 204, 21, 0.85)) drop-shadow(0 0 35px rgba(192, 132, 252, 0.6)) brightness(1.25); 
+    opacity: 0.95; 
+  }
+  50% { 
+    filter: drop-shadow(0 0 18px rgba(56, 189, 248, 1)) drop-shadow(0 0 36px rgba(250, 204, 21, 1)) drop-shadow(0 0 55px rgba(255, 255, 255, 0.8)) brightness(1.5); 
+    opacity: 1; 
+  }
+}
+@keyframes starParticleRise {
+  0% { transform: translateY(0) scale(0.7) rotate(0deg); opacity: 0; }
+  25% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { transform: translateY(-45px) scale(1.3) rotate(180deg); opacity: 0; }
+}
+
+.starry-magic-circle-wrap {
+  position: absolute;
+  top: 85%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotateX(72deg);
+  width: 115%;
+  height: 115%;
+  pointer-events: none;
+  z-index: 0 !important;
+  transform-style: preserve-3d;
+}
+
+.starry-magic-svg {
+  width: 100%;
+  height: 100%;
+  animation: starMagicGlowPulse 2.6s ease-in-out infinite;
+  overflow: visible !important;
+}
+
+.starry-ring-spin-cw {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: spinStarClockwise 18s linear infinite;
+}
+
+.starry-ring-spin-ccw {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: spinStarCounterClockwise 12s linear infinite;
+}
+
+.star-float-particle {
+  position: absolute;
+  pointer-events: none;
+  font-size: 0.95em;
+  color: #ffffff;
+  text-shadow: 0 0 8px #38bdf8, 0 0 16px #ffd700, 0 0 24px #ffffff;
+  animation: starParticleRise 3.2s ease-in-out infinite;
+  z-index: 6;
+  filter: brightness(1.4);
+}
+.star-float-particle.p1 { left: 10%; top: 48%; animation-delay: 0s; }
+.star-float-particle.p2 { right: 10%; top: 32%; animation-delay: 0.9s; font-size: 1.15em; }
+.star-float-particle.p3 { left: 45%; top: 60%; animation-delay: 1.8s; font-size: 0.85em; }
+.star-float-particle.p4 { right: 30%; top: 22%; animation-delay: 2.5s; font-size: 1.05em; }
+
+/* ═══════════════════════════════════════════════════════════════
+   🧚 2. 3D MULTI-FAIRY SWARM & STARDUST TRAILS (多精灵3D立体环绕)
+   ═══════════════════════════════════════════════════════════════ */
+.fairy-swarm-wrap {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible !important;
+}
+
+/* 🧚 Fairy 1: 翡翠森林仙子 (Emerald Forest Pixie - Horizontal Ellipse around Head & Chest) */
+@keyframes fairyOrbit1 {
+  0% {
+    transform: translate(-50%, -50%) translate(52px, 4px) scale(1.05);
+    z-index: 10;
+    opacity: 1;
+  }
+  25% {
+    transform: translate(-50%, -50%) translate(0px, 18px) scale(1.22);
+    z-index: 10;
+    opacity: 1;
+  }
+  49% {
+    transform: translate(-50%, -50%) translate(-50px, 4px) scale(1.0);
+    z-index: 10;
+    opacity: 0.95;
+  }
+  50% {
+    transform: translate(-50%, -50%) translate(-52px, 0px) scale(0.95);
+    z-index: 1;
+    opacity: 0.9;
+  }
+  75% {
+    transform: translate(-50%, -50%) translate(0px, -20px) scale(0.72);
+    z-index: 1;
+    opacity: 0.7;
+  }
+  99% {
+    transform: translate(-50%, -50%) translate(50px, 0px) scale(0.95);
+    z-index: 1;
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(52px, 4px) scale(1.05);
+    z-index: 10;
+    opacity: 1;
+  }
+}
+
+/* 🧚‍♀️ Fairy 2: 星光粉蝶仙子 (Starlight Rose Pixie - Tilted Upper Orbit around Crown) */
+@keyframes fairyOrbit2 {
+  0% {
+    transform: translate(-50%, -50%) translate(0px, -24px) scale(0.7);
+    z-index: 1;
+    opacity: 0.65;
+  }
+  24% {
+    transform: translate(-50%, -50%) translate(48px, -6px) scale(0.92);
+    z-index: 1;
+    opacity: 0.85;
+  }
+  25% {
+    transform: translate(-50%, -50%) translate(50px, -4px) scale(1.02);
+    z-index: 10;
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) translate(0px, 12px) scale(1.18);
+    z-index: 10;
+    opacity: 1;
+  }
+  74% {
+    transform: translate(-50%, -50%) translate(-48px, -6px) scale(0.96);
+    z-index: 10;
+    opacity: 0.95;
+  }
+  75% {
+    transform: translate(-50%, -50%) translate(-50px, -8px) scale(0.9);
+    z-index: 1;
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(0px, -24px) scale(0.7);
+    z-index: 1;
+    opacity: 0.65;
+  }
+}
+
+/* 🧚‍♂️ Fairy 3: 金辉暖阳仙子 (Golden Dawn Pixie - Swift Diagonal Ellipse) */
+@keyframes fairyOrbit3 {
+  0% {
+    transform: translate(-50%, -50%) translate(-46px, 10px) scale(1.02);
+    z-index: 10;
+    opacity: 1;
+  }
+  25% {
+    transform: translate(-50%, -50%) translate(0px, 22px) scale(1.25);
+    z-index: 10;
+    opacity: 1;
+  }
+  49% {
+    transform: translate(-50%, -50%) translate(44px, 8px) scale(1.0);
+    z-index: 10;
+    opacity: 0.95;
+  }
+  50% {
+    transform: translate(-50%, -50%) translate(46px, 4px) scale(0.9);
+    z-index: 1;
+    opacity: 0.85;
+  }
+  75% {
+    transform: translate(-50%, -50%) translate(0px, -18px) scale(0.7);
+    z-index: 1;
+    opacity: 0.65;
+  }
+  99% {
+    transform: translate(-50%, -50%) translate(-44px, 6px) scale(0.9);
+    z-index: 1;
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(-46px, 10px) scale(1.02);
+    z-index: 10;
+    opacity: 1;
+  }
+}
+
+.orbiting-fairy-sprite {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  pointer-events: none;
+}
+
+.orbiting-fairy-sprite.fairy-1 {
+  font-size: 21px;
+  animation: fairyOrbit1 5.5s linear infinite;
+  filter: drop-shadow(0 0 8px #34d399) drop-shadow(0 0 16px #38bdf8);
+}
+
+.orbiting-fairy-sprite.fairy-2 {
+  font-size: 19px;
+  animation: fairyOrbit2 6.5s linear infinite;
+  filter: drop-shadow(0 0 8px #f472b6) drop-shadow(0 0 16px #c084fc);
+}
+
+.orbiting-fairy-sprite.fairy-3 {
+  font-size: 20px;
+  animation: fairyOrbit3 4.8s linear infinite;
+  filter: drop-shadow(0 0 8px #fbbf24) drop-shadow(0 0 16px #f59e0b);
+}
+
+/* Stardust trail sparkles */
+.fairy-dust-spark {
+  position: absolute;
+  font-size: 0.85rem;
+  color: #fff;
+  pointer-events: none;
+  animation: fairyDustFloat 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px #67e8f9) drop-shadow(0 0 12px #f472b6);
+}
+.fairy-dust-spark.fd1 { left: 28%; top: 32%; animation-delay: 0s; }
+.fairy-dust-spark.fd2 { right: 26%; top: 48%; animation-delay: 1s; font-size: 0.95rem; }
+.fairy-dust-spark.fd3 { left: 52%; top: 25%; animation-delay: 2s; font-size: 0.75rem; }
+
+@keyframes fairyDustFloat {
+  0%, 100% { transform: translateY(0) scale(0.6); opacity: 0.2; }
+  50%      { transform: translateY(-12px) scale(1.2); opacity: 0.95; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   🌋 A. LAVA HELL RIFT MAGIC CIRCLE (熔岩地狱裂纹阵)
+   ═══════════════════════════════════════════════════════════════ */
+.lava-circle-wrap {
+  position: absolute;
+  top: 85%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotateX(72deg);
+  width: 115%;
+  height: 115%;
+  pointer-events: none;
+  z-index: 0 !important;
+  transform-style: preserve-3d;
+}
+.lava-circle-svg {
+  width: 100%;
+  height: 100%;
+  animation: lavaCircleGlowPulse 2.2s ease-in-out infinite;
+  overflow: visible !important;
+}
+@keyframes lavaCircleGlowPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 10px rgba(255,61,0,0.8)) drop-shadow(0 0 24px rgba(251,191,36,0.5));
+    opacity: 0.88;
+  }
+  50% {
+    filter: drop-shadow(0 0 22px rgba(255,61,0,1)) drop-shadow(0 0 44px rgba(251,191,36,0.9)) brightness(1.4);
+    opacity: 1;
+  }
+}
+.lava-ring-spin-cw {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: spinStarClockwise 14s linear infinite;
+}
+.lava-ring-spin-ccw {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: spinStarCounterClockwise 9s linear infinite;
+}
+.lava-float-particle {
+  position: absolute;
+  pointer-events: none;
+  font-size: 1rem;
+  animation: starParticleRise 2.8s ease-in-out infinite;
+  text-shadow: 0 0 8px #ff3d00, 0 0 16px #fbbf24, 0 0 24px #fff;
+  z-index: 6;
+}
+.lava-float-particle.lp1 { left: 10%; top: 48%; animation-delay: 0s; }
+.lava-float-particle.lp2 { right: 10%; top: 32%; animation-delay: 0.7s; font-size: 0.85rem; }
+.lava-float-particle.lp3 { left: 45%; top: 60%; animation-delay: 1.5s; font-size: 0.9rem; }
+.lava-float-particle.lp4 { right: 30%; top: 22%; animation-delay: 2.2s; font-size: 1.1rem; }
+
+/* ═══════════════════════════════════════════════════════════════
+   ⚡ B. QUANTUM CYBER TECH CIRCLE (量子赛博科技阵)
+   ═══════════════════════════════════════════════════════════════ */
+.cyber-circle-wrap {
+  position: absolute;
+  top: 85%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotateX(72deg);
+  width: 115%;
+  height: 115%;
+  pointer-events: none;
+  z-index: 0 !important;
+  transform-style: preserve-3d;
+}
+.cyber-circle-svg {
+  width: 100%;
+  height: 100%;
+  animation: cyberCircleGlowPulse 1.8s ease-in-out infinite;
+  overflow: visible !important;
+}
+@keyframes cyberCircleGlowPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 10px rgba(6,182,212,0.8)) drop-shadow(0 0 22px rgba(99,102,241,0.5));
+    opacity: 0.9;
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(6,182,212,1)) drop-shadow(0 0 40px rgba(99,102,241,1)) brightness(1.5);
+    opacity: 1;
+  }
+}
+.cyber-ring-spin-cw-fast {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: spinStarClockwise 8s linear infinite;
+}
+.cyber-ring-spin-ccw {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: spinStarCounterClockwise 14s linear infinite;
+}
+.cyber-ring-spin-ccw-slow {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: spinStarCounterClockwise 22s linear infinite;
+}
+.cyber-float-particle {
+  position: absolute;
+  pointer-events: none;
+  font-size: 1rem;
+  animation: starParticleRise 2.5s ease-in-out infinite;
+  text-shadow: 0 0 8px #06b6d4, 0 0 16px #6366f1, 0 0 24px #fff;
+  z-index: 6;
+}
+.cyber-float-particle.cp1 { left: 10%; top: 48%; animation-delay: 0s; }
+.cyber-float-particle.cp2 { right: 10%; top: 32%; animation-delay: 0.6s; font-size: 0.9rem; }
+.cyber-float-particle.cp3 { left: 45%; top: 60%; animation-delay: 1.3s; font-size: 0.85rem; }
+.cyber-float-particle.cp4 { right: 30%; top: 22%; animation-delay: 2s; font-size: 1.05rem; }
+
+/* ═══════════════════════════════════════════════════════════════
+   🌸 C. SACRED SAKURA SHRINE CIRCLE (圣樱神道奉纳阵)
+   ═══════════════════════════════════════════════════════════════ */
+.sakura-circle-wrap {
+  position: absolute;
+  top: 85%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotateX(72deg);
+  width: 115%;
+  height: 115%;
+  pointer-events: none;
+  z-index: 0 !important;
+  transform-style: preserve-3d;
+}
+.sakura-circle-svg {
+  width: 100%;
+  height: 100%;
+  animation: sakuraCircleGlowPulse 3s ease-in-out infinite;
+  overflow: visible !important;
+}
+@keyframes sakuraCircleGlowPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 10px rgba(244,63,94,0.75)) drop-shadow(0 0 22px rgba(253,230,138,0.5));
+    opacity: 0.88;
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(244,63,94,1)) drop-shadow(0 0 40px rgba(253,230,138,0.95)) brightness(1.35);
+    opacity: 1;
+  }
+}
+.sakura-ring-spin-cw {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: spinStarClockwise 20s linear infinite;
+}
+.sakura-ring-spin-ccw {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: spinStarCounterClockwise 15s linear infinite;
+}
+.sakura-ring-spin-cw-slow {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: spinStarClockwise 30s linear infinite;
+}
+.sakura-float-particle {
+  position: absolute;
+  pointer-events: none;
+  font-size: 1rem;
+  animation: starParticleRise 3.5s ease-in-out infinite;
+  text-shadow: 0 0 8px #f43f5e, 0 0 16px #fde68a, 0 0 24px #fff;
+  z-index: 6;
+}
+.sakura-float-particle.sp1 { left: 10%; top: 48%; animation-delay: 0s; }
+.sakura-float-particle.sp2 { right: 10%; top: 32%; animation-delay: 1s; font-size: 0.9rem; }
+.sakura-float-particle.sp3 { left: 45%; top: 60%; animation-delay: 2s; font-size: 0.85rem; }
+.sakura-float-particle.sp4 { right: 30%; top: 22%; animation-delay: 3s; font-size: 1.05rem; }
+
+/* ═══════════════════════════════════════════════════════════════
+   🌋 1. LAVA MAGMA SKIN AURA & FLAMING SPARKS (熔岩火龙动态特效)
+   ═══════════════════════════════════════════════════════════════ */
+.lava-skin-aura {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible !important;
+  z-index: 25;
+}
+
+.lava-spark {
+  position: absolute;
+  font-size: 1.25rem;
+  animation: lavaSparkRise 2.4s ease-out infinite;
+  opacity: 0;
+  filter: drop-shadow(0 0 10px #ff3300) drop-shadow(0 0 16px #ffa500);
+  pointer-events: none;
+}
+
+@keyframes lavaSparkRise {
+  0%   { transform: translateY(0) scale(0.6) rotate(0deg); opacity: 0; }
+  15%  { opacity: 1; }
+  75%  { opacity: 0.9; }
+  100% { transform: translateY(-75px) scale(1.3) rotate(35deg); opacity: 0; }
+}
+
+.lava-flowing-vein {
+  stroke: #ff5500;
+  filter: drop-shadow(0 0 5px #ff3300) drop-shadow(0 0 10px #ffaa00);
+  animation: lavaVeinPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes lavaVeinPulse {
+  0%   { stroke: #ff3300; opacity: 0.7; }
+  100% { stroke: #ffaa00; opacity: 1; filter: drop-shadow(0 0 8px #ff5500); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ❄️ 2. FROST ICE DRAGON SKIN AURA (极寒冰龙动态特效)
+   ═══════════════════════════════════════════════════════════════ */
+.frost-skin-aura {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible !important;
+  z-index: 25;
+}
+
+.frost-spark {
+  position: absolute;
+  font-size: 1.2rem;
+  animation: frostSparkRise 2.6s ease-out infinite;
+  opacity: 0;
+  filter: drop-shadow(0 0 10px #00d2ff) drop-shadow(0 0 16px #7dd3fc);
+  pointer-events: none;
+}
+
+@keyframes frostSparkRise {
+  0%   { transform: translateY(0) scale(0.6) rotate(0deg); opacity: 0; }
+  15%  { opacity: 1; }
+  75%  { opacity: 0.95; }
+  100% { transform: translateY(-75px) scale(1.3) rotate(-35deg); opacity: 0; }
+}
+
+.frost-flowing-vein {
+  stroke: #00d2ff;
+  filter: drop-shadow(0 0 5px #00d2ff) drop-shadow(0 0 10px #38bdf8);
+  animation: frostVeinPulse 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes frostVeinPulse {
+  0%   { stroke: #00d2ff; opacity: 0.75; }
+  100% { stroke: #e0f7fa; opacity: 1; filter: drop-shadow(0 0 10px #38bdf8); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ☯️ 2.5 FROSTFIRE DUAL DRAGON SKIN AURA (冰火双生·极境融合神龙特效)
+   ═══════════════════════════════════════════════════════════════ */
+.frostfire-skin-aura {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible !important;
+  z-index: 25;
+}
+
+.frostfire-fire-particle {
+  position: absolute;
+  font-size: 1.25rem;
+  animation: lavaSparkRise 2.4s ease-out infinite;
+  opacity: 0;
+  filter: drop-shadow(0 0 10px #ff3300) drop-shadow(0 0 16px #ffa500);
+  pointer-events: none;
+}
+
+.frostfire-ice-particle {
+  position: absolute;
+  font-size: 1.2rem;
+  animation: frostSparkRise 2.6s ease-out infinite;
+  opacity: 0;
+  filter: drop-shadow(0 0 10px #00d2ff) drop-shadow(0 0 16px #7dd3fc);
+  pointer-events: none;
+}
+
+.frostfire-flowing-vein {
+  animation: frostfireVeinPulse 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes frostfireVeinPulse {
+  0% {
+    filter: drop-shadow(0 0 4px #ff3300) drop-shadow(0 0 8px #00d2ff);
+  }
+  100% {
+    filter: drop-shadow(0 0 8px #ff793f) drop-shadow(0 0 14px #38bdf8);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   👼 3. ARCHANGEL HOLY SKIN AURA (炽天大天使神圣光环与圣金流光脉络)
+   ═══════════════════════════════════════════════════════════════ */
+.angel-skin-aura {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible !important;
+  z-index: 25;
+}
+
+.angel-spark {
+  position: absolute;
+  font-size: 1.3rem;
+  animation: angelSparkFloat 2.6s ease-in-out infinite;
+  opacity: 0;
+  filter: drop-shadow(0 0 10px #ffd700) drop-shadow(0 0 18px #fff59d);
+  pointer-events: none;
+}
+
+@keyframes angelSparkFloat {
+  0%   { transform: translateY(0) scale(0.6) rotate(0deg); opacity: 0; }
+  25%  { opacity: 1; }
+  75%  { opacity: 0.95; }
+  100% { transform: translateY(-75px) scale(1.3) rotate(30deg); opacity: 0; }
+}
+
+.holy-flowing-vein {
+  stroke: #fbbf24;
+  filter: drop-shadow(0 0 6px #f59e0b) drop-shadow(0 0 12px #fef08a);
+  animation: holyVeinPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes holyVeinPulse {
+  0%   { stroke: #f59e0b; opacity: 0.75; }
+  100% { stroke: #fffbeb; opacity: 1; filter: drop-shadow(0 0 10px #fbbf24) drop-shadow(0 0 18px #ffffff); }
+}
+
+.dino-angel-halo {
+  animation: angelHaloGlowSoft 2.8s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+@keyframes angelHaloGlowSoft {
+  0% {
+    filter: drop-shadow(0 0 3px #ffd700) drop-shadow(0 0 7px rgba(254, 240, 138, 0.4));
+    transform: translateY(0);
+  }
+  50% {
+    filter: drop-shadow(0 0 6px #ffd700) drop-shadow(0 0 12px rgba(254, 240, 138, 0.7)) drop-shadow(0 0 16px rgba(255, 255, 255, 0.5));
+    transform: translateY(-2.5px);
+  }
+  100% {
+    filter: drop-shadow(0 0 3px #ffd700) drop-shadow(0 0 7px rgba(254, 240, 138, 0.4));
+    transform: translateY(0);
+  }
+}
+
+.angel-wing-anim-left {
+  animation: angelWingFlapLeft 2.2s ease-in-out infinite;
+  transform-origin: 0px 0px;
+}
+
+@keyframes angelWingFlapLeft {
+  0% {
+    transform: rotate(0deg) scale(1, 1);
+  }
+  35% {
+    transform: rotate(-11deg) scale(0.9, 1.04);
+  }
+  70% {
+    transform: rotate(6deg) scale(1.05, 0.96);
+  }
+  100% {
+    transform: rotate(0deg) scale(1, 1);
+  }
+}
+
+.angel-wing-anim-right {
+  animation: angelWingFlapRight 2.2s ease-in-out infinite;
+  transform-origin: 0px 0px;
+}
+
+@keyframes angelWingFlapRight {
+  0% {
+    transform: rotate(0deg) scale(1, 1);
+  }
+  35% {
+    transform: rotate(-11deg) scale(0.9, 1.04);
+  }
+  70% {
+    transform: rotate(6deg) scale(1.05, 0.96);
+  }
+  100% {
+    transform: rotate(0deg) scale(1, 1);
+  }
+}
+
+.holy-breastplate {
+  animation: holyPlatePulse 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes holyPlatePulse {
+  0%   { filter: drop-shadow(0 0 4px #f59e0b); }
+  100% { filter: drop-shadow(0 0 10px #fbbf24) drop-shadow(0 0 18px #ffffff); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   🦄 4. DREAMY RAINBOW UNICORN AURA (梦幻彩虹独角兽星屑与极光脉络)
+   ═══════════════════════════════════════════════════════════════ */
+.unicorn-skin-aura {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible !important;
+  z-index: 25;
+}
+
+.unicorn-spark {
+  position: absolute;
+  font-size: 1.25rem;
+  animation: unicornSparkBounce 2.7s ease-in-out infinite;
+  opacity: 0;
+  filter: drop-shadow(0 0 10px #f472b6) drop-shadow(0 0 16px #38bdf8);
+  pointer-events: none;
+}
+
+@keyframes unicornSparkBounce {
+  0%   { transform: translateY(0) scale(0.6) rotate(0deg); opacity: 0; }
+  20%  { opacity: 1; }
+  70%  { opacity: 0.95; }
+  100% { transform: translateY(-75px) scale(1.2) rotate(-30deg); opacity: 0; }
+}
+
+.rainbow-flowing-vein {
+  stroke: #c084fc;
+  filter: drop-shadow(0 0 6px #f472b6) drop-shadow(0 0 12px #38bdf8);
+  animation: rainbowVeinPulse 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes rainbowVeinPulse {
+  0%   { stroke: #f472b6; opacity: 0.8; }
+  50%  { stroke: #38bdf8; opacity: 1; }
+  100% { stroke: #fde047; opacity: 0.85; filter: drop-shadow(0 0 10px #c084fc); }
+}
+
+.dino-unicorn-horn {
+  animation: unicornHornGlow 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes unicornHornGlow {
+  0% {
+    filter: drop-shadow(0 0 4px #ffd700) drop-shadow(0 0 8px rgba(244, 114, 182, 0.6));
+  }
+  50% {
+    filter: drop-shadow(0 0 8px #ffd700) drop-shadow(0 0 16px #38bdf8) drop-shadow(0 0 24px #ffffff);
+  }
+  100% {
+    filter: drop-shadow(0 0 4px #ffd700) drop-shadow(0 0 8px rgba(244, 114, 182, 0.6));
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   🎓 5. GRADUATION CAP WISDOM AURA (学霸博士帽智慧光晕)
+   ═══════════════════════════════════════════════════════════════ */
+.grad-wisdom-aura {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible !important;
+  z-index: 25;
+}
+
+.wisdom-spark {
+  position: absolute;
+  font-size: 1.15rem;
+  animation: wisdomSparkFloat 2.8s ease-in-out infinite;
+  opacity: 0;
+  filter: drop-shadow(0 0 8px #ffd700) drop-shadow(0 0 14px #fbbf24);
+  pointer-events: none;
+}
+
+@keyframes wisdomSparkFloat {
+  0%, 100% { transform: translateY(0) scale(0.8); opacity: 0.2; }
+  50%      { transform: translateY(-14px) scale(1.2); opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   🏆 3. CHROMA GOLD SKIN AURA (曜世黄金龙：神圣曜金天辉日轮光环)
+   ═══════════════════════════════════════════════════════════════ */
+.gold-skin-aura {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible !important;
+  z-index: 1; /* Placed behind dino SVG (z-index: 5) so radiant rays expand gracefully around the dinosaur */
+}
+
+.gold-mandala-svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 124%;
+  height: 124%;
+  transform: translate(-50%, -50%) !important;
+  pointer-events: none;
+  overflow: visible !important;
+  animation: goldMandalaGlowPulse 3.2s ease-in-out infinite;
+}
+
+@keyframes goldMandalaGlowPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.45)) drop-shadow(0 0 10px rgba(245, 158, 11, 0.2));
+    opacity: 0.72;
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.68)) drop-shadow(0 0 16px rgba(251, 191, 36, 0.35));
+    opacity: 0.88;
+  }
+}
+
+.gold-rays-spin-cw {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: spinStarClockwise 26s linear infinite;
+}
+
+.gold-mandala-spin-ccw {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: spinStarCounterClockwise 18s linear infinite;
+}
+
+.gold-particle {
+  position: absolute;
+  pointer-events: none;
+  animation: goldSparkleRise 3.2s ease-in-out infinite;
+  color: #ffd700;
+  font-size: 1.1rem;
+  filter: drop-shadow(0 0 8px #ffa502) drop-shadow(0 0 14px #ffd700);
+  z-index: 20;
+}
+
+@keyframes goldSparkleRise {
+  0%   { transform: translateY(0) scale(0.6) rotate(0deg); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 0.9; }
+  100% { transform: translateY(-75px) scale(1.25) rotate(180deg); opacity: 0; }
+}
+
+/* Dino Base SVG Animation Classes & Unclipped Wing Bounds */
+.dino-svg-vivid {
+  position: relative !important;
+  z-index: 5 !important;
+  overflow: visible !important;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.dino-anim-float {
+  animation: floatBounce 2.8s ease-in-out infinite;
+}
+
+.dino-anim-bounce {
+  animation: floatBounce 2.2s ease-in-out infinite;
+}
+
+.dino-anim-wobble {
+  animation: dinoWobble 2.5s ease-in-out infinite;
+}
+
+.dino-anim-pulse {
+  animation: floatBounce 2.4s ease-in-out infinite;
+}
+
+@keyframes goldAuraShimmer {
+  0%, 100% { filter: drop-shadow(0 0 8px #ffe066) drop-shadow(0 0 18px #ffd700); }
+  50%      { filter: drop-shadow(0 0 16px #ffffff) drop-shadow(0 0 32px #ffa502); }
+}
+
+svg.gold-skin-aura {
+  animation: floatBounce 2.8s ease-in-out infinite, goldAuraShimmer 2.5s ease-in-out infinite !important;
+}
+
+/* 4. Dancing Cherry Blossom Shower (Overflow Unclipped) */
+@keyframes cherrySwayFall {
+  0%   { transform: translateY(-15px) translateX(0) rotate(0deg); opacity: 0; }
+  15%  { opacity: 0.95; }
+  50%  { transform: translateY(60px) translateX(25px) rotate(140deg); }
+  85%  { opacity: 0.9; }
+  100% { transform: translateY(140px) translateX(-15px) rotate(300deg); opacity: 0; }
+}
+
+.deluxe-cherry-wrap {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  overflow: visible !important;
+  pointer-events: none;
+  z-index: 25;
+}
+
+.cherry-petal-deluxe {
+  position: absolute;
+  animation: cherrySwayFall 4.5s linear infinite;
+  font-size: 13px;
+  filter: drop-shadow(0 0 6px #ff7675);
+}
+.cherry-petal-deluxe:nth-child(1) { left: 15%; animation-delay: 0s; }
+.cherry-petal-deluxe:nth-child(2) { left: 45%; animation-delay: 1.2s; animation-duration: 5s; }
+.cherry-petal-deluxe:nth-child(3) { left: 75%; animation-delay: 2.4s; animation-duration: 3.8s; }
+.cherry-petal-deluxe:nth-child(4) { left: 30%; animation-delay: 3.5s; animation-duration: 4.8s; }
+.cherry-petal-deluxe:nth-child(5) { left: 85%; animation-delay: 1.8s; animation-duration: 4.2s; }
+
+/* === Full-Screen Dino Evolution Ceremony Modal === */
+@keyframes evolutionRayRotate {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes evolutionDinoPopIn {
+  0% { transform: scale(0.2) rotate(-15deg); opacity: 0; filter: brightness(3); }
+  50% { transform: scale(1.35) rotate(8deg); opacity: 1; filter: brightness(1.8); }
+  75% { transform: scale(0.95) rotate(-3deg); }
+  100% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+}
+
+@keyframes evolutionBadgeGlow {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
+  50% { transform: scale(1.1); box-shadow: 0 0 30px rgba(255, 215, 0, 1), 0 0 50px rgba(255, 100, 0, 0.8); }
+}
+
+.modal-evolution-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(10, 15, 30, 0.95);
+  backdrop-filter: blur(12px);
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.modal-evolution-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.evolution-light-rays {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 1200px; height: 1200px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg, rgba(255, 215, 0, 0.15) 15deg, transparent 30deg,
+    rgba(255, 215, 0, 0.25) 45deg, transparent 60deg,
+    rgba(255, 120, 0, 0.2) 75deg, transparent 90deg,
+    rgba(255, 215, 0, 0.18) 105deg, transparent 120deg,
+    rgba(255, 215, 0, 0.25) 135deg, transparent 150deg,
+    rgba(255, 215, 0, 0.15) 165deg, transparent 180deg,
+    rgba(255, 215, 0, 0.25) 195deg, transparent 210deg,
+    rgba(255, 120, 0, 0.2) 225deg, transparent 240deg,
+    rgba(255, 215, 0, 0.18) 255deg, transparent 270deg,
+    rgba(255, 215, 0, 0.25) 285deg, transparent 300deg,
+    rgba(255, 215, 0, 0.15) 315deg, transparent 330deg,
+    rgba(255, 215, 0, 0.25) 345deg, transparent 360deg
+  );
+  border-radius: 50%;
+  animation: evolutionRayRotate 25s linear infinite;
+  pointer-events: none;
+}
+
+.evolution-content-box {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  max-width: 520px;
+  width: 90%;
+  background: rgba(25, 30, 50, 0.85);
+  border: 2px solid rgba(255, 215, 0, 0.6);
+  border-radius: 28px;
+  padding: 36px 28px;
+  box-shadow: 0 0 50px rgba(255, 215, 0, 0.3), inset 0 0 30px rgba(255, 215, 0, 0.15);
+}
+
+.evolution-header-title {
+  font-size: 1.8rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #fff7ad, #ffd700, #ff8c00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+  letter-spacing: 1px;
+}
+
+.evolution-stage-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #ff7675, #d63031);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.15rem;
+  padding: 8px 24px;
+  border-radius: 50px;
+  margin-bottom: 24px;
+  animation: evolutionBadgeGlow 2s infinite ease-in-out;
+}
+
+.evolution-dino-stage-wrap {
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 24px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.evolution-dino-avatar {
+  width: 100%;
+  height: 100%;
+  animation: evolutionDinoPopIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.evolution-congratulations-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #f1f2f6;
+  line-height: 1.6;
+  margin-bottom: 28px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.evolution-btn {
+  padding: 14px 40px !important;
+  font-size: 1.2rem !important;
+  border-radius: 50px !important;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.6) !important;
+}
+
+
+
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  .console-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* ── 🎮 Welcome Gate Overlay ─────────────────────────────────────────── */
+.welcome-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at center, #1e1b4b 0%, #090d16 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.welcome-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.welcome-card {
+  text-align: center;
+  background: rgba(30, 41, 59, 0.45);
+  border: 1.5px solid rgba(245, 158, 11, 0.3);
+  padding: 40px 48px;
+  border-radius: 28px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  animation: welcomePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.welcome-logo {
+  width: 110px;
+  height: 110px;
+  border-radius: 24px;
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.5);
+  border: 2.2px solid rgba(245, 158, 11, 0.35);
+  margin-bottom: 24px;
+  animation: logoPulse 2s ease-in-out infinite;
+}
+
+.welcome-card h1 {
+  font-size: 2.6rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #fff, #ffeaa7, #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+  font-family: 'ZCOOL KuaiLe', sans-serif;
+}
+
+.welcome-card p {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  margin-bottom: 32px;
+}
+
+/* ── 🏞️ Dino Safari Park: main park styles (display/visibility handled in .tab-pane section above) ── */
+
+/* ═══════════════════════════════════════════════════════════════
+   🏕️  DINO HUTS — Positioning, Structure & All FX
+   ═══════════════════════════════════════════════════════════════ */
+.park-hut {
+  position: absolute;
+  bottom: 36%;
+  z-index: 120;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), filter 0.25s;
+  user-select: none;
+}
+
+.park-hut:hover {
+  transform: scale(1.04) translateY(-4px);
+  filter: drop-shadow(0 8px 20px rgba(245,158,11,0.35));
+}
+
+/* Click flash */
+.park-hut.hut-flash {
+  animation: hutClickFlash 0.5s ease-out;
+}
+@keyframes hutClickFlash {
+  0%   { filter: drop-shadow(0 0 0px rgba(251,191,36,0)); }
+  40%  { filter: drop-shadow(0 0 28px rgba(251,191,36,0.9)) brightness(1.3); }
+  100% { filter: drop-shadow(0 0 0px rgba(251,191,36,0)); }
+}
+
+/* Hut position & size (Luxury Villa) */
+.hut-single {
+  right: 11%;
+  width: 300px;
+  bottom: 28%;
+}
+
+/* Floating Sky Castle / Sky Palace (Upper-left sky) */
+.hut-sky {
+  left: 12%;
+  width: 250px;
+  top: 10%;
+  z-index: 185;
+  overflow: visible !important;
+  animation: skyCastleFloat 6s ease-in-out infinite alternate;
+}
+.hut-sky:hover {
+  transform: scale(1.06) translateY(-4px);
+  filter: drop-shadow(0 0 25px rgba(192,132,252,0.85));
+}
+
+@keyframes skyCastleFloat {
+  0%   { transform: translateY(0px) rotate(0deg); }
+  50%  { transform: translateY(-8px) rotate(0.8deg); }
+  100% { transform: translateY(-4px) rotate(-0.5deg); }
+}
+
+.sky-hut-svg { width: 100%; display: block; overflow: visible !important; filter: drop-shadow(0 12px 28px rgba(124,58,237,0.45)); }
+
+.hut-svg { width: 100%; display: block; }
+
+/* ── Chimney Smoke ── */
+.hut-smoke-wrap {
+  position: absolute;
+  pointer-events: none;
+}
+
+.hut-single-smoke { top: 10px; right: 90px; }
+
+.smoke-puff {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(230, 230, 230, 0.75);
+  filter: blur(3px);
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: smokeRise 3s ease-out infinite;
+}
+.smoke-puff.sp1 { animation-delay: 0s;    width: 12px; height: 12px; }
+.smoke-puff.sp2 { animation-delay: 1s;    width: 15px; height: 15px; left: 54%; }
+.smoke-puff.sp3 { animation-delay: 2s;    width: 10px; height: 10px; left: 46%; }
+
+@keyframes smokeRise {
+  0%   { transform: translateX(-50%) translateY(0)   scale(0.5); opacity: 0.8; }
+  40%  { transform: translateX(-50%) translateY(-26px) scale(1.3) rotate(8deg); opacity: 0.5; }
+  80%  { transform: translateX(-50%) translateY(-50px) scale(1.9) rotate(-5deg); opacity: 0.2; }
+  100% { transform: translateX(-50%) translateY(-70px) scale(2.4) rotate(10deg); opacity: 0; }
+}
+
+/* Day: smoke visible; Night: smoke fades */
+.park-hut.hut-night .hut-smoke-wrap { opacity: 0.3;  transition: opacity 4s; }
+.park-hut.hut-day   .hut-smoke-wrap { opacity: 1;    transition: opacity 4s; }
+
+/* Day window vs Night window glow inside SVG */
+.park-hut.hut-night .hut-window-night { opacity: 1; transition: opacity 4s ease; }
+.park-hut.hut-night .hut-window-day   { opacity: 0; transition: opacity 4s ease; }
+.park-hut.hut-day   .hut-window-night { opacity: 0; transition: opacity 4s ease; }
+.park-hut.hut-day   .hut-window-day   { opacity: 0.25; transition: opacity 4s ease; }
+
+/* ── Night Warm Window Glow ── */
+.hut-night-glow {
+  position: absolute;
+  bottom: 22%;
+  left: 45%;
+  transform: translateX(-50%);
+  width: 130px;
+  height: 65px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(251,191,36,0.65) 0%, rgba(251,191,36,0) 70%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 5s ease;
+  filter: blur(8px);
+}
+.park-hut.hut-night .hut-night-glow { opacity: 1; animation: hutGlowPulse 3s ease-in-out infinite; }
+.park-hut.hut-day   .hut-night-glow { opacity: 0; }
+
+@keyframes hutGlowPulse {
+  0%, 100% { transform: translateX(-50%) scale(1);    opacity: 0.85; }
+  50%       { transform: translateX(-50%) scale(1.2); opacity: 0.6; }
+}
+
+/* ── Fireflies ── */
+.hut-fireflies {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 5s ease;
+}
+.park-hut.hut-night .hut-fireflies { opacity: 1; }
+.park-hut.hut-day   .hut-fireflies { opacity: 0; }
+
+.firefly {
+  position: absolute;
+  font-size: 0.65rem;
+  animation: fireflyFloat 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px rgba(255,255,150,0.95));
+}
+.ff1 { bottom: 60%; left: 10%;  animation-delay: 0s;    animation-duration: 4.2s; }
+.ff2 { bottom: 35%; left: 85%;  animation-delay: 1.4s;  animation-duration: 3.7s; }
+.ff3 { bottom: 75%; left: 50%;  animation-delay: 2.6s;  animation-duration: 5.0s; }
+
+@keyframes fireflyFloat {
+  0%   { transform: translate(0,0) scale(1);       opacity: 0.3; }
+  25%  { transform: translate(10px,-16px) scale(1.2); opacity: 1; }
+  50%  { transform: translate(-8px,-28px) scale(0.9); opacity: 0.7; }
+  75%  { transform: translate(12px,-18px) scale(1.1); opacity: 1; }
+  100% { transform: translate(0,0) scale(1);       opacity: 0.3; }
+}
+
+/* ── Peek window animation ── */
+.hut-peek-wrap {
+  position: absolute;
+  pointer-events: none;
+}
+.hut-single .hut-peek-wrap { top: 48%; left: 17%; width: 32px; height: 32px; overflow: hidden; }
+
+/* ── Dino Doorway Squeeze-in Animation (Phase 2 of entering) ── */
+.park-dino-sprite.dino-squeeze-in {
+  animation: dinoDoorSqueeze 0.65s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards !important;
+}
+
+@keyframes dinoDoorSqueeze {
+  0% {
+    transform: scale(0.65) scaleX(1);
+    opacity: 1;
+  }
+  60% {
+    transform: scale(0.45) scaleX(0.3) translateY(-8px);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(0.1) scaleX(0.05) translateY(-15px);
+    opacity: 0;
+  }
+}
+
+/* ── Cute Entrance Bubble ── */
+.dino-entrance-bubble {
+  position: absolute;
+  top: -38px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.6);
+  background: rgba(20, 10, 0, 0.9);
+  color: #fff;
+  font-size: 0.95rem;
+  padding: 3px 8px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(251,191,36,0.65);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+  pointer-events: none;
+  animation: entranceBubblePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  z-index: 10008;
+}
+
+@keyframes entranceBubblePop {
+  0% { transform: translateX(-50%) translateY(8px) scale(0.2); opacity: 0; }
+  70% { transform: translateX(-50%) translateY(-4px) scale(1.15); opacity: 1; }
+  100% { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+}
+
+.hut-peeker {
+  position: absolute;
+  bottom: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.1rem;
+  animation: peekUpDown 0.6s ease-out forwards;
+}
+@keyframes peekUpDown {
+  0%   { bottom: -100%; }
+  50%  { bottom: 20%; }
+  80%  { bottom: 30%; }
+  100% { bottom: 15%; }
+}
+.hut-peeker.peek-hide {
+  animation: peekHide 0.4s ease-in forwards;
+}
+@keyframes peekHide {
+  0%   { bottom: 15%; }
+  100% { bottom: -100%; }
+}
+
+/* ── Hut Occupants Popup ── */
+.hut-popup {
+  position: absolute;
+  z-index: 9000;
+  pointer-events: auto;
+}
+.hut-a ~ .hut-popup, .hut-popup { /* positioned by JS */ }
+
+.hut-popup-inner {
+  background: rgba(15, 10, 2, 0.96);
+  border: 1.5px solid rgba(251,191,36,0.5);
+  border-radius: 18px;
+  padding: 16px 20px 14px;
+  min-width: 200px;
+  max-width: 260px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.55), 0 0 20px rgba(251,191,36,0.2);
+  backdrop-filter: blur(12px);
+  position: relative;
+  animation: popupAppear 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes popupAppear {
+  from { transform: scale(0.75) translateY(10px); opacity: 0; }
+  to   { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.hut-popup-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #fde68a;
+  margin-bottom: 10px;
+  font-family: 'ZCOOL KuaiLe', sans-serif;
+  text-align: center;
+  border-bottom: 1px solid rgba(251,191,36,0.25);
+  padding-bottom: 8px;
+}
+
+.hut-popup-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hut-resident-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 10px;
+  background: rgba(251,191,36,0.08);
+  font-size: 0.78rem;
+  color: var(--text-main);
+}
+
+.hut-empty-msg {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  padding: 8px 0;
+}
+
+.hut-popup-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 5px;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+}
+.hut-popup-close:hover { color: #f87171; background: rgba(239,68,68,0.15); }
+
+/* ── 🏞️ Dino Safari Park 300s (5-min) Day-Night Cycle System ── */
+.park-wrapper {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 130px);
+  min-height: 540px;
+  border-radius: var(--radius-lg);
+  border: 2px solid rgba(255,255,255,0.12);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+  user-select: none;
+  /* 5-minute continuous seamless sky background animation */
+  animation: skySeamlessGradient 300s linear infinite;
+}
+
+@keyframes skySeamlessGradient {
+  /* 0% - 35%: Daytime (Sunny Blue) */
+  0%, 35% {
+    background: linear-gradient(180deg, #1e6fa0 0%, #3098c8 22%, #62bde0 40%, #a8dff5 55%, #d0f0fa 62%, #b7ebb0 65%, #5cc966 70%, #34a853 82%, #1e7a33 100%);
+  }
+  /* 42%: Dusk/Sunset (Crimson Orange Pink) */
+  42% {
+    background: linear-gradient(180deg, #3b0764 0%, #7c2d12 25%, #c026d3 45%, #ea580c 62%, #fde047 68%, #3f6212 72%, #22c55e 82%, #15803d 100%);
+  }
+  /* 50%: Late Dusk (Deep Violet Sunset) */
+  50% {
+    background: linear-gradient(180deg, #1e1b4b 0%, #311b92 25%, #6b21a8 48%, #9d174d 62%, #ea580c 70%, #14532d 75%, #15803d 85%, #0f5128 100%);
+  }
+  /* 55% - 85%: Deep Night Sky (Dark Indigo & Starry Night) */
+  55%, 85% {
+    background: linear-gradient(180deg, #090d16 0%, #0f172a 25%, #1e1b4b 50%, #312e81 65%, #022c22 75%, #064e3b 85%, #022c22 100%);
+  }
+  /* 90%: Early Dawn (Deep Purple to Rose Pink) */
+  90% {
+    background: linear-gradient(180deg, #2e1065 0%, #581c87 25%, #be185d 48%, #f97316 62%, #fde047 70%, #15803d 78%, #16a34a 88%, #1e7a33 100%);
+  }
+  /* 96% - 100%: Sunrise -> Return to Day */
+  96%, 100% {
+    background: linear-gradient(180deg, #1e6fa0 0%, #3098c8 22%, #62bde0 40%, #a8dff5 55%, #d0f0fa 62%, #b7ebb0 65%, #5cc966 70%, #34a853 82%, #1e7a33 100%);
+  }
+}
+
+/* Night Ambient Overlay for Ground & Terrain */
+.park-night-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 30%, rgba(15, 23, 42, 0.45) 0%, rgba(2, 6, 23, 0.72) 100%);
+  pointer-events: none;
+  z-index: 10;
+  animation: nightOverlayFade 300s linear infinite;
+}
+
+@keyframes nightOverlayFade {
+  0%, 36% { opacity: 0; }
+  45%     { opacity: 0.4; }
+  55%, 85% { opacity: 0.68; }
+  92%     { opacity: 0.3; }
+  98%, 100% { opacity: 0; }
+}
+
+/* ── Sky ── */
+.park-sky {
+  position: absolute;
+  inset: 0;
+  height: 62%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Sun Orbit (Day: visible; Night: sinks & hides) */
+.park-sun-wrap {
+  position: absolute;
+  top: 14px;
+  right: 60px;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  animation: sunOrbitCycle 300s linear infinite;
+}
+
+.park-sun-svg {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  filter:
+    drop-shadow(0 0 12px #ffea00)
+    drop-shadow(0 0 28px #ff9800)
+    drop-shadow(0 0 50px rgba(255, 193, 7, 0.6));
+  animation: parkSunPulse 4s ease-in-out infinite;
+  z-index: 2;
+}
+
+.park-sun-rays {
+  position: absolute;
+  inset: -24px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 235, 59, 0.7) 0%,
+    rgba(255, 152, 0, 0.35) 45%,
+    transparent 72%
+  );
+  animation: parkSunRaysSpin 14s linear infinite;
+  z-index: 1;
+}
+
+@keyframes sunOrbitCycle {
+  0%, 35% {
+    transform: translateY(0px) scale(1);
+    opacity: 1;
+  }
+  42% {
+    transform: translateY(60px) scale(0.9);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(140px) scale(0.6);
+    opacity: 0;
+  }
+  51%, 88% {
+    transform: translateY(160px) scale(0.5);
+    opacity: 0;
+  }
+  94% {
+    transform: translateY(50px) scale(0.85);
+    opacity: 0.7;
+  }
+  98%, 100% {
+    transform: translateY(0px) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes parkSunPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 12px #ffea00) drop-shadow(0 0 28px #ff9800) drop-shadow(0 0 50px rgba(255,193,7,0.6));
+  }
+  50% {
+    transform: scale(1.07);
+    filter: drop-shadow(0 0 20px #fff) drop-shadow(0 0 42px #ffd600) drop-shadow(0 0 70px rgba(255,152,0,0.8));
+  }
+}
+@keyframes parkSunRaysSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Moon Orbit (Day: hides; Night: rises & glows) */
+.park-moon-wrap {
+  position: absolute;
+  top: 18px;
+  right: 80px;
+  width: 84px;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  animation: moonOrbitCycle 300s linear infinite;
+}
+
+.park-moon-svg {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  filter:
+    drop-shadow(0 0 14px #ffffff)
+    drop-shadow(0 0 30px #fef08a)
+    drop-shadow(0 0 50px rgba(250, 204, 21, 0.65));
+  animation: parkMoonPulse 4s ease-in-out infinite;
+  z-index: 2;
+}
+
+.park-moon-rays {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(254, 240, 138, 0.5) 0%, rgba(250, 204, 21, 0.2) 45%, transparent 70%);
+  animation: parkMoonRaysSpin 20s linear infinite;
+  z-index: 1;
+}
+
+@keyframes moonOrbitCycle {
+  0%, 42% {
+    transform: translateY(140px) scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(40px) scale(0.85);
+    opacity: 0.7;
+  }
+  55%, 85% {
+    transform: translateY(0px) scale(1);
+    opacity: 1;
+  }
+  92% {
+    transform: translateY(80px) scale(0.7);
+    opacity: 0.4;
+  }
+  96%, 100% {
+    transform: translateY(140px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes parkMoonPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 14px #fff) drop-shadow(0 0 30px #fef08a);
+  }
+  50% {
+    transform: scale(1.06);
+    filter: drop-shadow(0 0 22px #fff) drop-shadow(0 0 45px #facc15);
+  }
+}
+
+@keyframes parkMoonRaysSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+
+/* Twinkling Stars in Night Sky (Z-index 1: Background behind clouds & moon) */
+.park-stars-wrap {
+  position: absolute;
+  inset: 0;
+  height: 50%;
+  pointer-events: none;
+  z-index: 1;
+  animation: starsFadeCycle 300s linear infinite;
+}
+
+@keyframes starsFadeCycle {
+  0%, 40%   { opacity: 0; }
+  48%       { opacity: 0.5; }
+  55%, 85%  { opacity: 1; }
+  92%       { opacity: 0.3; }
+  97%, 100% { opacity: 0; }
+}
+
+.park-star {
+  position: absolute;
+  color: #fff;
+  font-size: 1rem;
+  filter: drop-shadow(0 0 6px #ffffff);
+  animation: starTwinkle 2.5s ease-in-out infinite alternate;
+}
+
+.star-1 { top: 12%; left: 15%; font-size: 1.2rem; animation-delay: 0s; }
+.star-2 { top: 22%; left: 32%; font-size: 0.9rem; animation-delay: 0.6s; }
+.star-3 { top: 8%;  left: 48%; font-size: 1.1rem; animation-delay: 1.2s; }
+.star-4 { top: 18%; left: 65%; font-size: 0.8rem; animation-delay: 0.3s; }
+.star-5 { top: 28%; left: 80%; font-size: 1.3rem; animation-delay: 1.8s; }
+.star-6 { top: 10%; left: 88%; font-size: 1.0rem; animation-delay: 0.9s; }
+.star-7 { top: 32%; left: 22%; font-size: 0.8rem; animation-delay: 1.5s; }
+.star-8 { top: 25%; left: 55%; font-size: 1.1rem; animation-delay: 2.1s; }
+
+@keyframes starTwinkle {
+  0%   { transform: scale(0.8); opacity: 0.5; }
+  100% { transform: scale(1.25); opacity: 1; filter: drop-shadow(0 0 10px #fef08a); }
+}
+
+/* Clouds (Z-index 5: Foreground floating in front of stars, moon & sun) */
+.park-cloud {
+  position: absolute;
+  opacity: 0.94;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.12));
+  pointer-events: none;
+  z-index: 5;
+}
+.cloud-1 { width: 190px; top: 22px;  left: -220px; animation: parkCloudDrift 38s linear infinite; }
+.cloud-2 { width: 140px; top: 60px;  left: -180px; animation: parkCloudDrift 52s linear infinite 14s; }
+.cloud-3 { width: 160px; top: 14px;  left: -200px; animation: parkCloudDrift 44s linear infinite 26s; }
+
+@keyframes parkCloudDrift {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(calc(100vw + 260px)); }
+}
+
+/* ── Far mountains ── */
+.park-far-mountains {
+  position: absolute;
+  bottom: 54%;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  pointer-events: none;
+  z-index: 1;
+}
+.park-far-mountains svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Ground (Takes up 60% of the entire safari park height!) ── */
+.park-ground {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: linear-gradient(180deg, #3dba58 0%, #2da048 35%, #1e7a33 100%);
+  box-shadow: inset 0 12px 40px rgba(0, 0, 0, 0.18);
+  z-index: 2;
+  overflow: visible;
+}
+
+/* Fence */
+.park-fence {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 48px;
+  pointer-events: none;
+  z-index: 4;
+}
+.park-fence svg { width: 100%; height: 100%; }
+
+/* Trees */
+.park-tree {
+  position: absolute;
+  pointer-events: none;
+  filter: drop-shadow(2px 6px 8px rgba(0,0,0,0.3));
+  animation: parkTreeSway 6s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+.tree-l1 { width: 80px;  top: -75px;  left: 2%;  animation-delay: 0s; }
+.tree-l2 { width: 55px;  top: -60px;  left: 9%;  animation-delay: 1.4s; }
+.tree-r1 { width: 90px;  top: -88px;  right: 2%; animation-delay: 0.7s; }
+.tree-r2 { width: 52px;  top: -55px;  right: 10%; animation-delay: 2.1s; }
+
+@keyframes parkTreeSway {
+  0%, 100% { transform: rotate(0deg); }
+  30% { transform: rotate(1.5deg); }
+  70% { transform: rotate(-1.2deg); }
+}
+
+/* Flowers */
+.park-flower {
+  position: absolute;
+  pointer-events: none;
+  animation: parkFlowerBob 3.8s ease-in-out infinite;
+}
+.flower-1 { width: 32px; bottom: 52%; left: 18%;  animation-delay: 0s; }
+.flower-2 { width: 26px; bottom: 62%; left: 34%;  animation-delay: 0.8s; }
+.flower-3 { width: 24px; bottom: 56%; left: 55%;  animation-delay: 1.6s; }
+.flower-4 { width: 20px; bottom: 48%; right: 22%; animation-delay: 2.4s; }
+.flower-5 { width: 22px; bottom: 60%; right: 35%; animation-delay: 1.1s; }
+
+@keyframes parkFlowerBob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  40% { transform: translateY(-4px) rotate(4deg); }
+  70% { transform: translateY(-2px) rotate(-3deg); }
+}
+
+/* Rocks */
+.park-rock {
+  position: absolute;
+  pointer-events: none;
+}
+.rock-1 { width: 52px; bottom: 52%; right: 18%; }
+.rock-2 { width: 36px; bottom: 44%; left: 43%; }
+
+/* River (River moved upwards to allow 60% grassland roaming) */
+.park-river {
+  position: absolute;
+  left: 0;
+  bottom: 42%;        /* sits in upper portion of 60% ground */
+  width: 100%;
+  height: 60px;
+  pointer-events: none;
+  z-index: 3;
+  animation: riverFlow 6s ease-in-out infinite;
+}
+.park-river svg { width: 100%; height: 100%; }
+
+@keyframes riverFlow {
+  0%, 100% { opacity: 0.85; }
+  50%       { opacity: 1; }
+}
+
+/* Foreground grass strip — delicate blade tips at bottom edge, no solid block */
+.park-foreground-grass {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 25px;
+  pointer-events: none;
+  z-index: 3;   /* below dinos layer */
+}
+.park-foreground-grass svg { width: 100%; height: 100%; }
+
+/* ── Dino Sprites Layer (Spans FULL 100% height, ALWAYS at the absolute front above terrain/rivers!) ── */
+#park-dinos-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  z-index: 999 !important; /* Absolute top z-index above grass, river, trees, rocks! */
+  pointer-events: none;    /* container transparent; sprites have their own pointer-events */
+}
+
+.park-dino-sprite {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70px;
+  height: 70px;
+  will-change: left, top, transform;
+  transform: translateZ(0);
+  transition: left 3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              top  3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+  overflow: visible;
+  pointer-events: auto;           /* sprites are clickable even though layer is none */
+  background: transparent !important;
+}
+.park-dino-sprite:hover { z-index: 9999 !important; }
+
+.park-dino-body {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: visible;
+  transition: transform 0.4s ease;
+  background: transparent !important;
+}
+
+/* ── CRITICAL: All effect wrappers inside park must be transparent ── */
+.park-dino-body > *,
+.park-dino-body svg,
+.park-dino-body .deluxe-magic-circle-wrap,
+.park-dino-body .starry-magic-circle-wrap,
+.park-dino-body .deluxe-cherry-wrap,
+.park-dino-body .gold-skin-aura,
+.park-dino-body .orbiting-fairy-sprite,
+.park-dino-body .apex-flame-left,
+.park-dino-body .apex-flame-right {
+  background: transparent !important;
+}
+
+/* ── 🐉 Legend Stage Flying Dino in Safari Sky ── */
+.park-dino-legend-flying {
+  filter: drop-shadow(0 0 16px rgba(245, 158, 11, 0.75));
+  z-index: 180 !important;
+}
+
+.park-dino-legend-flying .park-dino-body {
+  animation: legendSkyFlight 3.8s ease-in-out infinite alternate !important;
+}
+
+.park-dino-legend-flying::after {
+  content: '☁️';
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.3rem;
+  opacity: 0.6;
+  filter: drop-shadow(0 4px 10px rgba(255, 255, 255, 0.8));
+  pointer-events: none;
+  animation: flightCloudPulse 2.8s ease-in-out infinite;
+}
+
+@keyframes legendSkyFlight {
+  0%   { transform: translateY(0px) rotate(0deg); }
+  50%  { transform: translateY(-18px) rotate(3deg); }
+  100% { transform: translateY(-6px) rotate(-3deg); }
+}
+
+@keyframes flightCloudPulse {
+  0%, 100% { transform: translateX(-50%) scale(0.95); opacity: 0.45; }
+  50%      { transform: translateX(-50%) scale(1.2); opacity: 0.75; }
+}
+
+/* Direction flipping */
+.park-dino-sprite.flip-left  .park-dino-body { transform: scaleX(-1); }
+.park-dino-sprite.flip-right .park-dino-body { transform: scaleX(1); }
+
+/* Nametag */
+.park-dino-nametag {
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, rgba(10,14,36,0.92), rgba(24,32,64,0.92));
+  border: 1.4px solid rgba(251,191,36,0.65);
+  color: #f1f5f9;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 50px;
+  white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 50;
+  backdrop-filter: blur(4px);
+}
+.park-dino-nametag .nametag-score {
+  color: #fbbf24;
+  font-weight: 900;
+}
+.park-dino-nametag .nametag-badge {
+  color: #6ee7b7;
+  font-size: 0.65rem;
+}
+
+
+
+@keyframes welcomePop {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes logoPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}

@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DinoClass — 班级恐龙激励养成系统</title>
+  <meta name="description" content="专为班主任打造的班级激励管理应用。每个学生拥有一头可进化的专属恐龙，通过日常优秀表现加分，从恐龙蛋破壳升级为霸王圣龙！">
+  <link rel="icon" type="image/jpeg" href="icon.jpg">
+  <link rel="apple-touch-icon" href="icon.jpg">
+  <link rel="manifest" href="manifest.json">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation & Header Bar -->
+  <header class="app-header">
+    <div class="brand-container">
+      <img class="brand-logo-img" src="icon.jpg" alt="DinoClass">
+      <div class="brand-text">
+        <div class="brand-title">DinoClass</div>
+        <span class="brand-tag">v4.2 · 熔岩火龙特别版 🌋🎓</span>
+      </div>
+    </div>
+
+    <!-- Main Nav Tabs (Unified Master Views) -->
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-view="console">
+        <span>🎮</span> 班级大屏中枢
+      </button>
+      <button class="nav-tab" data-view="park" id="btn-nav-park" title="点击进入全班恐龙漫步乐园">
+        <span class="park-icon-anim">🏞️</span> 恐龙大草原
+      </button>
+      <button class="nav-tab" data-view="shop">
+        <span>🏪</span> 积分商城
+      </button>
+      <button class="nav-tab" data-view="history">
+        <span>📜</span> 积分明细
+      </button>
+      <button class="nav-tab" data-view="tools">
+        <span>🛠️</span> 实用小工具
+      </button>
+    </nav>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <button class="btn btn-gold" id="btn-open-wheel" title="启动全屏幸运抽答轮盘" onclick="window.dinoApp.openFullscreenWheel()">🎰 幸运抽答</button>
+      <button class="btn btn-gold btn-sm" id="btn-toggle-sound">🔊 音效: 开</button>
+      <button class="btn btn-gold btn-sm" id="btn-toggle-bgm">🎵 音乐: 开</button>
+      <button class="btn btn-primary" id="btn-batch-score">⚡ 批量加/扣分</button>
+      <button class="btn btn-success" id="btn-add-student">➕ 新增学生</button>
+    </div>
+  </header>
+
+  <!-- Main View Container -->
+  <main class="app-content">
+
+    <!-- View 1: 班级大屏管理中枢 (Master Classroom Hub) -->
+    <section class="tab-pane active" id="view-console">
+
+      <!-- 🌟 电子光荣榜置顶特写展台 (有置顶特权或今日之星时自动点亮) -->
+      <div class="spotlight-shelf-container" id="spotlight-shelf-container" style="display:none;">
+        <div class="spotlight-shelf-header">
+          <span>🌟 班级电子光荣榜 · 明星恐龙展台</span>
+          <span style="font-size:0.82rem; color:var(--text-muted);">佩戴置顶特权与高光荣誉学生特写</span>
+        </div>
+        <div class="spotlight-shelf-cards" id="spotlight-shelf-cards">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+      </div>
+
+      <div class="console-toolbar">
+        <div class="stats-group">
+          <div class="stat-item">
+            <span class="stat-value" id="stat-total-students">0 人</span>
+            <span class="stat-label">班级总人数</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" id="stat-hatched-count" style="color: #34d399;">0 / 0</span>
+            <span class="stat-label">已破壳恐龙</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" id="stat-total-score" style="color: #fbbf24;">0 分</span>
+            <span class="stat-label">全班累计总积分</span>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label style="display:flex; align-items:center; gap:6px; font-size:0.85rem; color:var(--text-muted);">
+            <input type="checkbox" id="checkbox-select-all" style="accent-color:var(--primary); cursor:pointer;">
+            全选
+          </label>
+          <input type="text" class="search-input" id="search-student" placeholder="🔍 搜索学生姓名...">
+          <select class="select-input" id="filter-species">
+            <option value="all">🐉 全部恐龙种族</option>
+            <option value="rex">霸王龙</option>
+            <option value="tri">三角龙</option>
+            <option value="ptero">翼龙</option>
+            <option value="brachio">腕龙</option>
+            <option value="mythic">幻彩圣龙</option>
+          </select>
+          <select class="select-input" id="filter-stage">
+            <option value="all">⭐ 全部进化阶段</option>
+            <option value="egg">🥚 恐龙蛋 (0-30分)</option>
+            <option value="baby">🐣 破壳幼龙 (31-150分)</option>
+            <option value="teen">🦖 酷炫青年龙 (151-270分)</option>
+            <option value="apex">🔥 霸王战龙 (271-390分)</option>
+            <option value="legend">👑 传说圣龙 (391分+)</option>
+          </select>
+          <button class="btn btn-secondary" id="btn-export-data" title="导出备份">💾 导出</button>
+          <button class="btn btn-secondary" id="btn-import-data" title="导入备份">📁 导入</button>
+          <button class="btn btn-secondary" id="btn-reset-demo" title="重置示例">🔄 恢复示例</button>
+        </div>
+      </div>
+
+      <!-- Student Dinosaur Cards Grid -->
+      <div class="cards-grid" id="console-cards-grid">
+        <!-- Rendered by app.js -->
+      </div>
+    </section>
+
+    <!-- View 3: 恐龙积分商城 & 魔法试衣间 (Reward Shop & Fitting Room) -->
+    <section class="tab-pane" id="view-shop">
+      <div class="shop-fitting-layout">
+        
+        <!-- Left: 👗 恐龙魔法试衣舞台 (Fitting Room Stage) -->
+        <div class="shop-fitting-room">
+          <div class="fitting-room-header">
+            <div class="fitting-room-title">👗 恐龙魔法试衣间</div>
+            <div class="fitting-room-subtitle">点击右侧装扮道具，实时预览穿戴效果</div>
+          </div>
+
+          <!-- 试穿模特展示台 -->
+          <div class="fitting-mannequin-wrap" id="shop-mannequin-wrap">
+            <div class="fitting-stage-pedestal"></div>
+            <div id="shop-mannequin-avatar" class="fitting-mannequin-avatar" onclick="window.dinoApp.triggerDinoScratch(this, 'mannequin')" title="点击恐龙互动抓痒">
+              <!-- Rendered by app.js -->
+            </div>
+          </div>
+
+          <!-- 模特控制与种族切换 -->
+          <div class="fitting-controls-box">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span style="font-size:0.82rem; font-weight:700; color:var(--text-muted);">🦖 模特种族切换：</span>
+              <select class="select-input" id="select-shop-species" style="padding:4px 10px; font-size:0.8rem;" onchange="window.dinoApp.setShopMannequinSpecies(this.value)">
+                <option value="rex">霸王龙</option>
+                <option value="tri">三角龙</option>
+                <option value="ptero">翼龙</option>
+                <option value="brachio">腕龙</option>
+                <option value="mythic">幻彩圣龙</option>
+              </select>
+            </div>
+
+            <!-- 当前已穿戴标签 -->
+            <div class="fitting-tryon-summary" id="shop-tryon-summary">
+              <span class="tryon-empty-hint">当前为基础初始造型（未试穿装扮）</span>
+            </div>
+
+            <div style="display:flex; gap:8px; margin-top:12px;">
+              <button class="btn btn-secondary btn-sm" style="flex:1; font-size:0.8rem;" onclick="window.dinoApp.clearShopTryOn()">🧹 脱下全部</button>
+              <button class="btn btn-gold btn-sm" style="flex:1; font-size:0.8rem;" onclick="window.dinoApp.tryOnAllCosmetics()">✨ 一键全配试穿</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: 🛍️ 道具与特权展柜 (Wardrobe Items Grid) -->
+        <div class="shop-items-panel">
+          <div class="shop-panel-header">
+            <div>
+              <h2 style="font-size: 1.3rem; margin-bottom:2px;">🏪 恐龙积分集市 & 班级特权</h2>
+              <p style="color: var(--text-muted); font-size: 0.85rem;">积累表现积分兑换特权卡与限定装扮</p>
+            </div>
+
+            <!-- 🗂️ Shop Category Filter Pills -->
+            <div class="shop-cat-pills" id="shop-category-pills">
+              <button class="shop-cat-pill active" data-cat="all" onclick="window.dinoApp.setShopCategory('all')">✨ 全部商品</button>
+              <button class="shop-cat-pill" data-cat="privilege" onclick="window.dinoApp.setShopCategory('privilege')">🎟️ 班级特权</button>
+              <button class="shop-cat-pill" data-cat="skin" onclick="window.dinoApp.setShopCategory('skin')">🐲 神兽皮肤</button>
+              <button class="shop-cat-pill" data-cat="accessory" onclick="window.dinoApp.setShopCategory('accessory')">👑 头饰装扮</button>
+              <button class="shop-cat-pill" data-cat="fx" onclick="window.dinoApp.setShopCategory('fx')">✨ 魔法特效</button>
+            </div>
+          </div>
+
+          <div class="shop-grid" id="shop-grid">
+            <!-- Rendered by app.js -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- View 4: 积分明细与履历 (Score Log History) -->
+    <section class="tab-pane" id="view-history">
+      <div style="margin-bottom: 20px;">
+        <h2 style="font-size: 1.4rem;">📜 班级积分与行为履历</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">记录所有加分与扣分的具体事由及时间戳</p>
+      </div>
+
+      <div id="history-list">
+        <!-- Rendered by app.js -->
+      </div>
+    </section>
+
+    <!-- View 5: 实用小工具 (Practical Tools) -->
+    <section class="tab-pane" id="view-tools">
+      <div style="margin-bottom: 20px;">
+        <h2 style="font-size: 1.4rem;">🛠️ 实用小工具</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">提供秒表、倒计时器、计算器等课堂常用工具</p>
+      </div>
+      <div class="tools-grid" id="tools-grid">
+        <!-- Stopwatch -->
+        <div class="tool-card" id="tool-stopwatch">
+          <h3>⏱️ 秒表</h3>
+          <div class="stopwatch-display" id="stopwatch-display">00:00.0</div>
+          <div class="tool-actions">
+            <button class="btn btn-primary" id="btn-start-stopwatch">开始</button>
+            <button class="btn btn-secondary" id="btn-reset-stopwatch">重置</button>
+          </div>
+        </div>
+        <!-- Countdown Timer -->
+        <div class="tool-card" id="tool-timer">
+          <h3>⏳ 倒计时器</h3>
+          <div style="display:flex; justify-content:center; align-items:center; gap:4px; margin: 8px 0;">
+            <input type="number" min="0" max="23" placeholder="0" id="timer-input-hours" class="search-input" style="width:52px; text-align:center; padding: 4px; font-size:0.85rem;"/>
+            <span style="font-size:0.8rem; color:var(--text-muted);">时</span>
+            <input type="number" min="0" max="59" placeholder="5" id="timer-input-mins" class="search-input" style="width:52px; text-align:center; padding: 4px; font-size:0.85rem;"/>
+            <span style="font-size:0.8rem; color:var(--text-muted);">分</span>
+          </div>
+          <div class="tool-actions">
+            <button class="btn btn-primary" id="btn-start-timer" style="padding: 4px 12px; font-size: 0.85rem;">开始</button>
+            <button class="btn btn-secondary" id="btn-reset-timer" style="padding: 4px 12px; font-size: 0.85rem;">重置</button>
+          </div>
+          <div class="timer-display" id="timer-display" style="margin-top:8px; font-size:1.1rem; font-weight:700; color: var(--accent-gold);">00时 00分 00秒</div>
+        </div>
+        <!-- Calculator -->
+        <div class="tool-card" id="tool-calculator">
+          <h3>🧮 计算器</h3>
+          <input type="text" placeholder="表达式 (如 12+7*3)" id="calc-input" class="search-input" style="width:100%; margin-bottom:8px;"/>
+          <div class="tool-actions">
+            <button class="btn btn-primary" id="btn-calc-eval">计算</button>
+          </div>
+          <div class="calc-result" id="calc-result" style="margin-top:8px; font-size:1.2rem; color: var(--accent-gold);"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- View 6: 恐龙大草原乐园 (Dino Safari Park) -->
+    <section class="tab-pane" id="view-park">
+      <div class="park-wrapper">
+        <div class="park-night-overlay"></div>
+
+        <!-- Sky Layer -->
+        <div class="park-sky">
+          <!-- Cute SVG Sun with eyes, cheeks and smile -->
+          <div class="park-sun-wrap">
+            <div class="park-sun-rays"></div>
+            <svg class="park-sun-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="sunBodyGrad" cx="38%" cy="32%" r="65%">
+                  <stop offset="0%"   stop-color="#fff176"/>
+                  <stop offset="40%"  stop-color="#ffd600"/>
+                  <stop offset="100%" stop-color="#fb8c00"/>
+                </radialGradient>
+                <radialGradient id="sunGloss" cx="30%" cy="25%" r="50%">
+                  <stop offset="0%" stop-color="rgba(255,255,255,0.55)"/>
+                  <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+                </radialGradient>
+              </defs>
+
+              <!-- Sun spike rays (8 triangular spikes) -->
+              <g fill="#ffd600" opacity="0.9">
+                <polygon points="50,2  54,18 46,18"/>
+                <polygon points="50,82 54,98 46,98"/>
+                <polygon points="2,50  18,54 18,46"/>
+                <polygon points="82,50 98,54 98,46"/>
+                <polygon points="15,15 26,28 13,28"/>
+                <polygon points="85,15 87,28 74,28"/>
+                <polygon points="15,85 26,72 13,72"/>
+                <polygon points="85,85 87,72 74,72"/>
+              </g>
+
+              <!-- Sun body -->
+              <circle cx="50" cy="50" r="30" fill="url(#sunBodyGrad)"/>
+              <!-- Gloss highlight -->
+              <ellipse cx="42" cy="38" rx="12" ry="9" fill="url(#sunGloss)"/>
+
+              <!-- Eyes — slightly squinting for cute expression -->
+              <ellipse cx="41" cy="46" rx="5.5" ry="5" fill="white"/>
+              <ellipse cx="59" cy="46" rx="5.5" ry="5" fill="white"/>
+              <!-- Pupils -->
+              <ellipse cx="41.5" cy="47" rx="3" ry="3.2" fill="#2d1a00"/>
+              <ellipse cx="59.5" cy="47" rx="3" ry="3.2" fill="#2d1a00"/>
+              <!-- Eye sparkle highlights -->
+              <circle cx="43" cy="45.2" r="1.5" fill="white"/>
+              <circle cx="61" cy="45.2" r="1.5" fill="white"/>
+              <circle cx="40" cy="48.5" r="0.7" fill="rgba(255,255,255,0.6)"/>
+              <circle cx="58" cy="48.5" r="0.7" fill="rgba(255,255,255,0.6)"/>
+
+              <!-- Rosy cheeks -->
+              <ellipse cx="34" cy="55" rx="5.5" ry="3.5" fill="#ff8a65" opacity="0.5"/>
+              <ellipse cx="66" cy="55" rx="5.5" ry="3.5" fill="#ff8a65" opacity="0.5"/>
+
+              <!-- Cute kawaii mouth: small "∪" closed smile -->
+              <path d="M44,61 Q50,66 56,61" stroke="#c84b00" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+              <!-- Tiny corner dimples -->
+              <circle cx="44" cy="61.5" r="1" fill="#d84315" opacity="0.6"/>
+              <circle cx="56" cy="61.5" r="1" fill="#d84315" opacity="0.6"/>
+            </svg>
+          </div>
+
+          <!-- Cute SVG Moon with sleeping eyes, blush & silver glow -->
+          <div class="park-moon-wrap">
+            <div class="park-moon-rays"></div>
+            <svg class="park-moon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="moonBodyGrad" cx="35%" cy="30%" r="68%">
+                  <stop offset="0%"   stop-color="#ffffff"/>
+                  <stop offset="45%"  stop-color="#fef08a"/>
+                  <stop offset="100%" stop-color="#facc15"/>
+                </radialGradient>
+                <radialGradient id="moonGloss" cx="30%" cy="25%" r="50%">
+                  <stop offset="0%" stop-color="rgba(255,255,255,0.7)"/>
+                  <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+                </radialGradient>
+              </defs>
+
+              <!-- Crescent Moon Body -->
+              <path d="M52,12 A38,38 0 1,0 88,52 A28,28 0 1,1 52,12 Z" fill="url(#moonBodyGrad)"/>
+              <path d="M52,12 A38,38 0 1,0 88,52 A28,28 0 1,1 52,12 Z" fill="url(#moonGloss)"/>
+
+              <!-- Sleeping Eyes ("⌒ ⌒") -->
+              <path d="M34,44 Q38,39 42,44" stroke="#713f12" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+              <path d="M52,44 Q56,39 60,44" stroke="#713f12" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+
+              <!-- Sweet Smile -->
+              <path d="M43,52 Q47,56 51,52" stroke="#854d0e" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+              <!-- Rosy cheeks -->
+              <ellipse cx="32" cy="49" rx="4.5" ry="3" fill="#f43f5e" opacity="0.45"/>
+              <ellipse cx="62" cy="49" rx="4.5" ry="3" fill="#f43f5e" opacity="0.45"/>
+
+              <!-- Sparkle accent -->
+              <text x="68" y="32" font-size="12" fill="#fbbf24">✨</text>
+            </svg>
+          </div>
+
+          <!-- Night Twinkling Stars -->
+          <div class="park-stars-wrap">
+            <span class="park-star star-1">✨</span>
+            <span class="park-star star-2">⭐</span>
+            <span class="park-star star-3">✦</span>
+            <span class="park-star star-4">✨</span>
+            <span class="park-star star-5">⭐</span>
+            <span class="park-star star-6">✦</span>
+            <span class="park-star star-7">✨</span>
+            <span class="park-star star-8">⭐</span>
+          </div>
+          <!-- Clouds (SVG-styled, not emoji) -->
+          <div class="park-cloud cloud-1">
+            <svg viewBox="0 0 120 55" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="60" cy="38" rx="55" ry="17" fill="white" opacity="0.95"/>
+              <ellipse cx="38" cy="28" rx="28" ry="20" fill="white" opacity="0.95"/>
+              <ellipse cx="75" cy="24" rx="22" ry="18" fill="white" opacity="0.9"/>
+              <ellipse cx="55" cy="20" rx="20" ry="16" fill="white"/>
+            </svg>
+          </div>
+          <div class="park-cloud cloud-2">
+            <svg viewBox="0 0 90 45" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="45" cy="32" rx="40" ry="13" fill="white" opacity="0.9"/>
+              <ellipse cx="28" cy="22" rx="22" ry="16" fill="white" opacity="0.9"/>
+              <ellipse cx="60" cy="18" rx="18" ry="14" fill="white"/>
+            </svg>
+          </div>
+          <div class="park-cloud cloud-3">
+            <svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="36" rx="46" ry="14" fill="white" opacity="0.92"/>
+              <ellipse cx="30" cy="26" rx="24" ry="18" fill="white" opacity="0.92"/>
+              <ellipse cx="65" cy="22" rx="20" ry="16" fill="white"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Far Mountain Silhouettes -->
+        <div class="park-far-mountains">
+          <svg viewBox="0 0 1200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="mtnGrad1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#4ade80"/>
+                <stop offset="100%" stop-color="#15803d"/>
+              </linearGradient>
+              <linearGradient id="mtnGrad2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#86efac"/>
+                <stop offset="100%" stop-color="#22c55e"/>
+              </linearGradient>
+            </defs>
+            <!-- Back hills -->
+            <ellipse cx="150" cy="200" rx="240" ry="130" fill="url(#mtnGrad2)" opacity="0.5"/>
+            <ellipse cx="500" cy="200" rx="300" ry="150" fill="url(#mtnGrad2)" opacity="0.45"/>
+            <ellipse cx="900" cy="200" rx="280" ry="140" fill="url(#mtnGrad2)" opacity="0.5"/>
+            <!-- Front hills -->
+            <ellipse cx="280" cy="200" rx="220" ry="110" fill="url(#mtnGrad1)" opacity="0.7"/>
+            <ellipse cx="700" cy="200" rx="260" ry="120" fill="url(#mtnGrad1)" opacity="0.65"/>
+            <ellipse cx="1100" cy="200" rx="200" ry="105" fill="url(#mtnGrad1)" opacity="0.7"/>
+          </svg>
+        </div>
+
+        <!-- Ground Layer -->
+        <div class="park-ground" id="park-ground">
+
+          <!-- Back fence (decorative) -->
+          <div class="park-fence">
+            <svg viewBox="0 0 1200 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+              <rect y="20" width="1200" height="6" rx="3" fill="#92400e" opacity="0.6"/>
+              <rect y="32" width="1200" height="4" rx="2" fill="#92400e" opacity="0.5"/>
+              <!-- Fence posts -->
+              <rect x="0"   y="5" width="10" height="38" rx="3" fill="#78350f" opacity="0.7"/>
+              <rect x="90"  y="5" width="10" height="38" rx="3" fill="#78350f" opacity="0.7"/>
+              <rect x="180" y="5" width="10" height="38" rx="3" fill="#78350f" opacity="0.7"/>
+              <rect x="270" y="5" width="10" height="38" rx="3" fill="#78350f" opacity="0.7"/>
+              <rect x="360" y="5" width="10" height="38" rx="3" fill="#78350f" opacity="0.7"/>
+              <rect x="450" y="5" width="10" height="38" rx="3" fill="#78350f" opacity="0.7"/>
+              <rect x="540" y="5" width="10" height="38" rx="3" fill="#78350f" opacity="0.7"/>
+              <rect x="630" y="5" width="10" height="38" rx="3" fill="#78350f" opacity="0.7"/>
+              <rect x="720" y="5" width="10" height="38" rx="3" fill="#78350f" opacity="0.7"/>
+              <rect x="810" y="5" width="10" height="38" rx="3" fill="#78350f" opacity="0.7"/>
+              <rect x="900" y="5" width="10" height="38" rx="3" fill="#78350f" opacity="0.7"/>
+              <rect x="990" y="5" width="10" height="38" rx="3" fill="#78350f" opacity="0.7"/>
+              <rect x="1080" y="5" width="10" height="38" rx="3" fill="#78350f" opacity="0.7"/>
+              <rect x="1190" y="5" width="10" height="38" rx="3" fill="#78350f" opacity="0.7"/>
+            </svg>
+          </div>
+
+          <!-- Trees left cluster -->
+          <div class="park-tree tree-l1">
+            <svg viewBox="0 0 80 120" xmlns="http://www.w3.org/2000/svg">
+              <rect x="34" y="70" width="12" height="50" rx="4" fill="#78350f"/>
+              <ellipse cx="40" cy="52" rx="32" ry="38" fill="#16a34a"/>
+              <ellipse cx="40" cy="40" rx="26" ry="30" fill="#22c55e"/>
+              <ellipse cx="40" cy="30" rx="18" ry="22" fill="#4ade80"/>
+            </svg>
+          </div>
+          <div class="park-tree tree-l2">
+            <svg viewBox="0 0 60 100" xmlns="http://www.w3.org/2000/svg">
+              <rect x="26" y="60" width="8" height="40" rx="3" fill="#92400e"/>
+              <ellipse cx="30" cy="44" rx="24" ry="30" fill="#15803d"/>
+              <ellipse cx="30" cy="32" rx="18" ry="22" fill="#16a34a"/>
+              <ellipse cx="30" cy="22" rx="13" ry="16" fill="#4ade80"/>
+            </svg>
+          </div>
+
+          <!-- Trees right cluster -->
+          <div class="park-tree tree-r1">
+            <svg viewBox="0 0 80 130" xmlns="http://www.w3.org/2000/svg">
+              <rect x="34" y="75" width="12" height="55" rx="4" fill="#78350f"/>
+              <ellipse cx="40" cy="58" rx="34" ry="40" fill="#14532d"/>
+              <ellipse cx="40" cy="44" rx="28" ry="32" fill="#16a34a"/>
+              <ellipse cx="40" cy="30" rx="20" ry="24" fill="#22c55e"/>
+              <ellipse cx="40" cy="18" rx="14" ry="16" fill="#4ade80"/>
+            </svg>
+          </div>
+          <div class="park-tree tree-r2">
+            <svg viewBox="0 0 55 90" xmlns="http://www.w3.org/2000/svg">
+              <rect x="23" y="55" width="9" height="35" rx="3" fill="#92400e"/>
+              <ellipse cx="27" cy="42" rx="22" ry="28" fill="#15803d"/>
+              <ellipse cx="27" cy="28" rx="16" ry="20" fill="#22c55e"/>
+            </svg>
+          </div>
+
+          <!-- Flowers scattered -->
+          <div class="park-flower flower-1">
+            <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="18" cy="8" r="6" fill="#f9a8d4"/>
+              <circle cx="28" cy="18" r="6" fill="#f9a8d4"/>
+              <circle cx="18" cy="28" r="6" fill="#f9a8d4"/>
+              <circle cx="8" cy="18" r="6" fill="#f9a8d4"/>
+              <circle cx="18" cy="18" r="7" fill="#fbbf24"/>
+              <rect x="16" y="28" width="4" height="10" rx="2" fill="#22c55e"/>
+            </svg>
+          </div>
+          <div class="park-flower flower-2">
+            <svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="15" cy="6" r="5" fill="#fde68a"/>
+              <circle cx="24" cy="15" r="5" fill="#fde68a"/>
+              <circle cx="15" cy="24" r="5" fill="#fde68a"/>
+              <circle cx="6" cy="15" r="5" fill="#fde68a"/>
+              <circle cx="15" cy="15" r="6" fill="#f59e0b"/>
+              <rect x="13" y="24" width="4" height="8" rx="2" fill="#16a34a"/>
+            </svg>
+          </div>
+          <div class="park-flower flower-3">
+            <svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="14" cy="5" r="5" fill="#c4b5fd"/>
+              <circle cx="23" cy="14" r="5" fill="#c4b5fd"/>
+              <circle cx="14" cy="23" r="5" fill="#c4b5fd"/>
+              <circle cx="5" cy="14" r="5" fill="#c4b5fd"/>
+              <circle cx="14" cy="14" r="6" fill="#8b5cf6"/>
+              <rect x="12" y="23" width="4" height="7" rx="2" fill="#22c55e"/>
+            </svg>
+          </div>
+          <div class="park-flower flower-4">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="4" r="4" fill="#fca5a5"/>
+              <circle cx="20" cy="12" r="4" fill="#fca5a5"/>
+              <circle cx="12" cy="20" r="4" fill="#fca5a5"/>
+              <circle cx="4" cy="12" r="4" fill="#fca5a5"/>
+              <circle cx="12" cy="12" r="5" fill="#ef4444"/>
+              <rect x="10" y="20" width="4" height="6" rx="2" fill="#16a34a"/>
+            </svg>
+          </div>
+          <div class="park-flower flower-5">
+            <svg viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="13" cy="5" r="4" fill="#6ee7b7"/>
+              <circle cx="21" cy="13" r="4" fill="#6ee7b7"/>
+              <circle cx="13" cy="21" r="4" fill="#6ee7b7"/>
+              <circle cx="5" cy="13" r="4" fill="#6ee7b7"/>
+              <circle cx="13" cy="13" r="5" fill="#10b981"/>
+              <rect x="11" y="21" width="4" height="7" rx="2" fill="#15803d"/>
+            </svg>
+          </div>
+
+          <!-- Rock / mushroom accents -->
+          <div class="park-rock rock-1">
+            <svg viewBox="0 0 52 28" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="26" cy="18" rx="24" ry="12" fill="#6b7280"/>
+              <ellipse cx="26" cy="16" rx="22" ry="10" fill="#9ca3af"/>
+              <ellipse cx="20" cy="14" rx="7" ry="4" fill="rgba(255,255,255,0.18)"/>
+            </svg>
+          </div>
+          <div class="park-rock rock-2">
+            <svg viewBox="0 0 36 20" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="18" cy="13" rx="16" ry="9" fill="#78716c"/>
+              <ellipse cx="18" cy="11" rx="14" ry="7" fill="#a8a29e"/>
+              <ellipse cx="12" cy="9" rx="5" ry="3" fill="rgba(255,255,255,0.15)"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- ☁️ 2.5D Floating Sky Castle / Sky Palace: 🌌 星空银河魔幻观星台 (Upper-left sky ~6%, 12%) -->
+        <div class="park-hut hut-sky" id="park-hut-sky" onclick="window.dinoApp.clickHut('sky')" title="点击查看天空之城内的圣龙">
+          <!-- Floating Cosmic Astral Observatory Castle SVG Structure (Expanded ViewBox 0 -35 320 275 to prevent top spire clipping) -->
+          <svg class="sky-hut-svg" viewBox="0 -35 320 275" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="skyWinGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#fef08a" stop-opacity="0.98"/>
+                <stop offset="100%" stop-color="#eab308" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="cosmicSkyDomeGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#3b82f6"/>
+                <stop offset="35%" stop-color="#6366f1"/>
+                <stop offset="70%" stop-color="#311b92"/>
+                <stop offset="100%" stop-color="#0f172a"/>
+              </linearGradient>
+              <linearGradient id="astralGoldGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#fff7ed"/>
+                <stop offset="30%" stop-color="#fde047"/>
+                <stop offset="70%" stop-color="#eab308"/>
+                <stop offset="100%" stop-color="#854d0e"/>
+              </linearGradient>
+              <linearGradient id="sapphireGemGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#38bdf8"/>
+                <stop offset="40%" stop-color="#0284c7"/>
+                <stop offset="80%" stop-color="#0369a1"/>
+                <stop offset="100%" stop-color="#0c4a6e"/>
+              </linearGradient>
+              <linearGradient id="skyPillarGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#f8fafc"/>
+                <stop offset="50%" stop-color="#cbd5e1"/>
+                <stop offset="100%" stop-color="#64748b"/>
+              </linearGradient>
+              <linearGradient id="astralPortalGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#c084fc"/>
+                <stop offset="33%" stop-color="#818cf8"/>
+                <stop offset="66%" stop-color="#38bdf8"/>
+                <stop offset="100%" stop-color="#fde047"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Soft Heavenly Starlight Cloud Base (☁️ Floating Clouds) -->
+            <ellipse cx="160" cy="180" rx="140" ry="20" fill="url(#astralGoldGrad)" opacity="0.32" filter="blur(10px)"/>
+            <path d="M15,160 Q38,130 72,150 Q108,118 152,140 Q196,118 232,150 Q266,130 290,160 Q315,192 258,192 Q160,208 62,192 Q-10,192 15,160 Z" fill="#ffffff" opacity="0.95" filter="drop-shadow(0 12px 28px rgba(99,102,241,0.48))"/>
+            <path d="M38,166 Q60,140 88,158 Q116,130 155,148 Q194,130 222,158 Q250,140 272,166 Q288,190 238,190 Q155,200 72,190 Q20,190 38,166 Z" fill="#fde047" opacity="0.38"/>
+
+            <!-- Floating Island Rock Crust (Underneath Clouds) -->
+            <polygon points="50,150 160,175 270,150 160,198" fill="#1e1b4b"/>
+            <polygon points="50,150 160,175 160,198" fill="#0f172a"/>
+            <!-- Hanging Sapphire Crystal Stalactites -->
+            <polygon points="90,175 95,208 100,175" fill="url(#sapphireGemGrad)" filter="drop-shadow(0 0 6px #38bdf8)"/>
+            <polygon points="155,188 160,225 165,188" fill="url(#sapphireGemGrad)" filter="drop-shadow(0 0 8px #38bdf8)"/>
+            <polygon points="220,175 225,205 230,175" fill="url(#sapphireGemGrad)" filter="drop-shadow(0 0 6px #38bdf8)"/>
+
+            <!-- PALACE GOTHIC CITADEL & TWIN GUARDIAN MINARETS -->
+            <!-- Central Citadel Hall Wall -->
+            <rect x="75" y="80" width="170" height="75" rx="4" fill="#0f172a"/>
+            
+            <!-- Left Guardian Tower Body -->
+            <rect x="52" y="60" width="38" height="95" rx="3" fill="#1e1b4b"/>
+            <rect x="55" y="62" width="16" height="91" fill="#311b92" opacity="0.55"/>
+            <!-- Left Tower Crescent Moon Golden Spire -->
+            <polygon points="50,60 71,15 92,60" fill="url(#astralGoldGrad)"/>
+            <path d="M71,10 Q61,4 64,-6 Q76,-3 71,10 Z" fill="#fde047" filter="drop-shadow(0 0 10px #fde047)"/>
+
+            <!-- Right Guardian Tower Body -->
+            <rect x="230" y="60" width="38" height="95" rx="3" fill="#1e1b4b"/>
+            <rect x="233" y="62" width="16" height="91" fill="#311b92" opacity="0.55"/>
+            <!-- Right Tower Crescent Moon Golden Spire -->
+            <polygon points="228,60 249,15 270,60" fill="url(#astralGoldGrad)"/>
+            <path d="M249,10 Q239,4 242,-6 Q254,-3 249,10 Z" fill="#fde047" filter="drop-shadow(0 0 10px #fde047)"/>
+
+            <!-- MAGICAL CRYSTAL OBSERVATORY DOME -->
+            <path d="M75,80 Q160,15 245,80 Z" fill="url(#cosmicSkyDomeGrad)" opacity="0.95"/>
+            <path d="M85,80 Q160,25 235,80 Z" fill="none" stroke="#fde047" stroke-width="1.8" opacity="0.6"/>
+
+            <!-- ORBITING GOLDEN ASTRONOMICAL RINGS -->
+            <!-- Ring 1 (Tilted Left) -->
+            <ellipse cx="160" cy="55" rx="95" ry="20" fill="none" stroke="url(#astralGoldGrad)" stroke-width="3.5" transform="rotate(-15,160,55)" filter="drop-shadow(0 0 10px #eab308)"/>
+            <!-- Ring 2 (Tilted Right) -->
+            <ellipse cx="160" cy="55" rx="82" ry="24" fill="none" stroke="url(#astralGoldGrad)" stroke-width="2.2" transform="rotate(18,160,55)" opacity="0.85"/>
+
+            <!-- GLOWING SAPPHIRE GEM SPHERE AT DOME PEAK -->
+            <circle cx="160" cy="-6" r="11" fill="url(#sapphireGemGrad)" filter="drop-shadow(0 0 16px #38bdf8)"/>
+            <!-- Starlight Rays from Gem Peak -->
+            <line x1="160" y1="-22" x2="160" y2="10" stroke="#fde047" stroke-width="2" stroke-linecap="round"/>
+            <line x1="144" y1="-6" x2="176" y2="-6" stroke="#fde047" stroke-width="2" stroke-linecap="round"/>
+            <line x1="148" y1="-18" x2="172" y2="6" stroke="#fde047" stroke-width="1.5"/>
+            <line x1="148" y1="6" x2="172" y2="-18" stroke="#fde047" stroke-width="1.5"/>
+
+            <!-- Marble Columns (Front Facade) -->
+            <rect x="85" y="85" width="9" height="68" rx="2" fill="url(#skyPillarGrad)"/>
+            <rect x="108" y="85" width="9" height="68" rx="2" fill="url(#skyPillarGrad)"/>
+            <rect x="203" y="85" width="9" height="68" rx="2" fill="url(#skyPillarGrad)"/>
+            <rect x="226" y="85" width="9" height="68" rx="2" fill="url(#skyPillarGrad)"/>
+
+            <!-- Stained Glass Star Windows -->
+            <rect x="60" y="75" width="22" height="30" rx="11" fill="#090d16"/>
+            <ellipse cx="71" cy="90" rx="7" ry="10" fill="url(#sapphireGemGrad)" opacity="0.85" filter="drop-shadow(0 0 8px #38bdf8)"/>
+            <rect x="238" y="75" width="22" height="30" rx="11" fill="#090d16"/>
+            <ellipse cx="249" cy="90" rx="7" ry="10" fill="url(#sapphireGemGrad)" opacity="0.85" filter="drop-shadow(0 0 8px #38bdf8)"/>
+
+            <!-- Constellation Lines on Central Facade -->
+            <path d="M98,96 L118,106 L138,98 M182,98 L202,106 L222,96" stroke="url(#astralGoldGrad)" stroke-width="1.6" stroke-dasharray="3,3" opacity="0.75"/>
+            <circle cx="98" cy="96" r="2" fill="#fde047"/>
+            <circle cx="118" cy="106" r="2" fill="#fde047"/>
+            <circle cx="138" cy="98" r="2" fill="#fde047"/>
+            <circle cx="182" cy="98" r="2" fill="#fde047"/>
+            <circle cx="202" cy="106" r="2" fill="#fde047"/>
+            <circle cx="222" cy="96" r="2" fill="#fde047"/>
+
+            <!-- COSMIC PORTAL DOORWAY ENTRANCE (Centered at x=160 out of 320) -->
+            <!-- Outer Golden Frame -->
+            <path d="M125,153 L125,102 Q160,78 195,102 L195,153 Z" fill="none" stroke="url(#astralGoldGrad)" stroke-width="5" filter="drop-shadow(0 0 14px #facc15)"/>
+            <!-- Deep Cosmic Starlight Interior -->
+            <path d="M129,153 L129,105 Q160,82 191,105 L191,153 Z" fill="#020617"/>
+
+            <!-- Floating Galaxy Dust inside Portal -->
+            <circle cx="145" cy="122" r="2.6" fill="#38bdf8" filter="drop-shadow(0 0 5px #38bdf8)"/>
+            <circle cx="175" cy="116" r="3.2" fill="#fde047" filter="drop-shadow(0 0 7px #fde047)"/>
+            <circle cx="160" cy="138" r="2.2" fill="#c084fc" filter="drop-shadow(0 0 5px #c084fc)"/>
+            <circle cx="138" cy="132" r="1.8" fill="#ffffff" filter="drop-shadow(0 0 4px #ffffff)"/>
+
+            <!-- Interactive Sky Door Warm Light Welcoming Overlay -->
+            <path id="sky-door-glow" d="M129,153 L129,105 Q160,82 191,105 L191,153 Z" fill="#fde047" opacity="0" style="transition: opacity 0.5s ease; filter: blur(5px);"/>
+            <!-- Golden Arch Keystone -->
+            <polygon points="154,78 166,78 168,88 152,88" fill="#fde047"/>
+
+            <!-- Floating Starlight Runes & Sparkles around Sky Castle -->
+            <text x="25" y="45" font-size="16" fill="#fde047" filter="drop-shadow(0 0 10px #fde047)">✦</text>
+            <text x="285" y="48" font-size="16" fill="#38bdf8" filter="drop-shadow(0 0 10px #38bdf8)">✦</text>
+            <text x="154" y="38" font-size="14" fill="#c084fc" filter="drop-shadow(0 0 10px #c084fc)">✨</text>
+          </svg>
+
+          <!-- Sky Night Ambient Glow -->
+          <div class="hut-night-glow sky-hut-glow"></div>
+
+          <!-- Sky Fireflies / Starlight -->
+          <div class="hut-fireflies sky-fireflies">
+            <span class="firefly ff1">✨</span>
+            <span class="firefly ff2">⭐</span>
+            <span class="firefly ff3">✨</span>
+          </div>
+        </div>
+
+        <!-- 🏰 2.5D Isometric Fairytale Dino Villa: 恐龙 2.5D 童话庄园 (Right-center ~11%) -->
+        <div class="park-hut hut-single" id="park-hut-single" onclick="window.dinoApp.clickHut('single')" title="点击查看屋内恐龙">
+          <!-- 2.5D Isometric SVG Villa Structure (300 x 230 viewBox) -->
+          <svg class="hut-svg" viewBox="0 0 300 230" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <!-- ✂️ CLIP PATHS: Lock roof tiles inside front and side roof slopes -->
+              <clipPath id="frontRoofClip">
+                <polygon points="120,12 10,96 225,96"/>
+              </clipPath>
+              <clipPath id="sideRoofClip">
+                <polygon points="120,12 265,96 248,104 120,24"/>
+              </clipPath>
+
+              <radialGradient id="hutWinGlowSingle" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#fef08a" stop-opacity="0.98"/>
+                <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="hutFrontGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#fbbf24"/>
+                <stop offset="35%" stop-color="#f59e0b"/>
+                <stop offset="70%" stop-color="#d97706"/>
+                <stop offset="100%" stop-color="#92400e"/>
+              </linearGradient>
+              <linearGradient id="hutSideGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#451a03"/>
+                <stop offset="100%" stop-color="#1f0a00"/>
+              </linearGradient>
+              <linearGradient id="stoneBaseGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#9ca3af"/>
+                <stop offset="50%" stop-color="#4b5563"/>
+                <stop offset="100%" stop-color="#374151"/>
+              </linearGradient>
+              <linearGradient id="roofTileGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#fb923c"/>
+                <stop offset="30%" stop-color="#f97316"/>
+                <stop offset="65%" stop-color="#ea580c"/>
+                <stop offset="85%" stop-color="#c2410c"/>
+                <stop offset="100%" stop-color="#881337"/>
+              </linearGradient>
+              <linearGradient id="roofSideGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#881337"/>
+                <stop offset="50%" stop-color="#4c0519"/>
+                <stop offset="100%" stop-color="#28020d"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Ground Cast Shadow for Volume & Real Weight -->
+            <ellipse cx="145" cy="216" rx="140" ry="8" fill="rgba(0,0,0,0.36)"/>
+
+            <!-- 2.5D RIGHT SIDE GARDEN GAZEBO (Underneath Eaves line y=96) -->
+            <!-- Side Porch Base -->
+            <polygon points="235,165 275,178 275,216 235,216" fill="#1c0700"/>
+            <!-- Side Porch Pillars -->
+            <rect x="242" y="135" width="6" height="52" fill="#78350f"/>
+            <rect x="265" y="145" width="6" height="42" fill="#451a03"/>
+            <!-- Side Porch Roof -->
+            <polygon points="225,120 282,142 275,150 225,128" fill="#7f1d1d"/>
+            <polygon points="225,128 275,150 235,165" fill="#2d0a00"/>
+            <!-- Hanging Flower Basket -->
+            <ellipse cx="254" cy="154" rx="5" ry="3.5" fill="#15803d"/>
+            <circle cx="251" cy="152" r="2.5" fill="#f43f5e"/>
+            <circle cx="257" cy="152" r="2.5" fill="#fbbf24"/>
+
+            <!-- COBBLESTONE FOUNDATION BASE (Front + 2.5D Side Depth) -->
+            <!-- Front Base Facade -->
+            <polygon points="25,160 215,160 215,216 25,216" fill="url(#stoneBaseGrad)"/>
+            <!-- 2.5D Right Side Base Depth -->
+            <polygon points="215,160 255,176 255,216 215,216" fill="#1f2937"/>
+
+            <!-- Stone Texture Blocks on Base -->
+            <rect x="35" y="166" width="30" height="10" rx="2" fill="#6b7280" opacity="0.6"/>
+            <rect x="72" y="166" width="34" height="10" rx="2" fill="#4b5563" opacity="0.6"/>
+            <rect x="155" y="166" width="32" height="10" rx="2" fill="#6b7280" opacity="0.6"/>
+
+            <rect x="32" y="180" width="36" height="12" rx="2" fill="#4b5563" opacity="0.6"/>
+            <rect x="74" y="180" width="28" height="12" rx="2" fill="#6b7280" opacity="0.6"/>
+            <rect x="160" y="180" width="34" height="12" rx="2" fill="#4b5563" opacity="0.6"/>
+
+            <!-- Grass Tuft Trim along Bottom Base -->
+            <path d="M20,216 Q24,208 28,216 Q32,206 36,216 M64,216 Q68,206 72,216 M180,216 Q184,206 188,216 M220,216 Q224,208 228,216 M252,216 Q256,208 260,216" stroke="#22c55e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+            <!-- FRONT MAIN TIMBER WALL FACADE -->
+            <polygon points="28,85 215,85 215,160 28,160" fill="url(#hutFrontGrad)"/>
+
+            <!-- 2.5D RIGHT SIDE TIMBER WALL DEPTH (Slight 15° depth tilt, strictly starts at x=215) -->
+            <polygon points="215,85 255,98 255,216 215,216" fill="url(#hutSideGrad)"/>
+            <polygon points="215,85 255,98 255,104 215,91" fill="#1c0700"/> <!-- Side eaves shadow -->
+
+            <!-- 2.5D SIDE ARCHED WINDOW DETAIL (On right side wall x=224, 100% zero window clipping!) -->
+            <rect x="224" y="115" width="18" height="26" rx="4" fill="#1c0700"/>
+            <rect x="226" y="117" width="14" height="22" rx="2" fill="#fef08a" opacity="0.35"/>
+            <rect x="226" y="117" width="14" height="22" rx="2" fill="none" stroke="#fbbf24" stroke-width="1.2"/>
+            <line x1="233" y1="117" x2="233" y2="139" stroke="#fbbf24" stroke-width="1.2"/>
+            <!-- Side Flower Box -->
+            <rect x="222" y="139" width="22" height="7" rx="2" fill="#15803d"/>
+            <circle cx="227" cy="137" r="3" fill="#f43f5e"/>
+            <circle cx="239" cy="137" r="3" fill="#fbbf24"/>
+
+            <!-- Timber Horizontal Planks & Beams (Front Facade) -->
+            <line x1="28" y1="102" x2="215" y2="102" stroke="#78350f" stroke-width="2.5" opacity="0.4"/>
+            <line x1="28" y1="120" x2="215" y2="120" stroke="#78350f" stroke-width="2.5" opacity="0.4"/>
+            <line x1="28" y1="138" x2="215" y2="138" stroke="#78350f" stroke-width="2.5" opacity="0.4"/>
+            <!-- Corner Vertical Support Beams -->
+            <rect x="28" y="85" width="10" height="75" fill="#78350f"/>
+            <rect x="205" y="85" width="10" height="75" fill="#581c87" opacity="0.25"/>
+
+            <!-- ROOF BOTTOM OVERHANG SHADOW -->
+            <polygon points="20,96 260,96 254,104 24,104" fill="rgba(0,0,0,0.22)"/>
+
+            <!-- 🏠 2.5D ISOMETRIC TERRACOTTA SHINGLE ROOF (Dual Slope with Clipped Tiles) -->
+            <!-- 2.5D Right Side Roof Slope Depth -->
+            <polygon points="120,12 265,96 248,104 120,24" fill="url(#roofSideGrad)"/>
+            <g clip-path="url(#sideRoofClip)">
+              <path d="M120,30 Q190,60 265,96" stroke="#4c0519" stroke-width="3" fill="none" opacity="0.6"/>
+              <path d="M120,45 Q190,72 265,108" stroke="#4c0519" stroke-width="3" fill="none" opacity="0.6"/>
+            </g>
+
+            <!-- Front Main Gable Roof Slope -->
+            <polygon points="120,12 10,96 225,96" fill="url(#roofTileGrad)"/>
+
+            <!-- ✂️ CLIPPED FRONT TILE TEXTURE LINES -->
+            <g clip-path="url(#frontRoofClip)">
+              <polygon points="120,18 16,92 219,92" fill="#e11d48" opacity="0.85"/>
+              <path d="M0,84 Q120,24 240,84" stroke="#9f1239" stroke-width="4" fill="none" opacity="0.75"/>
+              <path d="M0,70 Q120,22 240,70" stroke="#9f1239" stroke-width="4" fill="none" opacity="0.75"/>
+              <path d="M0,56 Q120,20 240,56" stroke="#9f1239" stroke-width="4" fill="none" opacity="0.75"/>
+              <path d="M0,42 Q120,18 240,42" stroke="#9f1239" stroke-width="4" fill="none" opacity="0.75"/>
+              <path d="M0,28 Q120,16 240,28" stroke="#9f1239" stroke-width="4" fill="none" opacity="0.75"/>
+            </g>
+
+            <!-- Roof Bottom Eaves Fascia Rim -->
+            <polygon points="8,96 227,96 221,102 14,102" fill="url(#roofEavesGrad)"/>
+
+            <!-- DORMER WINDOW ON ROOF CENTER -->
+            <polygon points="120,30 102,52 138,52" fill="#881337"/>
+            <rect x="105" y="52" width="28" height="18" rx="3" fill="#78350f"/>
+            <rect x="108" y="54" width="22" height="14" rx="2" fill="#fef08a" opacity="0.25" class="hut-window-day"/>
+            <rect x="108" y="54" width="22" height="14" rx="2" fill="url(#hutWinGlowSingle)" class="hut-window-night" opacity="0"/>
+            <rect x="108" y="54" width="22" height="14" rx="2" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+
+            <!-- GOLDEN CREST ORNAMENT ON ROOF APEX -->
+            <path d="M114,12 L120,-2 L126,12 Z" fill="#fbbf24"/>
+            <circle cx="120" cy="-3" r="4.5" fill="#f59e0b"/>
+
+            <!-- 2.5D STONE CHIMNEY ON RIGHT SLOPE -->
+            <polygon points="184,25 200,33 200,68 184,58" fill="#374151"/> <!-- Chimney side depth -->
+            <rect x="168" y="25" width="16" height="33" fill="#4b5563"/> <!-- Chimney front -->
+            <rect x="164" y="20" width="24" height="8" rx="2" fill="#1f2937"/> <!-- Cap -->
+
+            <!-- GRAND ARCHED ENTRANCE DOORWAY (Centered at x=115 out of 300) -->
+            <!-- Outer Arch Frame -->
+            <path d="M88,216 L88,140 Q88,112 115,112 Q142,112 142,140 L142,216 Z" fill="#374151"/>
+            <!-- Deep Entrance Tunnel -->
+            <path d="M92,216 L92,144 Q92,118 115,118 Q138,118 138,144 L138,216 Z" fill="#120601"/>
+
+            <!-- Classic Polished Mahogany Double Doors -->
+            <!-- Left Door Leaf -->
+            <rect x="93" y="145" width="21" height="71" fill="#78350f"/>
+            <rect x="96" y="150" width="15" height="28" rx="2" stroke="#521d05" stroke-width="1.5" fill="none"/>
+            <rect x="96" y="182" width="15" height="28" rx="2" stroke="#521d05" stroke-width="1.5" fill="none"/>
+            <!-- Right Door Leaf -->
+            <rect x="116" y="145" width="21" height="71" fill="#78350f"/>
+            <rect x="119" y="150" width="15" height="28" rx="2" stroke="#521d05" stroke-width="1.5" fill="none"/>
+            <rect x="119" y="182" width="15" height="28" rx="2" stroke="#521d05" stroke-width="1.5" fill="none"/>
+            <!-- Center Door Seam Line -->
+            <line x1="115" y1="140" x2="115" y2="216" stroke="#3b1301" stroke-width="2"/>
+
+            <!-- Brass Ring Handles & Iron Hinges -->
+            <circle cx="110" cy="178" r="3" fill="#fbbf24" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.5))"/>
+            <circle cx="120" cy="178" r="3" fill="#fbbf24" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.5))"/>
+            <rect x="93" y="154" width="4" height="3" fill="#fbbf24"/>
+            <rect x="93" y="196" width="4" height="3" fill="#fbbf24"/>
+            <rect x="133" y="154" width="4" height="3" fill="#fbbf24"/>
+            <rect x="133" y="196" width="4" height="3" fill="#fbbf24"/>
+
+            <!-- Interactive Door Warm Light Welcoming Overlay (Fades in when dino approaches) -->
+            <path id="door-glow-overlay" d="M92,216 L92,144 Q92,118 115,118 Q138,118 138,144 L138,216 Z" fill="#fde047" opacity="0" style="transition: opacity 0.5s ease; filter: blur(3px);"/>
+            <!-- Golden Arch Trim -->
+            <path d="M92,144 Q92,118 115,118 Q138,118 138,144" stroke="#fbbf24" stroke-width="2.5" fill="none" opacity="0.9"/>
+            <!-- Keystone on Arch Center -->
+            <polygon points="111,108 119,108 121,118 109,118" fill="#fbbf24"/>
+
+            <!-- TWIN SUSPENDED LANTERNS ON WALL -->
+            <!-- Left Lantern -->
+            <path d="M72,132 L78,132 L78,138" stroke="#1f2937" stroke-width="2" fill="none"/>
+            <rect x="74" y="138" width="8" height="12" rx="2" fill="#fbbf24" filter="drop-shadow(0 0 8px #f59e0b)"/>
+            <path d="M72,138 L84,138 L78,134 Z" fill="#78350f"/>
+            <!-- Right Lantern -->
+            <path d="M158,132 L152,132 L152,138" stroke="#1f2937" stroke-width="2" fill="none"/>
+            <rect x="148" y="138" width="8" height="12" rx="2" fill="#fbbf24" filter="drop-shadow(0 0 8px #f59e0b)"/>
+            <path d="M146,138 L158,138 L152,134 Z" fill="#78350f"/>
+
+            <!-- 2.5D MARBLE STEPS (Centered at x=115) -->
+            <rect x="80" y="196" width="70" height="7" rx="3" fill="#9ca3af"/>
+            <rect x="80" y="196" width="70" height="3" rx="1.5" fill="#f3f4f6"/>
+            <rect x="73" y="203" width="84" height="8" rx="3.5" fill="#6b7280"/>
+            <rect x="73" y="203" width="84" height="3.5" rx="1.5" fill="#d1d5db"/>
+            <rect x="65" y="211" width="100" height="9" rx="4" fill="#4b5563"/>
+            <rect x="65" y="211" width="100" height="4" rx="2" fill="#9ca3af"/>
+
+            <!-- Cobblestone Walkway Path -->
+            <ellipse cx="115" cy="222" rx="46" ry="5.5" fill="#9ca3af" opacity="0.6"/>
+            <ellipse cx="107" cy="224" rx="28" ry="4" fill="#e5e7eb" opacity="0.5"/>
+
+            <!-- UPPER STORY ARCHED WINDOWS (Front Facade x=42 and x=160, 100% zero window clipping!) -->
+            <!-- Left Window -->
+            <rect x="42" y="105" width="30" height="34" rx="4" fill="#290e02"/>
+            <rect x="44" y="107" width="26" height="28" rx="2" fill="#fef08a" opacity="0.25" class="hut-window-day"/>
+            <rect x="44" y="107" width="26" height="28" rx="2" fill="url(#hutWinGlowSingle)" class="hut-window-night" opacity="0"/>
+            <rect x="44" y="107" width="26" height="28" rx="2" fill="none" stroke="#fbbf24" stroke-width="2.2"/>
+            <line x1="57" y1="107" x2="57" y2="135" stroke="#fbbf24" stroke-width="1.8" opacity="0.7"/>
+            <line x1="44" y1="121" x2="70" y2="121" stroke="#fbbf24" stroke-width="1.8" opacity="0.7"/>
+            <!-- Left Flower Box -->
+            <rect x="38" y="135" width="38" height="9" rx="3" fill="#15803d"/>
+            <circle cx="44" cy="133" r="4.5" fill="#f43f5e"/>
+            <circle cx="57" cy="131" r="4.5" fill="#fbbf24"/>
+            <circle cx="70" cy="133" r="4.5" fill="#ec4899"/>
+
+            <!-- Right Window (Cleanly inside front wall x=28..215, never collides with side wall x=215..255) -->
+            <rect x="160" y="105" width="30" height="34" rx="4" fill="#290e02"/>
+            <rect x="162" y="107" width="26" height="28" rx="2" fill="#fef08a" opacity="0.25" class="hut-window-day"/>
+            <rect x="162" y="107" width="26" height="28" rx="2" fill="url(#hutWinGlowSingle)" class="hut-window-night" opacity="0"/>
+            <rect x="162" y="107" width="26" height="28" rx="2" fill="none" stroke="#fbbf24" stroke-width="2.2"/>
+            <line x1="175" y1="107" x2="175" y2="135" stroke="#fbbf24" stroke-width="1.8" opacity="0.7"/>
+            <line x1="162" y1="121" x2="188" y2="121" stroke="#fbbf24" stroke-width="1.8" opacity="0.7"/>
+            <!-- Right Flower Box -->
+            <rect x="156" y="135" width="38" height="9" rx="3" fill="#15803d"/>
+            <circle cx="162" cy="133" r="4.5" fill="#a78bfa"/>
+            <circle cx="175" cy="131" r="4.5" fill="#fb923c"/>
+            <circle cx="188" cy="133" r="4.5" fill="#34d399"/>
+
+            <!-- Decorative Vines Climbing Left Wall -->
+            <path d="M28,98 Q20,118 28,138 Q34,158 28,178" stroke="#15803d" stroke-width="3" fill="none"/>
+            <circle cx="22" cy="110" r="3" fill="#22c55e"/>
+            <circle cx="31" cy="128" r="3.5" fill="#4ade80"/>
+            <circle cx="21" cy="148" r="3" fill="#22c55e"/>
+          </svg>
+
+          <!-- Smoke Particles (Day: heavy, Night: light) -->
+          <div class="hut-smoke-wrap hut-single-smoke">
+            <span class="smoke-puff sp1"></span>
+            <span class="smoke-puff sp2"></span>
+            <span class="smoke-puff sp3"></span>
+          </div>
+
+          <!-- Night Ambient Glow -->
+          <div class="hut-night-glow"></div>
+
+          <!-- Night Fireflies -->
+          <div class="hut-fireflies">
+            <span class="firefly ff1">✨</span>
+            <span class="firefly ff2">✨</span>
+            <span class="firefly ff3">✨</span>
+          </div>
+
+          <!-- Window Peek Slot -->
+          <div class="hut-peek-wrap" id="hut-single-peek"></div>
+        </div>
+
+        <!-- Hut Occupants Popup -->
+        <div class="hut-popup" id="hut-popup" style="display:none;">
+          <div class="hut-popup-inner">
+            <div class="hut-popup-title" id="hut-popup-title">🏰 恐龙豪华庄园</div>
+            <div class="hut-popup-list" id="hut-popup-list"></div>
+            <button class="hut-popup-close" onclick="document.getElementById('hut-popup').style.display='none'">✕</button>
+          </div>
+        </div>
+
+
+        <div class="park-river">
+          <svg viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="riverGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.85"/>
+                <stop offset="30%" stop-color="#7dd3fc" stop-opacity="0.9"/>
+                <stop offset="60%" stop-color="#0ea5e9" stop-opacity="0.85"/>
+                <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.8"/>
+              </linearGradient>
+              <linearGradient id="riverShine" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="rgba(255,255,255,0.45)"/>
+                <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+              </linearGradient>
+            </defs>
+            <!-- River bed -->
+            <path d="M0,18 Q200,8 400,22 Q600,36 800,18 Q1000,4 1200,20 L1200,52 Q1000,40 800,52 Q600,64 400,52 Q200,40 0,52 Z" fill="url(#riverGrad)"/>
+            <!-- River shimmer -->
+            <path d="M0,18 Q200,8 400,22 Q600,36 800,18 Q1000,4 1200,20 L1200,34 Q1000,22 800,32 Q600,44 400,36 Q200,28 0,32 Z" fill="url(#riverShine)" opacity="0.6"/>
+            <!-- Ripple lines -->
+            <path d="M100,32 Q150,28 200,34" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M350,38 Q420,33 490,40" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M600,26 Q680,21 760,28" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M900,30 Q970,25 1040,32" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <!-- Foreground Grass Blades (transparent background, never blocks dinos) -->
+        <div class="park-foreground-grass">
+          <svg viewBox="0 0 1200 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Grass blade tufts with no solid background box -->
+            <path d="M0,40 Q5,10 10,40" fill="#22c55e"/><path d="M8,40 Q14,5 20,40" fill="#4ade80"/>
+            <path d="M18,40 Q23,15 28,40" fill="#22c55e"/><path d="M26,40 Q32,8 38,40" fill="#16a34a"/>
+            <path d="M36,40 Q41,12 46,40" fill="#4ade80"/><path d="M44,40 Q50,6 56,40" fill="#22c55e"/>
+            <path d="M54,40 Q59,14 64,40" fill="#16a34a"/><path d="M62,40 Q68,10 74,40" fill="#4ade80"/>
+            <path d="M72,40 Q77,8 82,40" fill="#22c55e"/><path d="M80,40 Q86,13 92,40" fill="#16a34a"/>
+            <path d="M90,40 Q95,7 100,40" fill="#4ade80"/><path d="M98,40 Q104,11 110,40" fill="#22c55e"/>
+            <path d="M108,40 Q114,15 120,40" fill="#16a34a"/><path d="M118,40 Q124,9 130,40" fill="#4ade80"/>
+            <path d="M128,40 Q133,13 138,40" fill="#22c55e"/><path d="M136,40 Q142,7 148,40" fill="#16a34a"/>
+            <path d="M146,40 Q151,12 156,40" fill="#4ade80"/><path d="M154,40 Q160,10 166,40" fill="#22c55e"/>
+            <path d="M164,40 Q169,8 174,40" fill="#16a34a"/><path d="M172,40 Q178,14 184,40" fill="#4ade80"/>
+            <path d="M182,40 Q187,6 192,40" fill="#22c55e"/><path d="M190,40 Q196,11 202,40" fill="#16a34a"/>
+            <path d="M200,40 Q205,15 210,40" fill="#4ade80"/><path d="M208,40 Q214,9 220,40" fill="#22c55e"/>
+            <path d="M218,40 Q223,13 228,40" fill="#16a34a"/><path d="M226,40 Q232,7 238,40" fill="#4ade80"/>
+            <path d="M236,40 Q241,12 246,40" fill="#22c55e"/><path d="M244,40 Q250,8 256,40" fill="#16a34a"/>
+            <path d="M254,40 Q259,14 264,40" fill="#4ade80"/><path d="M262,40 Q268,6 274,40" fill="#22c55e"/>
+            <path d="M272,40 Q277,11 282,40" fill="#16a34a"/><path d="M280,40 Q286,15 292,40" fill="#4ade80"/>
+            <path d="M290,40 Q295,9 300,40" fill="#22c55e"/><path d="M298,40 Q304,13 310,40" fill="#16a34a"/>
+            <path d="M308,40 Q313,7 318,40" fill="#4ade80"/><path d="M316,40 Q322,12 328,40" fill="#22c55e"/>
+            <path d="M326,40 Q331,8 336,40" fill="#16a34a"/><path d="M334,40 Q340,14 346,40" fill="#4ade80"/>
+            <path d="M344,40 Q349,6 354,40" fill="#22c55e"/><path d="M352,40 Q358,11 364,40" fill="#16a34a"/>
+            <path d="M362,40 Q367,15 372,40" fill="#4ade80"/><path d="M370,40 Q376,9 382,40" fill="#22c55e"/>
+            <path d="M380,40 Q385,13 390,40" fill="#16a34a"/><path d="M388,40 Q394,7 400,40" fill="#4ade80"/>
+            <path d="M398,40 Q403,12 408,40" fill="#22c55e"/><path d="M406,40 Q412,8 418,40" fill="#16a34a"/>
+            <path d="M416,40 Q421,14 426,40" fill="#4ade80"/><path d="M424,40 Q430,6 436,40" fill="#22c55e"/>
+            <path d="M434,40 Q439,11 444,40" fill="#16a34a"/><path d="M442,40 Q448,15 454,40" fill="#4ade80"/>
+            <path d="M452,40 Q457,9 462,40" fill="#22c55e"/><path d="M460,40 Q466,13 472,40" fill="#16a34a"/>
+            <path d="M470,40 Q475,7 480,40" fill="#4ade80"/><path d="M478,40 Q484,12 490,40" fill="#22c55e"/>
+            <path d="M488,40 Q493,8 498,40" fill="#16a34a"/><path d="M496,40 Q502,14 508,40" fill="#4ade80"/>
+            <path d="M506,40 Q511,6 516,40" fill="#22c55e"/><path d="M514,40 Q520,11 526,40" fill="#16a34a"/>
+            <path d="M524,40 Q529,15 534,40" fill="#4ade80"/><path d="M532,40 Q538,9 544,40" fill="#22c55e"/>
+            <path d="M542,40 Q547,13 552,40" fill="#16a34a"/><path d="M550,40 Q556,7 562,40" fill="#4ade80"/>
+            <path d="M560,40 Q565,12 570,40" fill="#22c55e"/><path d="M568,40 Q574,8 580,40" fill="#16a34a"/>
+            <path d="M578,40 Q583,14 588,40" fill="#4ade80"/><path d="M586,40 Q592,6 598,40" fill="#22c55e"/>
+            <path d="M596,40 Q601,11 606,40" fill="#16a34a"/><path d="M604,40 Q610,15 616,40" fill="#4ade80"/>
+            <path d="M614,40 Q619,9 624,40" fill="#22c55e"/><path d="M622,40 Q628,13 634,40" fill="#16a34a"/>
+            <path d="M632,40 Q637,7 642,40" fill="#4ade80"/><path d="M640,40 Q646,12 652,40" fill="#22c55e"/>
+            <path d="M650,40 Q655,8 660,40" fill="#16a34a"/><path d="M658,40 Q664,14 670,40" fill="#4ade80"/>
+            <path d="M668,40 Q673,6 678,40" fill="#22c55e"/><path d="M676,40 Q682,11 688,40" fill="#16a34a"/>
+            <path d="M686,40 Q691,15 696,40" fill="#4ade80"/><path d="M694,40 Q700,9 706,40" fill="#22c55e"/>
+            <path d="M704,40 Q709,13 714,40" fill="#16a34a"/><path d="M712,40 Q718,7 724,40" fill="#4ade80"/>
+            <path d="M722,40 Q727,12 732,40" fill="#22c55e"/><path d="M730,40 Q736,8 742,40" fill="#16a34a"/>
+            <path d="M740,40 Q745,14 750,40" fill="#4ade80"/><path d="M748,40 Q754,6 760,40" fill="#22c55e"/>
+            <path d="M758,40 Q763,11 768,40" fill="#16a34a"/><path d="M766,40 Q772,15 778,40" fill="#4ade80"/>
+            <path d="M776,40 Q781,9 786,40" fill="#22c55e"/><path d="M784,40 Q790,13 796,40" fill="#16a34a"/>
+            <path d="M794,40 Q799,7 804,40" fill="#4ade80"/><path d="M802,40 Q808,12 814,40" fill="#22c55e"/>
+            <path d="M812,40 Q817,8 822,40" fill="#16a34a"/><path d="M820,40 Q826,14 832,40" fill="#4ade80"/>
+            <path d="M830,40 Q835,6 840,40" fill="#22c55e"/><path d="M838,40 Q844,11 850,40" fill="#16a34a"/>
+            <path d="M848,40 Q853,15 858,40" fill="#4ade80"/><path d="M856,40 Q862,9 868,40" fill="#22c55e"/>
+            <path d="M866,40 Q871,13 876,40" fill="#16a34a"/><path d="M874,40 Q880,7 886,40" fill="#4ade80"/>
+            <path d="M884,40 Q889,12 894,40" fill="#22c55e"/><path d="M892,40 Q898,8 904,40" fill="#16a34a"/>
+            <path d="M902,40 Q907,14 912,40" fill="#4ade80"/><path d="M910,40 Q916,6 922,40" fill="#22c55e"/>
+            <path d="M920,40 Q925,11 930,40" fill="#16a34a"/><path d="M928,40 Q934,15 940,40" fill="#4ade80"/>
+            <path d="M938,40 Q943,9 948,40" fill="#22c55e"/><path d="M946,40 Q952,13 958,40" fill="#16a34a"/>
+            <path d="M956,40 Q961,7 966,40" fill="#4ade80"/><path d="M964,40 Q970,12 976,40" fill="#22c55e"/>
+            <path d="M974,40 Q979,8 984,40" fill="#16a34a"/><path d="M982,40 Q988,14 994,40" fill="#4ade80"/>
+            <path d="M992,40 Q997,6 1002,40" fill="#22c55e"/><path d="M1000,40 Q1006,11 1012,40" fill="#16a34a"/>
+            <path d="M1010,40 Q1015,15 1020,40" fill="#4ade80"/><path d="M1018,40 Q1024,9 1030,40" fill="#22c55e"/>
+            <path d="M1028,40 Q1033,13 1038,40" fill="#16a34a"/><path d="M1036,40 Q1042,7 1048,40" fill="#4ade80"/>
+            <path d="M1046,40 Q1051,12 1056,40" fill="#22c55e"/><path d="M1054,40 Q1060,8 1066,40" fill="#16a34a"/>
+            <path d="M1064,40 Q1069,14 1074,40" fill="#4ade80"/><path d="M1072,40 Q1078,6 1084,40" fill="#22c55e"/>
+            <path d="M1082,40 Q1087,11 1092,40" fill="#16a34a"/><path d="M1090,40 Q1096,15 1102,40" fill="#4ade80"/>
+            <path d="M1100,40 Q1105,9 1110,40" fill="#22c55e"/><path d="M1108,40 Q1114,13 1120,40" fill="#16a34a"/>
+            <path d="M1118,40 Q1123,7 1128,40" fill="#4ade80"/><path d="M1126,40 Q1132,12 1138,40" fill="#22c55e"/>
+            <path d="M1136,40 Q1141,8 1146,40" fill="#16a34a"/><path d="M1144,40 Q1150,14 1156,40" fill="#4ade80"/>
+            <path d="M1154,40 Q1159,6 1164,40" fill="#22c55e"/><path d="M1162,40 Q1168,11 1174,40" fill="#16a34a"/>
+            <path d="M1172,40 Q1177,15 1182,40" fill="#4ade80"/><path d="M1180,40 Q1186,9 1192,40" fill="#22c55e"/>
+            <path d="M1190,40 Q1195,13 1200,40" fill="#16a34a"/>
+          </svg>
+        </div>
+
+        <!-- Dynamic Wanderer Dinosaur Sprites Layer (At very front of DOM & highest z-index) -->
+        <div id="park-dinos-layer"></div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+     Modals System
+     ========================================================================== -->
+
+  <!-- Modal 1: 批量加扣分弹窗 -->
+  <div class="modal-overlay" id="modal-batch-score">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">⚡ 快速加扣分事由选择</div>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div style="margin-bottom: 14px; font-size: 0.9rem; color: var(--accent-gold);" id="batch-target-info">
+        已选中 0 名学生
+      </div>
+
+      <div class="behavior-tags-grid" id="behavior-tags-list">
+        <!-- Rendered by app.js -->
+      </div>
+
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="btn btn-secondary btn-modal-cancel">取消</button>
+        <button class="btn btn-primary" onclick="window.dinoApp.submitBatchScore()">确认应用加分</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: 恐龙破壳 / 升级庆祝全屏弹窗 -->
+  <div class="modal-overlay" id="modal-celebration">
+    <div class="modal-card celebration-modal">
+      <div class="celebration-dino-wrap" id="celebration-dino-avatar"></div>
+      <div class="celebration-title" id="celebration-title">🎉 破壳大喜！</div>
+      <div style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 20px;" id="celebration-desc"></div>
+      <button class="btn btn-gold" style="padding: 10px 28px; font-size: 1.05rem;" onclick="document.getElementById('modal-celebration').classList.remove('active')">
+        太棒啦！继续加油 🚀
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal 3: 新增学生 -->
+  <div class="modal-overlay" id="modal-add-student">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">➕ 登记新学生恐龙</div>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px;">
+        <div>
+          <label style="font-weight:600; font-size:0.9rem; display:block; margin-bottom:6px;">学生姓名：</label>
+          <input type="text" class="search-input" id="input-student-name" placeholder="例如：李小明" style="width:100%;">
+        </div>
+        <div>
+          <label style="font-weight:600; font-size:0.9rem; display:block; margin-bottom:6px;">初始恐龙种族：</label>
+          <select class="select-input" id="select-student-species" style="width:100%;">
+            <option value="rex">🦖 霸王龙系 (力量与热情)</option>
+            <option value="tri">🛡️ 三角龙系 (守护与稳重)</option>
+            <option value="ptero">🦅 翼龙系 (敏捷与智慧)</option>
+            <option value="brachio">🦕 腕龙系 (博学与从容)</option>
+            <option value="mythic">✨ 幻彩圣龙 (传说尊贵)</option>
+          </select>
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="btn btn-secondary btn-modal-cancel">取消</button>
+        <button class="btn btn-success" onclick="window.dinoApp.submitAddStudent()">保存并添加</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: 积分商城兑换确认弹窗 -->
+  <div class="modal-overlay" id="modal-redeem">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">🎁 兑换班级奖励卡牌</div>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div style="font-size:1.1rem; font-weight:700;" id="redeem-item-title">免写一次作业卡</div>
+        <div style="color:var(--accent-gold); font-weight:800; margin-top:4px;" id="redeem-item-cost">30 分</div>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="font-weight:600; font-size:0.9rem; display:block; margin-bottom:6px;">选择进行兑换的学生：</label>
+        <select class="select-input" id="select-redeem-student" style="width:100%;"></select>
+      </div>
+      <div id="redeem-title-select-group" style="margin-bottom:20px; display:none;">
+        <label style="font-weight:600; font-size:0.9rem; display:block; margin-bottom:6px;">选择要兑换解锁的专属称号：</label>
+        <select class="select-input" id="select-redeem-title" style="width:100%;"></select>
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="btn btn-secondary btn-modal-cancel">取消</button>
+        <button class="btn btn-gold" onclick="window.dinoApp.submitRedeem()">确认扣除积分并兑换</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5: 学生详情与更改种族弹窗 -->
+  <div class="modal-overlay" id="modal-student-detail">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">⚙️ 学生恐龙设置</div>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:14px; margin-bottom:20px;">
+        <div>
+          <label style="font-weight:600; font-size:0.9rem; display:block; margin-bottom:6px;">修改姓名：</label>
+          <input type="text" class="search-input" id="detail-student-name-input" placeholder="输入新姓名" style="width:100%;">
+          <span style="font-size:0.8rem; color:var(--text-muted);">当前姓名：<strong id="detail-student-name" style="color:#fff;"></strong></span>
+        </div>
+        <div>
+          <label style="font-weight:600; font-size:0.9rem; display:block; margin-bottom:6px;">更改恐龙种族：</label>
+          <select class="select-input" id="detail-species-select" style="width:100%;">
+            <option value="rex">霸王龙</option>
+            <option value="tri">三角龙</option>
+            <option value="ptero">翼龙</option>
+            <option value="brachio">腕龙</option>
+            <option value="mythic">幻彩圣龙</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-weight:600; font-size:0.9rem; display:block; margin-bottom:6px;">🏷️ 选择佩戴专属称号勋章：</label>
+          <select class="select-input" id="detail-title-select" style="width:100%;">
+            <option value="">(无称号)</option>
+            <option value="学习小先锋">学习小先锋</option>
+            <option value="答题战神">答题战神</option>
+            <option value="纪律标兵">纪律标兵</option>
+            <option value="班级之光">班级之光</option>
+            <option value="破蛋先锋">破蛋先锋</option>
+            <option value="劳动小能手">劳动小能手</option>
+            <option value="全勤达人">全勤达人</option>
+          </select>
+        </div>
+        <!-- 🎒 已解锁外观衣橱 -->
+        <div id="detail-wardrobe-section" style="background:rgba(255,255,255,0.05); border:1px solid var(--border-glass); border-radius:var(--radius-md); padding:10px 14px; display:none;">
+          <label style="font-weight:700; font-size:0.95rem; color:var(--text-main); display:block; margin-bottom:8px;">
+            🎒 已解锁外观衣橱：
+          </label>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <label id="wardrobe-crown" style="display:none; align-items:center; gap:8px; font-weight:700; color:#f1c40f; cursor:pointer;">
+              <input type="checkbox" id="detail-crown-checkbox" style="accent-color:#f1c40f; width:18px; height:18px;">
+              👑 穿戴/脱下 超炫流光金冠框
+            </label>
+            <label id="wardrobe-sunglasses" style="display:none; align-items:center; gap:8px; font-weight:700; color:#555; cursor:pointer;">
+              <input type="checkbox" id="detail-sunglasses-checkbox" style="accent-color:#555; width:18px; height:18px;">
+              👓 穿戴/脱下 酷炫ThugLife墨镜
+            </label>
+            <label id="wardrobe-cherry" style="display:none; align-items:center; gap:8px; font-weight:700; color:#fd79a8; cursor:pointer;">
+              <input type="checkbox" id="detail-cherry-checkbox" style="accent-color:#fd79a8; width:18px; height:18px;">
+              🌸 开启/关闭 唯美樱花飘落特效
+            </label>
+            <label id="wardrobe-magic" style="display:none; align-items:center; gap:8px; font-weight:700; color:#0984e3; cursor:pointer;">
+              <input type="checkbox" id="detail-magic-checkbox" style="accent-color:#0984e3; width:18px; height:18px;">
+              🔯 开启/关闭 星芒魔法阵底座
+            </label>
+            <label id="wardrobe-fairy" style="display:none; align-items:center; gap:8px; font-weight:700; color:#00b894; cursor:pointer;">
+              <input type="checkbox" id="detail-fairy-checkbox" style="accent-color:#00b894; width:18px; height:18px;">
+              🧚 召唤/收回 悬浮小仙子精灵
+            </label>
+            <label id="wardrobe-chroma" style="display:none; align-items:center; gap:8px; font-weight:700; color:#e17055; cursor:pointer;">
+              <input type="checkbox" id="detail-chroma-checkbox" style="accent-color:#e17055; width:18px; height:18px;">
+              🏆 穿戴/脱下 耀世黄金变色龙皮肤
+            </label>
+            <label id="wardrobe-lava" style="display:none; align-items:center; gap:8px; font-weight:700; color:#ff4500; cursor:pointer;">
+              <input type="checkbox" id="detail-lava-checkbox" style="accent-color:#ff4500; width:18px; height:18px;">
+              🌋 穿戴/脱下 熔岩火龙皮肤
+            </label>
+            <label id="wardrobe-frost" style="display:none; align-items:center; gap:8px; font-weight:700; color:#00d2ff; cursor:pointer;">
+              <input type="checkbox" id="detail-frost-checkbox" style="accent-color:#00d2ff; width:18px; height:18px;">
+              ❄️ 穿戴/脱下 极寒冰龙皮肤
+            </label>
+            <label id="wardrobe-frostfire" style="display:none; align-items:center; gap:8px; font-weight:700; color:#fbbf24; cursor:pointer; background:linear-gradient(90deg, rgba(255,71,87,0.15), rgba(0,210,255,0.15)); border:1px solid rgba(251,191,36,0.3); border-radius:6px; padding:3px 6px;">
+              <input type="checkbox" id="detail-frostfire-checkbox" style="accent-color:#fbbf24; width:18px; height:18px;">
+              ☯️ 穿戴/脱下 冰火双生·极境神龙（羁绊专属）
+            </label>
+            <label id="wardrobe-angel" style="display:none; align-items:center; gap:8px; font-weight:700; color:#fbbf24; cursor:pointer;">
+              <input type="checkbox" id="detail-angel-checkbox" style="accent-color:#fbbf24; width:18px; height:18px;">
+              👼 穿戴/脱下 炽天大天使皮肤
+            </label>
+            <label id="wardrobe-unicorn" style="display:none; align-items:center; gap:8px; font-weight:700; color:#f472b6; cursor:pointer;">
+              <input type="checkbox" id="detail-unicorn-checkbox" style="accent-color:#f472b6; width:18px; height:18px;">
+              🦄 穿戴/脱下 梦幻独角兽皮肤
+            </label>
+            <label id="wardrobe-grad" style="display:none; align-items:center; gap:8px; font-weight:700; color:#f1c40f; cursor:pointer;">
+              <input type="checkbox" id="detail-grad-checkbox" style="accent-color:#f1c40f; width:18px; height:18px;">
+              🎓 穿戴/脱下 学霸博士帽
+            </label>
+            <label id="wardrobe-fireworks" style="display:none; align-items:center; gap:8px; font-weight:700; color:#a855f7; cursor:pointer;">
+              <input type="checkbox" id="detail-fireworks-checkbox" style="accent-color:#a855f7; width:18px; height:18px;">
+              🎇 开启/关闭 恐龙身后烟火特效
+            </label>
+            <label id="wardrobe-dialogue" style="display:none; align-items:center; gap:8px; font-weight:700; color:#f59e0b; cursor:pointer;">
+              <input type="checkbox" id="detail-dialogue-checkbox" style="accent-color:#f59e0b; width:18px; height:18px;">
+              💬 开启/清空 恐龙专属台词
+            </label>
+          </div>
+        </div>
+        
+        <!-- 生效特权与倒计时列表 -->
+        <div style="border-top:1px solid var(--border-glass); padding-top:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <label style="font-weight:700; font-size:0.95rem; color:var(--accent-gold);">
+              ⏳ 当前已佩戴特权与剩余倒计时：
+            </label>
+            <button class="btn btn-secondary" style="padding:3px 10px; font-size:0.78rem; color:#f87171; border-color:rgba(248,113,113,0.4);" onclick="window.dinoApp.clearStudentAllPrivileges()">🧹 一键清除所有特权与装扮</button>
+          </div>
+          <div id="detail-privileges-container" style="display:flex; flex-direction:column; gap:6px; max-height:120px; overflow-y:auto;">
+            <!-- Rendered by app.js -->
+          </div>
+        </div>
+
+        <div>
+          <span style="font-size:0.9rem; color:var(--text-muted);">当前总积分：<strong id="detail-score" class="score-highlight"></strong></span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: space-between;">
+        <button class="btn btn-danger" onclick="window.dinoApp.deleteCurrentStudent()">🗑️ 移除学生</button>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-secondary btn-modal-cancel">取消</button>
+          <button class="btn btn-primary" onclick="window.dinoApp.submitUpdateStudentDetail()">保存设置</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 7: 沉浸式全屏抽答大轮盘 Modal -->
+  <div class="modal-fullscreen-wheel" id="modal-fullscreen-wheel">
+    <button class="btn btn-secondary" style="position: absolute; top: 24px; right: 28px; font-size: 1rem;" onclick="window.dinoApp.closeFullscreenWheel()">&times; 关闭退出大屏抽答</button>
+
+    <div class="fullscreen-wheel-box">
+      <div class="fullscreen-wheel-title">🎡 恐龙班级幸运抽答大轮盘</div>
+
+      <div class="fullscreen-wheel-canvas-wrap">
+        <div class="wheel-pointer" style="top: -16px; border-top-width: 32px; border-left-width: 20px; border-right-width: 20px;"></div>
+        <canvas id="fullscreen-wheel-canvas" class="wheel-canvas" width="420" height="420"></canvas>
+      </div>
+
+      <button class="btn btn-gold" id="btn-spin-fullscreen-wheel" style="padding: 14px 48px; font-size: 1.3rem; border-radius: var(--radius-full); box-shadow: 0 0 30px rgba(245, 158, 11, 0.6);" onclick="window.dinoApp.spinWheel()">
+        🎰 点击旋转轮盘
+      </button>
+    </div>
+
+    <!-- 抽中学生全屏闪耀展示 Card -->
+    <div class="fullscreen-wheel-winner-reveal" id="fullscreen-wheel-winner-reveal" style="display: none;">
+      <div class="winner-dino-avatar" id="winner-dino-avatar"></div>
+      <div class="winner-student-name" id="winner-student-name">张小明</div>
+      <div style="font-size: 1.5rem; color: #fff; margin-bottom: 24px;" id="winner-species-text">霸王龙 • 萌龙初现</div>
+      <button class="btn btn-gold" style="padding: 12px 36px; font-size: 1.2rem;" onclick="document.getElementById('fullscreen-wheel-winner-reveal').style.display = 'none'">
+        🎉 太棒啦！恭喜被抽中！
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal 9: 班级大屏中央焦点恐龙特写 Modal -->
+  <div class="modal-overlay" id="modal-projection-spotlight" style="z-index: 15000;">
+    <div class="modal-card projection-spotlight-box" style="text-align:center; max-width:560px; padding:32px 28px;">
+      <div id="spotlight-dino-wrap" style="width:240px; height:240px; margin:0 auto 16px; position:relative; cursor:pointer;" onclick="window.dinoApp.triggerDinoScratch(this, 'spotlight')" title="点击抚摸恐龙">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <h2 id="spotlight-student-name" style="font-size:2rem; font-weight:900; margin-bottom:8px; background:linear-gradient(135deg, #fff, #ffeaa7); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+        张小明
+      </h2>
+      <div id="spotlight-stage-badge" style="margin-bottom:12px;"></div>
+      <div id="spotlight-title-badge" style="margin-bottom:8px;"></div>
+      <div id="spotlight-dialogue-text" style="display:none; font-size:1.05rem; font-weight:700; color:var(--accent-gold); background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.35); border-radius:var(--radius-md); padding:10px 18px; margin-bottom:14px;"></div>
+      <div id="spotlight-score-text" style="font-size:1.1rem; color:var(--text-muted); margin-bottom:24px;"></div>
+
+      <button class="btn btn-gold" style="padding:12px 36px; font-size:1.1rem; border-radius:50px;" onclick="window.dinoApp.closeProjectionSpotlight()">
+        ✖ 关闭特写展示
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal 10: 恐龙专属台词输入 Modal -->
+  <div class="modal-overlay" id="modal-dialogue-input" style="z-index: 15001;">
+    <div class="modal-card" style="max-width:420px; text-align:center; padding:28px 24px;">
+      <div style="font-size:1.3rem; font-weight:800; color:var(--accent-gold); margin-bottom:8px;">💬 设置恐龙专属台词</div>
+      <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">
+        请为 <strong id="dialogue-student-name" style="color:#fff;"></strong> 的恐龙输入一句专属台词（最多 20 字）：
+      </p>
+      <input id="dialogue-input" type="text" maxlength="20"
+        style="width:100%; padding:12px 14px; border-radius:var(--radius-md); border:1px solid var(--border-glass); background:rgba(30,41,59,0.8); color:#fff; font-size:1.05rem; text-align:center; margin-bottom:20px;"
+        placeholder="例如：我要成为班级传说！🔥" />
+      <div style="display:flex; gap:10px; justify-content:center;">
+        <button class="btn btn-secondary btn-modal-cancel">取消</button>
+        <button class="btn btn-gold" onclick="window.dinoApp.submitDialogue()">✅ 确认设置台词</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/sound.js"></script>
+  <script src="js/confetti.js"></script>
+  <script src="js/dino_data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- 🎮 DinoClass Welcome Play Gate Splash Overlay -->
+  <div class="welcome-overlay" id="welcome-gate">
+    <div class="welcome-card">
+      <img class="welcome-logo" src="icon.jpg" alt="DinoClass Logo">
+      <h1>DinoClass</h1>
+      <p>班级恐龙激励与趣味养成系统</p>
+      <button class="btn btn-gold" id="btn-enter-class" style="padding: 14px 46px; font-size: 1.25rem; font-weight: 800; border-radius: 50px; cursor: pointer; box-shadow: 0 0 24px rgba(245,158,11,0.65);">
+        🎮 开启恐龙魔法课堂
+      </button>
+    </div>
+  <!-- PWA Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('DinoClass PWA ServiceWorker registered:', reg.scope))
+          .catch(err => console.log('DinoClass PWA ServiceWorker registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>
