@@ -22,15 +22,17 @@ class DinoApp {
 
   init() {
     this.bindEvents();
+    this.renderClassSelector();
     this.renderAll();
     this.initTools();
     this.initHutSystem();
 
     // Multi-tab cross-page sync
     window.addEventListener('storage', (e) => {
-      if (e.key === STORAGE_KEY) {
+      if (e.key === STORAGE_KEY || (e.key && e.key.startsWith(STORAGE_KEY))) {
         window.storageMgr.data = window.storageMgr.loadData();
         this.renderAll();
+        this.renderClassSelector();
       }
     });
 
@@ -43,6 +45,36 @@ class DinoApp {
   }
 
   bindEvents() {
+    // Class Selector Dropdown Events
+    const btnClassSelector = document.getElementById('btn-class-selector');
+    const classDropdown = document.getElementById('class-dropdown-menu');
+    if (btnClassSelector && classDropdown) {
+      btnClassSelector.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = classDropdown.classList.contains('active');
+        classDropdown.classList.toggle('active', !isOpen);
+        if (!isOpen) this.renderClassSelector();
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('#class-selector-wrap')) {
+          classDropdown.classList.remove('active');
+        }
+      });
+    }
+
+    document.getElementById('btn-menu-add-class')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.getElementById('class-dropdown-menu')?.classList.remove('active');
+      this.openCreateClassView();
+    });
+
+    document.getElementById('btn-menu-manage-classes')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.getElementById('class-dropdown-menu')?.classList.remove('active');
+      this.openClassManageModal();
+    });
+
     // Nav Tabs
     document.querySelectorAll('.nav-tab').forEach(tab => {
       tab.addEventListener('click', (e) => {
@@ -2568,6 +2600,153 @@ class DinoApp {
       const directUrlInput = document.getElementById('fb-direct-url-display');
       if (directUrlInput) directUrlInput.value = '';
       this.showToast('🧹 已清除 Firebase 配置并切换为纯本地模式');
+    }
+  }
+
+  // ==========================================================================
+  // 🏫 多班级管理与极速切换核心 UI 方法
+  // ==========================================================================
+
+  // 渲染顶部班级切换器与下拉菜单
+  renderClassSelector() {
+    const nameDisplay = document.getElementById('current-class-name-display');
+    const dropdownList = document.getElementById('class-dropdown-list');
+    const activeId = window.storageMgr.getActiveClassId();
+    const activeName = window.storageMgr.getActiveClassName();
+
+    if (nameDisplay) {
+      nameDisplay.textContent = activeName;
+    }
+
+    if (dropdownList) {
+      const list = window.storageMgr.classesList || [];
+      dropdownList.innerHTML = list.map(c => {
+        const isActive = c.id === activeId;
+        return `
+          <div class="class-dropdown-item ${isActive ? 'active' : ''}" onclick="window.dinoApp.selectClass('${c.id}')">
+            <span class="class-item-icon">${isActive ? '✅' : '🏫'}</span>
+            <span class="class-item-name">${c.name}</span>
+            ${isActive ? '<span class="class-item-badge">当前授课</span>' : ''}
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  // 切换激活班级
+  selectClass(classId) {
+    document.getElementById('class-dropdown-menu')?.classList.remove('active');
+    window.storageMgr.switchClass(classId);
+    this.selectedStudentIds.clear();
+    this.renderClassSelector();
+    this.renderAll();
+    this.showToast(`🏫 已切换至【${window.storageMgr.getActiveClassName()}】！数据已就绪`);
+  }
+
+  // 打开创建新班级视图
+  openCreateClassView() {
+    const modal = document.getElementById('modal-class-manage');
+    if (!modal) return;
+    const title = document.getElementById('class-manage-modal-title');
+    if (title) title.textContent = '➕ 新建授课班级';
+    document.getElementById('class-manage-view-create').style.display = 'block';
+    document.getElementById('class-manage-view-list').style.display = 'none';
+    const input = document.getElementById('input-new-class-name');
+    if (input) {
+      input.value = '';
+      setTimeout(() => input.focus(), 150);
+    }
+    modal.classList.add('active');
+  }
+
+  // 打开班级管理中心视图
+  openClassManageModal() {
+    const modal = document.getElementById('modal-class-manage');
+    if (!modal) return;
+    const title = document.getElementById('class-manage-modal-title');
+    if (title) title.textContent = '🏫 班级管理中心';
+    document.getElementById('class-manage-view-create').style.display = 'none';
+    document.getElementById('class-manage-view-list').style.display = 'block';
+    this.renderClassManageItems();
+    modal.classList.add('active');
+  }
+
+  closeClassManageModal() {
+    document.getElementById('modal-class-manage')?.classList.remove('active');
+  }
+
+  // 渲染管理中心列表
+  renderClassManageItems() {
+    const container = document.getElementById('class-manage-items-list');
+    if (!container) return;
+    const list = window.storageMgr.classesList || [];
+    const activeId = window.storageMgr.getActiveClassId();
+
+    container.innerHTML = list.map(c => {
+      const isActive = c.id === activeId;
+      const canDelete = list.length > 1;
+      return `
+        <div class="class-manage-row" style="display:flex; justify-content:space-between; align-items:center; background:rgba(15,23,42,0.6); padding:10px 14px; border-radius:var(--radius-md); border:1px solid var(--border-glass);">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:1.1rem;">${isActive ? '🌟' : '🏫'}</span>
+            <strong style="color:#fff; font-size:0.95rem;">${c.name}</strong>
+            ${isActive ? '<span style="font-size:0.75rem; background:rgba(245,158,11,0.2); color:#fbbf24; padding:2px 8px; border-radius:10px; font-weight:700;">当前班级</span>' : ''}
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-secondary btn-sm" style="padding:4px 10px; font-size:0.8rem;" onclick="window.dinoApp.promptRenameClass('${c.id}')" title="重命名此班级">✏️ 改名</button>
+            ${canDelete ? `<button class="btn btn-secondary btn-sm" style="padding:4px 10px; font-size:0.8rem; color:#f87171; border-color:rgba(248,113,113,0.3);" onclick="window.dinoApp.confirmDeleteClass('${c.id}')" title="删除班级">🗑️</button>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // 提交新建班级
+  submitCreateClass() {
+    const input = document.getElementById('input-new-class-name');
+    const name = input?.value.trim();
+    if (!name) {
+      alert('⚠️ 请输入新班级名称（例如：三(2)班）！');
+      return;
+    }
+    const withSample = !!document.getElementById('checkbox-with-sample-students')?.checked;
+    const created = window.storageMgr.createClass(name, withSample);
+    if (created) {
+      this.closeClassManageModal();
+      this.selectedStudentIds.clear();
+      this.renderClassSelector();
+      this.renderAll();
+      this.showToast(`🎉 成功创建并切换至新班级：【${name}】！`);
+    }
+  }
+
+  // 重命名班级提示框
+  promptRenameClass(classId) {
+    const currentClass = window.storageMgr.classesList.find(c => c.id === classId);
+    if (!currentClass) return;
+    const newName = prompt('请输入班级的新名称：', currentClass.name);
+    if (newName && newName.trim()) {
+      window.storageMgr.renameClass(classId, newName.trim());
+      this.renderClassSelector();
+      this.renderClassManageItems();
+      if (classId === window.storageMgr.getActiveClassId()) {
+        this.renderAll();
+      }
+      this.showToast(`✏️ 班级名称已更新为：【${newName.trim()}】`);
+    }
+  }
+
+  // 删除班级确认
+  confirmDeleteClass(classId) {
+    const target = window.storageMgr.classesList.find(c => c.id === classId);
+    if (!target) return;
+    if (confirm(`⚠️ 确认删除班级【${target.name}】吗？\n删除后该班级的学生和积分将一并移除。`)) {
+      window.storageMgr.deleteClass(classId);
+      this.selectedStudentIds.clear();
+      this.renderClassSelector();
+      this.renderClassManageItems();
+      this.renderAll();
+      this.showToast(`🗑️ 已删除班级：【${target.name}】`);
     }
   }
 }

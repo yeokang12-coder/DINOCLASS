@@ -177,8 +177,11 @@ class FirebaseSyncManager {
       }
 
       this.database = firebase.database();
-      const safeRoomId = (this.roomId || 'class_default').replace(/[^a-zA-Z0-9_\u4e00-\u9fa5-]/g, '_');
-      this.dataRef = this.database.ref(`dinoclass_rooms/${safeRoomId}`);
+      
+      // 同步班级房间 ID（优先采用当前激活班级）
+      if (window.storageMgr) {
+        this.roomId = window.storageMgr.getActiveClassId() || 'class_default';
+      }
 
       // 监听连接健康状态 (.info/connected)
       this.connectedRef = this.database.ref('.info/connected');
@@ -195,46 +198,22 @@ class FirebaseSyncManager {
         this.updateStatusUI();
       });
 
-      // 核心：监听远程数据变动 (毫秒级双向长连接推送)
-      this.dataRef.on('value', (snapshot) => {
-        const payload = snapshot.val();
-        if (!payload || !payload.data) {
-          // 云端首次为空，自动将本地初始数据推上去
-          console.log('[FirebaseSync] Remote is empty, seeding initial local data...');
-          this.pushDataImmediately(window.storageMgr.data);
-          return;
-        }
-
-        // 若是由本设备发出的广播，直接忽略（防回环死循环）
-        if (payload.clientDevice === this.deviceId) {
-          this.lastSyncTime = new Date(payload.updatedAt || Date.now());
-          this.updateStatusUI();
-          return;
-        }
-
-        // 收到来自手机端或其他设备的远程变动！
-        console.log('[FirebaseSync] 📲 Remote update received from:', payload.clientDevice);
-        this.isRemoteUpdating = true;
-        try {
-          const success = window.storageMgr.importJSON(JSON.stringify(payload.data));
-          if (success) {
-            this.lastSyncTime = new Date(payload.updatedAt || Date.now());
-            // 通知前端主应用进行视觉重绘
-            if (window.dinoApp && typeof window.dinoApp.onRemoteDataSynced === 'function') {
-              window.dinoApp.onRemoteDataSynced(payload.data, payload);
-            }
+      // 监听多班级元数据云端列表（多设备自动共享班级列表）
+      this.metaRef = this.database.ref('dinoclass_meta/classes');
+      this.metaRef.on('value', (snap) => {
+        const remoteList = snap.val();
+        if (Array.isArray(remoteList) && remoteList.length > 0) {
+          if (window.storageMgr) {
+            window.storageMgr.mergeRemoteClassesList(remoteList);
           }
-        } catch (err) {
-          console.error('[FirebaseSync] Failed to apply remote update:', err);
-        } finally {
-          this.isRemoteUpdating = false;
-          this.updateStatusUI();
+          if (window.dinoApp && typeof window.dinoApp.renderClassSelector === 'function') {
+            window.dinoApp.renderClassSelector();
+          }
         }
-      }, (error) => {
-        console.error('[FirebaseSync] Listener error:', error);
-        this.status = 'error';
-        this.updateStatusUI(error.message);
       });
+
+      // 启动当前班级房间的实时监听
+      this.listenToCurrentRoom();
 
       this.saveLocalConfig(this.config, this.roomId);
       return true;
@@ -243,6 +222,78 @@ class FirebaseSyncManager {
       this.status = 'error';
       this.updateStatusUI(e.message);
       return false;
+    }
+  }
+
+  // 监听当前激活班级房间
+  listenToCurrentRoom() {
+    if (!this.database) return;
+    if (this.dataRef) {
+      this.dataRef.off();
+      this.dataRef = null;
+    }
+
+    const safeRoomId = (this.roomId || 'class_default').replace(/[^a-zA-Z0-9_\u4e00-\u9fa5-]/g, '_');
+    this.dataRef = this.database.ref(`dinoclass_rooms/${safeRoomId}`);
+
+    console.log('[FirebaseSync] Listening to room:', safeRoomId);
+
+    this.dataRef.on('value', (snapshot) => {
+      const payload = snapshot.val();
+      if (!payload || !payload.data) {
+        // 云端该班级首次为空，自动将本地数据推上去
+        console.log('[FirebaseSync] Room is empty, pushing initial local state...');
+        if (window.storageMgr && window.storageMgr.data) {
+          this.pushDataImmediately(window.storageMgr.data);
+        }
+        return;
+      }
+
+      // 若是由本设备发出的广播，直接忽略（防回环死循环）
+      if (payload.clientDevice === this.deviceId) {
+        this.lastSyncTime = new Date(payload.updatedAt || Date.now());
+        this.updateStatusUI();
+        return;
+      }
+
+      // 收到来自其他设备的远程变动！
+      console.log('[FirebaseSync] 📲 Remote update received for room:', this.roomId, 'from:', payload.clientDevice);
+      this.isRemoteUpdating = true;
+      try {
+        const success = window.storageMgr.importJSON(JSON.stringify(payload.data));
+        if (success) {
+          this.lastSyncTime = new Date(payload.updatedAt || Date.now());
+          if (window.dinoApp && typeof window.dinoApp.onRemoteDataSynced === 'function') {
+            window.dinoApp.onRemoteDataSynced(payload.data, payload);
+          }
+        }
+      } catch (err) {
+        console.error('[FirebaseSync] Failed to apply remote update:', err);
+      } finally {
+        this.isRemoteUpdating = false;
+        this.updateStatusUI();
+      }
+    }, (error) => {
+      console.error('[FirebaseSync] Room listener error:', error);
+      this.status = 'error';
+      this.updateStatusUI(error.message);
+    });
+  }
+
+  // 切换班级房间
+  switchRoom(newRoomId) {
+    if (!newRoomId) return;
+    this.roomId = newRoomId;
+    this.saveLocalConfig(this.config, this.roomId);
+    if (this.database) {
+      this.listenToCurrentRoom();
+    }
+  }
+
+  // 同步班级列表元数据到云端
+  syncClassesMeta(classesList) {
+    if (this.database && Array.isArray(classesList)) {
+      this.database.ref('dinoclass_meta/classes').set(classesList).catch(() => {});
     }
   }
 
@@ -255,6 +306,10 @@ class FirebaseSyncManager {
     if (this.connectedRef) {
       this.connectedRef.off();
       this.connectedRef = null;
+    }
+    if (this.metaRef) {
+      this.metaRef.off();
+      this.metaRef = null;
     }
     this.status = 'unconfigured';
     this.updateStatusUI();

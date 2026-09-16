@@ -11,7 +11,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=5.0.1">
 </head>
 <body>
 
@@ -21,7 +21,30 @@
       <img class="brand-logo-img" src="icon.jpg" alt="DinoClass">
       <div class="brand-text">
         <div class="brand-title">DinoClass</div>
-        <span class="brand-tag">v4.3 · Firebase 实时云联动版 ☁️🌋</span>
+        <span class="brand-tag">v5.0 · 多班级实时云联动版 🏫☁️</span>
+      </div>
+
+      <!-- 🏫 多班级极速切换器 (Multi-Class Switcher) -->
+      <div class="class-selector-wrap" id="class-selector-wrap">
+        <button class="btn-class-selector" id="btn-class-selector" title="点击快速切换或管理授课班级">
+          <span class="class-selector-icon">🏫</span>
+          <span class="class-selector-name" id="current-class-name-display">三(1)班</span>
+          <span class="class-selector-caret">▾</span>
+        </button>
+        <div class="class-dropdown-menu" id="class-dropdown-menu">
+          <div class="class-dropdown-header">📚 选择授课班级</div>
+          <div class="class-dropdown-list" id="class-dropdown-list">
+            <!-- Rendered dynamically by app.js -->
+          </div>
+          <div class="class-dropdown-footer">
+            <button class="class-dropdown-action-btn" id="btn-menu-add-class">
+              <span>➕</span> 新建班级
+            </button>
+            <button class="class-dropdown-action-btn" id="btn-menu-manage-classes">
+              <span>⚙️</span> 管理班级
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1430,6 +1453,50 @@
         <div style="display: flex; gap: 10px;">
           <button class="btn btn-secondary btn-modal-cancel" onclick="window.dinoApp.closeFirebaseModal()">关闭</button>
           <button class="btn btn-primary" onclick="window.dinoApp.submitFirebaseConfig()">🚀 连接并开启实时同步</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 12: 班级创建与管理弹窗 -->
+  <div class="modal-overlay" id="modal-class-manage" style="z-index: 15003;">
+    <div class="modal-card" style="max-width: 480px; text-align: left; padding: 26px 22px;">
+      <div class="modal-header" style="margin-bottom: 16px;">
+        <div class="modal-title" id="class-manage-modal-title">🏫 班级管理中心</div>
+        <button class="modal-close" onclick="window.dinoApp.closeClassManageModal()">&times;</button>
+      </div>
+
+      <!-- View A: 新建班级视图 -->
+      <div id="class-manage-view-create" style="display:none;">
+        <div style="margin-bottom: 14px;">
+          <label style="display:block; font-weight:700; font-size:0.9rem; margin-bottom:6px; color:var(--accent-gold);">
+            请输入新班级名称：
+          </label>
+          <input type="text" id="input-new-class-name" class="search-input" style="width:100%; padding:10px 14px; font-size:0.95rem;" placeholder="例如：三(2)班、四年级二班">
+        </div>
+        <div style="margin-bottom: 20px;">
+          <label style="display:flex; align-items:center; gap:8px; font-size:0.85rem; color:var(--text-muted); cursor:pointer;">
+            <input type="checkbox" id="checkbox-with-sample-students" style="width:16px; height:16px; accent-color:var(--primary);">
+            导入初始示例恐龙蛋（若不勾选则创建纯净空白班级）
+          </label>
+        </div>
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+          <button class="btn btn-secondary btn-modal-cancel" onclick="window.dinoApp.closeClassManageModal()">取消</button>
+          <button class="btn btn-primary" onclick="window.dinoApp.submitCreateClass()">✨ 确认创建新班级</button>
+        </div>
+      </div>
+
+      <!-- View B: 班级列表与重命名/删除视图 -->
+      <div id="class-manage-view-list">
+        <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">
+          当前所有授课班级（各班级学生与积分完全隔离，各享云端同步）：
+        </div>
+        <div id="class-manage-items-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:20px; max-height:240px; overflow-y:auto;">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+        <div style="display:flex; gap:10px; justify-content:space-between;">
+          <button class="btn btn-gold btn-sm" onclick="window.dinoApp.openCreateClassView()">➕ 新建另一个班级</button>
+          <button class="btn btn-secondary btn-sm" onclick="window.dinoApp.closeClassManageModal()">完成</button>
         </div>
       </div>
     </div>
