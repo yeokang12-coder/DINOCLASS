@@ -110,6 +110,8 @@ class DinoApp {
     document.getElementById('btn-reset-demo')?.addEventListener('click', () => this.resetDemoData());
     document.getElementById('btn-export-data')?.addEventListener('click', () => window.storageMgr.exportJSON());
     document.getElementById('btn-import-data')?.addEventListener('click', () => this.triggerImportJSON());
+    document.getElementById('btn-cloud-sync-pill')?.addEventListener('click', () => this.openFirebaseModal());
+    document.getElementById('btn-cloud-sync-toolbar')?.addEventListener('click', () => this.openFirebaseModal());
 
     // Select All Checkbox
     document.getElementById('checkbox-select-all')?.addEventListener('change', (e) => {
@@ -2428,6 +2430,145 @@ class DinoApp {
       }
     };
     input.click();
+  }
+
+  // 🍞 浮动吐司通知 (Toast Notification)
+  showToast(msg, duration = 3200) {
+    let toast = document.getElementById('dinoclass-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'dinoclass-toast';
+      toast.className = 'dinoclass-toast';
+      document.body.appendChild(toast);
+    }
+    toast.innerHTML = msg;
+    toast.classList.add('show');
+    clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => {
+      toast.classList.remove('show');
+    }, duration);
+  }
+
+  // 📲 远程数据变动监听响应回调
+  onRemoteDataSynced(data, payload) {
+    this.renderAll();
+    this.showToast('📲 收到远程变动，班级大屏已实时同步更新！');
+    if (window.soundCtrl && typeof window.soundCtrl.playCoin === 'function') {
+      window.soundCtrl.playCoin();
+    }
+  }
+
+  // ☁️ 打开 Firebase 配置与遥控中心弹窗
+  openFirebaseModal() {
+    const modal = document.getElementById('modal-firebase-config');
+    if (!modal) return;
+    modal.classList.add('active');
+
+    const mgr = window.firebaseSyncMgr;
+    const roomInput = document.getElementById('fb-room-id-input');
+    const directUrlInput = document.getElementById('fb-direct-url-display');
+    const configInput = document.getElementById('fb-config-raw-input');
+
+    if (roomInput && mgr) roomInput.value = mgr.roomId || 'class_default';
+    if (directUrlInput && mgr && mgr.config) {
+      directUrlInput.value = mgr.generateDirectUrl();
+    }
+    if (mgr && mgr.config && configInput && !configInput.value) {
+      configInput.value = JSON.stringify(mgr.config, null, 2);
+    }
+    mgr?.updateStatusUI();
+  }
+
+  closeFirebaseModal() {
+    document.getElementById('modal-firebase-config')?.classList.remove('active');
+  }
+
+  // 提交并连接 Firebase 配置
+  submitFirebaseConfig() {
+    const mgr = window.firebaseSyncMgr;
+    if (!mgr) return;
+
+    const rawInput = document.getElementById('fb-config-raw-input')?.value.trim();
+    const roomId = document.getElementById('fb-room-id-input')?.value.trim() || 'class_default';
+
+    if (!rawInput && !mgr.config) {
+      alert('⚠️ 请先在文本框中粘贴 Firebase 控制台中的配置代码！');
+      return;
+    }
+
+    let parsedConfig = mgr.config;
+    if (rawInput) {
+      parsedConfig = mgr.parseRawConfigInput(rawInput);
+      if (!parsedConfig) {
+        alert('⚠️ 无法识别您输入的 Firebase 配置，请确保包含 apiKey 和 projectId 或 databaseURL！');
+        return;
+      }
+    }
+
+    const ok = mgr.connect(parsedConfig, roomId);
+    if (ok) {
+      this.showToast('🚀 正在连接 Firebase 实时数据库...');
+      const directUrlInput = document.getElementById('fb-direct-url-display');
+      if (directUrlInput) directUrlInput.value = mgr.generateDirectUrl();
+    }
+  }
+
+  // 复制手机遥控免密直连地址
+  copyMobileRemoteLink() {
+    const mgr = window.firebaseSyncMgr;
+    if (!mgr || !mgr.config) {
+      alert('⚠️ 请先成功连接 Firebase 后再获取手机遥控链接！');
+      return;
+    }
+    const directUrl = mgr.generateDirectUrl();
+    navigator.clipboard.writeText(directUrl).then(() => {
+      this.showToast('📋 手机专属直连网址已复制！发送到微信在手机打开即可随堂遥控！');
+    }).catch(() => {
+      prompt('请手动复制以下手机专属网址：', directUrl);
+    });
+  }
+
+  // 下载 D 盘极速启动器
+  downloadFirebaseLauncher() {
+    const mgr = window.firebaseSyncMgr;
+    if (!mgr || !mgr.config) {
+      alert('⚠️ 请先成功连接 Firebase 后再下载启动器！');
+      return;
+    }
+    mgr.downloadLauncherHtml();
+    this.showToast('💾 D 盘启动器已下载！请将它存放在学校电脑的 D 盘或 U 盘');
+  }
+
+  // 手动推送与拉取
+  manualPushFirebase() {
+    const mgr = window.firebaseSyncMgr;
+    if (!mgr) return;
+    mgr.pushDataImmediately(window.storageMgr.data)
+      .then(() => this.showToast('✅ 已成功推送全班数据至 Firebase 云端！'))
+      .catch((e) => alert('❌ 上传失败: ' + e.message));
+  }
+
+  manualPullFirebase() {
+    const mgr = window.firebaseSyncMgr;
+    if (!mgr) return;
+    mgr.pullDataImmediately()
+      .then((hasData) => {
+        if (hasData) this.showToast('✅ 已成功从云端恢复全班最新数据！');
+        else alert('ℹ️ 云端暂无存档数据');
+      })
+      .catch((e) => alert('❌ 拉取失败: ' + e.message));
+  }
+
+  // 清除配置
+  clearFirebaseConfig() {
+    if (confirm('确认清除当前 Firebase 云端配置并断开连接吗？（本地学生数据不受影响）')) {
+      window.firebaseSyncMgr?.clearConfig();
+      const configInput = document.getElementById('fb-config-raw-input');
+      if (configInput) configInput.value = '';
+      const directUrlInput = document.getElementById('fb-direct-url-display');
+      if (directUrlInput) directUrlInput.value = '';
+      this.showToast('🧹 已清除 Firebase 配置并切换为纯本地模式');
+    }
   }
 }
 

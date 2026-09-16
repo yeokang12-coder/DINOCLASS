@@ -21,7 +21,7 @@
       <img class="brand-logo-img" src="icon.jpg" alt="DinoClass">
       <div class="brand-text">
         <div class="brand-title">DinoClass</div>
-        <span class="brand-tag">v4.2 · 熔岩火龙特别版 🌋🎓</span>
+        <span class="brand-tag">v4.3 · Firebase 实时云联动版 ☁️🌋</span>
       </div>
     </div>
 
@@ -46,6 +46,9 @@
 
     <!-- Header Actions -->
     <div class="header-actions">
+      <button class="btn btn-secondary btn-sm btn-cloud-pill" id="btn-cloud-sync-pill" title="点击打开 Firebase 实时云端同步与多端联动管理">
+        <span class="pulse-dot status-unconfigured"></span> ☁️ Firebase: 点击配置
+      </button>
       <button class="btn btn-gold" id="btn-open-wheel" title="启动全屏幸运抽答轮盘" onclick="window.dinoApp.openFullscreenWheel()">🎰 幸运抽答</button>
       <button class="btn btn-gold btn-sm" id="btn-toggle-sound">🔊 音效: 开</button>
       <button class="btn btn-gold btn-sm" id="btn-toggle-bgm">🎵 音乐: 开</button>
@@ -109,6 +112,7 @@
             <option value="apex">🔥 霸王战龙 (271-390分)</option>
             <option value="legend">👑 传说圣龙 (391分+)</option>
           </select>
+          <button class="btn btn-gold btn-sm" id="btn-cloud-sync-toolbar" title="打开实时云同步与手机遥控">☁️ 云同步/手机遥控</button>
           <button class="btn btn-secondary" id="btn-export-data" title="导出备份">💾 导出</button>
           <button class="btn btn-secondary" id="btn-import-data" title="导入备份">📁 导入</button>
           <button class="btn btn-secondary" id="btn-reset-demo" title="重置示例">🔄 恢复示例</button>
@@ -1346,7 +1350,96 @@
     </div>
   </div>
 
+  <!-- Modal 11: Firebase 实时云端同步与手机遥控中心 -->
+  <div class="modal-overlay" id="modal-firebase-config" style="z-index: 15002;">
+    <div class="modal-card" style="max-width: 620px; text-align: left; padding: 26px 24px;">
+      <div class="modal-header" style="margin-bottom: 14px;">
+        <div class="modal-title">☁️ Firebase 实时云端同步与多端联动</div>
+        <button class="modal-close" onclick="window.dinoApp.closeFirebaseModal()">&times;</button>
+      </div>
+
+      <!-- Realtime Status Banner -->
+      <div class="fb-status-card" style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 12px 16px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+            <span style="font-size: 0.88rem; color: var(--text-muted);">当前状态：</span>
+            <span id="fb-modal-status-badge" class="fb-status-badge status-unconfigured">⚪ 未配置</span>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">
+            上次云端同步：<strong id="fb-last-sync-time" style="color: var(--accent-gold);">尚未同步</strong>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary btn-sm" onclick="window.dinoApp.manualPullFirebase()" title="从云端拉取最新数据覆盖本地">⬇️ 强制拉取</button>
+          <button class="btn btn-gold btn-sm" onclick="window.dinoApp.manualPushFirebase()" title="将本地当前全班数据推送覆盖到云端">⬆️ 立即推送</button>
+        </div>
+      </div>
+
+      <!-- Classroom Room ID -->
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-weight: 700; font-size: 0.9rem; margin-bottom: 6px; color: var(--accent-gold);">
+          🏫 班级房间代号 (Class Room ID)：
+        </label>
+        <input type="text" id="fb-room-id-input" class="search-input" style="width: 100%; padding: 8px 12px; font-size: 0.92rem;" placeholder="例如：class_301 或 阳光三班">
+        <span style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; display: block;">不同班级可以使用不同代号进行数据隔离。</span>
+      </div>
+
+      <!-- Multi-device & Anti-Freeze School PC Tools -->
+      <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 18px;">
+        <div style="font-weight: 700; font-size: 0.95rem; color: #f59e0b; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+          🛡️ 学校电脑防关机还原神器 & 手机遥控
+        </div>
+        <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 10px;">
+          学校电脑只要重启，C 盘就会还原？将下方【D 盘极速启动器】存入学校电脑的 <strong>D 盘或 U 盘</strong>，每次开机双击即可秒连云端恢复数据！
+        </p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn btn-gold btn-sm" onclick="window.dinoApp.downloadFirebaseLauncher()" style="flex: 1; min-width: 180px;">
+            💾 下载「D 盘极速启动器（.html）」
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="window.dinoApp.copyMobileRemoteLink()" style="flex: 1; min-width: 180px;">
+            📱 复制手机遥控免密直达链接
+          </button>
+        </div>
+        <div style="margin-top: 10px;">
+          <input type="text" id="fb-direct-url-display" readonly style="width: 100%; font-size: 0.75rem; background: rgba(15,23,42,0.8); border: 1px dashed var(--border-glass); border-radius: 6px; padding: 6px 10px; color: #94a3b8;" placeholder="配置连接成功后，这里将自动生成专属免密启动链接...">
+        </div>
+      </div>
+
+      <!-- Firebase Config Input -->
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-weight: 700; font-size: 0.9rem; margin-bottom: 6px; color: var(--text-main);">
+          ⚙️ 粘贴 Firebase 配置代码：
+        </label>
+        <textarea id="fb-config-raw-input" rows="3" style="width: 100%; font-family: monospace; font-size: 0.8rem; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-glass); background: rgba(15, 23, 42, 0.85); color: #e2e8f0; resize: vertical;" placeholder="直接粘贴控制台生成的 const firebaseConfig = { ... } 代码"></textarea>
+      </div>
+
+      <!-- Step Guide Collapsible -->
+      <details style="margin-bottom: 18px; font-size: 0.82rem; color: var(--text-muted); background: rgba(15,23,42,0.4); border-radius: 8px; padding: 10px 14px; border: 1px solid var(--border-glass);">
+        <summary style="cursor: pointer; color: var(--accent-gold); font-weight: 700;">📖 还没有 Firebase 数据库？点击查看 3 分钟免费创建步骤</summary>
+        <ol style="margin-top: 8px; padding-left: 20px; line-height: 1.6;">
+          <li>打开 <a href="https://console.firebase.google.com/" target="_blank" style="color: #38bdf8; text-decoration: underline;">Firebase 控制台</a>，登录 Google 账号。</li>
+          <li>点击「添加项目」，名称输入 <code>dinoclass</code>，一路下一步完成创建。</li>
+          <li>在左侧菜单点击 <strong>Build ➔ Realtime Database ➔ Create Database</strong>，安全规则选择「测试模式（Test mode）」。</li>
+          <li>点击项目概览旁边的 ⚙️ <strong>Project settings</strong>，往下滑找到 <code>&lt;/&gt;</code> (Web 应用) 点击注册，将生成的 <code>const firebaseConfig = { ... };</code> 整段复制粘贴到上方即可！</li>
+        </ol>
+      </details>
+
+      <!-- Modal Footer -->
+      <div style="display: flex; gap: 10px; justify-content: space-between; align-items: center;">
+        <button class="btn btn-secondary btn-sm" style="color: #f87171; border-color: rgba(248,113,113,0.4);" onclick="window.dinoApp.clearFirebaseConfig()">🧹 断开并清除配置</button>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn btn-secondary btn-modal-cancel" onclick="window.dinoApp.closeFirebaseModal()">关闭</button>
+          <button class="btn btn-primary" onclick="window.dinoApp.submitFirebaseConfig()">🚀 连接并开启实时同步</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Scripts -->
+  <!-- Firebase Realtime Database SDK (Compat v9) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="js/firebase_sync.js"></script>
   <script src="js/sound.js"></script>
   <script src="js/confetti.js"></script>
   <script src="js/dino_data.js"></script>
@@ -1363,6 +1456,7 @@
         🎮 开启恐龙魔法课堂
       </button>
     </div>
+  </div>
   <!-- PWA Service Worker Registration -->
   <script>
     if ('serviceWorker' in navigator) {

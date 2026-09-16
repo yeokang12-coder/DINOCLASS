@@ -86,6 +86,10 @@ class StorageManager {
     } catch (e) {
       console.error('LocalStorage write failed:', e);
     }
+    // Auto-sync to Firebase Realtime Database
+    if (window.firebaseSyncMgr && typeof window.firebaseSyncMgr.schedulePush === 'function') {
+      window.firebaseSyncMgr.schedulePush(this.data);
+    }
   }
 
   resetToDefault() {
