@@ -4144,3 +4144,218 @@ svg.gold-skin-aura {
   transform: translateX(-50%) translateY(0);
   opacity: 1;
 }
+
+/* ==========================================================================
+   Mobile & Tablet Responsive Layout Adaptations (手机与平板移动端深度适配)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* 1. 顶部 Header 自适应：换行且横向顺滑滑动 */
+  .app-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 10px 12px !important;
+    gap: 10px !important;
+    overflow-x: hidden !important;
+  }
+
+  .brand-container {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+
+  .brand-logo-img {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 10px !important;
+  }
+
+  .brand-title {
+    font-size: 1.15rem !important;
+  }
+
+  .brand-tag {
+    font-size: 0.68rem !important;
+  }
+
+  .nav-tabs {
+    display: flex !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    gap: 6px !important;
+    padding-bottom: 4px !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+
+  .nav-tabs::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .nav-tab {
+    padding: 6px 12px !important;
+    font-size: 0.8rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  .header-actions {
+    display: flex !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    gap: 6px !important;
+    padding-bottom: 4px !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+
+  .header-actions::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .btn-cloud-pill {
+    font-size: 0.76rem !important;
+    padding: 4px 10px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .header-actions .btn {
+    padding: 6px 10px !important;
+    font-size: 0.8rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* 2. 页面内边距收缩 */
+  .app-content {
+    padding: 12px 10px !important;
+  }
+
+  /* 3. 中枢工具栏纵向流式排版 */
+  .console-toolbar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    padding: 12px 14px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .stats-group {
+    display: flex !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+
+  .stat-item {
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .stat-value {
+    font-size: 1.05rem !important;
+  }
+
+  .stat-label {
+    font-size: 0.7rem !important;
+  }
+
+  .filter-group {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    width: 100% !important;
+    white-space: normal !important;
+  }
+
+  .search-input {
+    width: 100% !important;
+    font-size: 0.85rem !important;
+    padding: 7px 10px !important;
+  }
+
+  .select-input {
+    flex: 1 1 45% !important;
+    min-width: 120px !important;
+    font-size: 0.8rem !important;
+    padding: 6px 8px !important;
+  }
+
+  /* 4. 恐龙卡片手机端完美双列 (2列并排) 紧凑易操作 */
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    row-gap: 16px !important;
+  }
+
+  .dino-card {
+    padding: 10px 6px !important;
+    border-radius: var(--radius-md) !important;
+  }
+
+  .dino-avatar-wrap {
+    width: 80px !important;
+    height: 80px !important;
+    margin: 4px 0 !important;
+  }
+
+  .student-name {
+    font-size: 0.92rem !important;
+  }
+
+  .species-name {
+    font-size: 0.72rem !important;
+    display: block !important;
+    margin-top: 1px !important;
+  }
+
+  .stage-badge {
+    font-size: 0.68rem !important;
+    padding: 2px 6px !important;
+  }
+
+  .level-row {
+    font-size: 0.72rem !important;
+  }
+
+  .card-actions {
+    gap: 4px !important;
+    margin-top: 6px !important;
+    width: 100% !important;
+  }
+
+  .score-btn {
+    padding: 6px 4px !important;
+    font-size: 0.82rem !important;
+    font-weight: 800 !important;
+  }
+
+  .score-btn.btn-secondary {
+    flex: 0 0 28px !important;
+  }
+
+  /* 5. 弹窗手机端自适应 */
+  .modal-card {
+    width: 95% !important;
+    max-width: 95% !important;
+    padding: 18px 14px !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+  }
+
+  .shop-fitting-layout {
+    flex-direction: column !important;
+  }
+
+  .shop-fitting-room {
+    width: 100% !important;
+    position: relative !important;
+    top: 0 !important;
+  }
+
+  .shop-items-panel {
+    width: 100% !important;
+  }
+}

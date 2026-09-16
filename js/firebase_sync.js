@@ -4,9 +4,20 @@
 
 const FB_CONFIG_STORAGE_KEY = 'DINOCLASS_FIREBASE_CONFIG_V1';
 
+// 🌟 班级专属内置 Firebase 实时云数据库配置（任何设备开机自连）
+const DEFAULT_FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBz-DRpDZ99JLK1W9sXBs9f0lhgECyLNL8",
+  authDomain: "dinoclass-fe24a.firebaseapp.com",
+  databaseURL: "https://dinoclass-fe24a-default-rtdb.firebaseio.com",
+  projectId: "dinoclass-fe24a",
+  storageBucket: "dinoclass-fe24a.firebasestorage.app",
+  messagingSenderId: "231158299615",
+  appId: "1:231158299615:web:f35bf608c308393442a26a"
+};
+
 class FirebaseSyncManager {
   constructor() {
-    this.config = null;
+    this.config = DEFAULT_FIREBASE_CONFIG;
     this.roomId = 'class_default';
     this.app = null;
     this.database = null;
@@ -30,16 +41,19 @@ class FirebaseSyncManager {
       this.config = hashConfig.config;
       this.roomId = hashConfig.roomId || 'class_default';
       this.saveLocalConfig(this.config, this.roomId);
-      // 清理 URL hash 避免视觉杂乱，但保留历史
       try {
         window.history.replaceState(null, '', window.location.pathname + window.location.search);
       } catch (e) {}
     } else {
-      // 从 LocalStorage 读取
+      // 从 LocalStorage 读取，若没有则默认自动使用内置的班级云数据库！
       const saved = this.loadLocalConfig();
-      if (saved) {
+      if (saved && saved.config) {
         this.config = saved.config;
         this.roomId = saved.roomId || 'class_default';
+      } else {
+        this.config = DEFAULT_FIREBASE_CONFIG;
+        this.roomId = 'class_default';
+        this.saveLocalConfig(this.config, this.roomId);
       }
     }
 
