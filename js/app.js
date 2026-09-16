@@ -2621,10 +2621,19 @@ class DinoApp {
     if (dropdownList) {
       const list = window.storageMgr.classesList || [];
       const seenIds = new Set();
+      const seenNames = new Set();
       const cleanItems = [];
       for (const c of list) {
         if (!c || !c.id || seenIds.has(c.id)) continue;
+        const name = (c.name || '').trim();
+        if (!name || seenNames.has(name)) continue;
+
+        // 核心权威过滤：3K班必须是 class_3k_24，ON必须是 class_primary_5
+        if ((name === '3K班' || name === '3K') && c.id !== 'class_3k_24') continue;
+        if (name === 'ON' && c.id !== 'class_primary_5') continue;
+
         seenIds.add(c.id);
+        seenNames.add(name);
         cleanItems.push(c);
       }
 
@@ -2704,10 +2713,19 @@ class DinoApp {
     const activeId = window.storageMgr.getActiveClassId();
 
     const seenIds = new Set();
+    const seenNames = new Set();
     const cleanItems = [];
     for (const c of list) {
       if (!c || !c.id || seenIds.has(c.id)) continue;
+      const name = (c.name || '').trim();
+      if (!name || seenNames.has(name)) continue;
+
+      // 核心权威过滤：3K班必须是 class_3k_24，ON必须是 class_primary_5
+      if ((name === '3K班' || name === '3K') && c.id !== 'class_3k_24') continue;
+      if (name === 'ON' && c.id !== 'class_primary_5') continue;
+
       seenIds.add(c.id);
+      seenNames.add(name);
       cleanItems.push(c);
     }
 

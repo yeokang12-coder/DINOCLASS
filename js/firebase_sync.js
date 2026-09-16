@@ -203,19 +203,29 @@ class FirebaseSyncManager {
       this.metaRef.on('value', (snap) => {
         const remoteList = snap.val();
         if (Array.isArray(remoteList) && remoteList.length > 0) {
-          // 智能检测云端列表是否存在历史遗留脏数据（如 class_default）或旧班名需自动规范为 ON
-          const hasDirty = remoteList.some(c => !c || c.id === 'class_default' || (c.id === 'class_primary_5' && (c.name === '三(1)班' || c.name === '三（1）班')));
+          // 智能检测云端列表是否存在任何污染/重叠/幽灵班级（常由旧手机或旧缓存上传）：
+          // 1. 包含 class_default
+          // 2. 包含旧名 三(1)班
+          // 3. 包含 ID 不是 class_3k_24 的 3K班 (0人幽灵班)
+          // 4. 包含 ID 不是 class_primary_5 的 ON (0人幽灵班)
+          // 5. 包含重复 ID 或 重复名称
           const idSet = new Set();
-          let hasDuplicates = false;
+          const nameSet = new Set();
+          let needsSanitize = false;
+
           for (const c of remoteList) {
-            if (c && c.id) {
-              if (idSet.has(c.id)) { hasDuplicates = true; break; }
-              idSet.add(c.id);
-            }
+            if (!c || !c.id || c.id === 'class_default') { needsSanitize = true; break; }
+            let name = (c.name || '').trim();
+            if (name === '三(1)班' || name === '三（1）班') { needsSanitize = true; break; }
+            if ((name === '3K班' || name === '3K') && c.id !== 'class_3k_24') { needsSanitize = true; break; }
+            if (name === 'ON' && c.id !== 'class_primary_5') { needsSanitize = true; break; }
+            if (idSet.has(c.id) || nameSet.has(name)) { needsSanitize = true; break; }
+            idSet.add(c.id);
+            nameSet.add(name);
           }
 
-          if ((hasDirty || hasDuplicates) && window.storageMgr && typeof window.storageMgr.sanitizeToStandardClasses === 'function') {
-            console.log('[FirebaseSync] 🧹 检测到云端班级列表含有历史重叠/脏数据，立即自动净化云端！');
+          if (needsSanitize && window.storageMgr && typeof window.storageMgr.sanitizeToStandardClasses === 'function') {
+            console.log('[FirebaseSync] 🧹 侦测到云端含有幽灵/重叠班级（旧设备上传），立即自动反向净化并强行覆盖云端！');
             window.storageMgr.sanitizeToStandardClasses();
           } else if (window.storageMgr) {
             window.storageMgr.mergeRemoteClassesList(remoteList);

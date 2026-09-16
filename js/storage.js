@@ -21,16 +21,36 @@ class StorageManager {
       if (raw) {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // 过滤掉引起多端打架的历史冲突 ID class_default
-          const filtered = parsed.filter(c => c && c.id !== 'class_default');
-          if (filtered.length > 0) {
-            filtered.forEach(c => {
-              if (c.id === 'class_primary_5' && (c.name === '三(1)班' || c.name === '三（1）班' || !c.name)) {
-                c.name = 'ON';
-              }
-            });
-            return filtered;
+          const clean = [];
+          const seenNames = new Set();
+          const seenIds = new Set();
+
+          for (const c of parsed) {
+            if (!c || !c.id || c.id === 'class_default') continue;
+            let name = (c.name || '').trim();
+            if (name === '三(1)班' || name === '三（1）班') name = 'ON';
+            if (!name) continue;
+
+            // 核心权威规则：3K班的合法 ID 只能是 class_3k_24，拒绝 0人幽灵班
+            if ((name === '3K班' || name === '3K') && c.id !== 'class_3k_24') continue;
+            // 核心权威规则：ON 的合法 ID 只能是 class_primary_5，拒绝 0人幽灵班
+            if (name === 'ON' && c.id !== 'class_primary_5') continue;
+
+            if (seenNames.has(name) || seenIds.has(c.id)) continue;
+            seenNames.add(name);
+            seenIds.add(c.id);
+            clean.push({ id: c.id, name: name });
           }
+
+          if (!clean.some(c => c.id === 'class_3k_24')) {
+            clean.unshift({ id: 'class_3k_24', name: '3K班' });
+          }
+          if (!clean.some(c => c.id === 'class_primary_5')) {
+            clean.push({ id: 'class_primary_5', name: 'ON' });
+          }
+
+          this.saveClassesList(clean);
+          return clean;
         }
       }
     } catch (e) {}
@@ -110,17 +130,27 @@ class StorageManager {
       try { localStorage.setItem(this.getClassStorageKey('class_primary_5'), JSON.stringify(classPrimary)); } catch(e) {}
     }
 
-    // 重构纯净的两班目录（彻底清除历史冲突 class_default）
+    // 重构纯净的两班目录（彻底清除历史冲突 class_default 与同名幽灵班级）
     const cleanList = [
       { id: 'class_3k_24', name: '3K班' },
       { id: 'class_primary_5', name: 'ON' }
     ];
 
-    // 保留其他有效自定义班级
+    const seenNames = new Set(['3K班', '3K', 'ON', '三(1)班', '三（1）班']);
+    const seenIds = new Set(['class_3k_24', 'class_primary_5', 'class_default']);
+
+    // 保留其他真正的自定义班级，同时清理同名幽灵班级本地垃圾
     this.classesList.forEach(c => {
-      if (c && c.id && c.id !== 'class_default' && c.id !== 'class_3k_24' && c.id !== 'class_primary_5') {
-        cleanList.push(c);
+      if (!c || !c.id || seenIds.has(c.id)) return;
+      const name = (c.name || '').trim();
+      if (!name || seenNames.has(name)) {
+        // 清理同名幽灵班级的历史垃圾本地 key
+        try { localStorage.removeItem(this.getClassStorageKey(c.id)); } catch(e) {}
+        return;
       }
+      seenNames.add(name);
+      seenIds.add(c.id);
+      cleanList.push({ id: c.id, name: name });
     });
 
     this.classesList = cleanList;
@@ -465,23 +495,43 @@ class StorageManager {
   mergeRemoteClassesList(remoteList) {
     if (!Array.isArray(remoteList) || remoteList.length === 0) return;
 
-    // 清洗远程列表：去重、过滤无效 ID、剔除历史冲突 ID class_default
+    // 清洗远程列表：去重、过滤无效 ID、剔除历史冲突 ID class_default、严格按名称和 ID 权威去重
     const sanitized = [];
     const seenIds = new Set();
+    const seenNames = new Set();
+
     remoteList.forEach(rc => {
       if (!rc || !rc.id) return;
       if (rc.id === 'class_default') return;
-      if (seenIds.has(rc.id)) return;
-      seenIds.add(rc.id);
 
-      let cleanName = (rc.name || '').trim() || '未命名班级';
-      if (rc.id === 'class_primary_5' && (cleanName === '三(1)班' || cleanName === '三（1）班')) {
+      let cleanName = (rc.name || '').trim();
+      if (cleanName === '三(1)班' || cleanName === '三（1）班') {
         cleanName = 'ON';
       }
+      if (!cleanName) return;
+
+      // 核心权威规则：3K班 的唯一合法 ID 只能是 class_3k_24，彻底干掉 0人幽灵班
+      if ((cleanName === '3K班' || cleanName === '3K') && rc.id !== 'class_3k_24') return;
+      // 核心权威规则：ON 的唯一合法 ID 只能是 class_primary_5，彻底干掉 0人幽灵班
+      if (cleanName === 'ON' && rc.id !== 'class_primary_5') return;
+
+      // 严格去重：名称或 ID 出现过一律丢弃
+      if (seenIds.has(rc.id) || seenNames.has(cleanName)) return;
+
+      seenIds.add(rc.id);
+      seenNames.add(cleanName);
       sanitized.push({ id: rc.id, name: cleanName });
     });
 
     if (sanitized.length === 0) return;
+
+    // 确保核心双班级必定在列表中
+    if (!sanitized.some(c => c.id === 'class_3k_24')) {
+      sanitized.unshift({ id: 'class_3k_24', name: '3K班' });
+    }
+    if (!sanitized.some(c => c.id === 'class_primary_5')) {
+      sanitized.push({ id: 'class_primary_5', name: 'ON' });
+    }
 
     // 权威覆盖：直接以清洗后的云端目录为准！绝对不再累加本地已失效的旧班级
     this.classesList = sanitized;
