@@ -2620,7 +2620,15 @@ class DinoApp {
 
     if (dropdownList) {
       const list = window.storageMgr.classesList || [];
-      dropdownList.innerHTML = list.map(c => {
+      const seenIds = new Set();
+      const cleanItems = [];
+      for (const c of list) {
+        if (!c || !c.id || seenIds.has(c.id)) continue;
+        seenIds.add(c.id);
+        cleanItems.push(c);
+      }
+
+      dropdownList.innerHTML = cleanItems.map(c => {
         const isActive = c.id === activeId;
         const count = window.storageMgr.getClassStudentCount(c.id);
         const score = window.storageMgr.getClassTotalScore(c.id);
@@ -2644,6 +2652,16 @@ class DinoApp {
     this.renderClassSelector();
     this.renderAll();
     this.showToast(`🏫 已切换至【${window.storageMgr.getActiveClassName()}】！数据已就绪`);
+  }
+
+  // 一键理顺双班级目录（彻底消除多端重叠加的所有幽灵班级）
+  cleanDuplicateClasses() {
+    if (!window.storageMgr) return;
+    const cleanList = window.storageMgr.sanitizeToStandardClasses();
+    this.renderClassSelector();
+    this.renderClassManageItems();
+    this.renderAll();
+    this.showToast('🧹 已彻底理顺双班级目录！多余重叠班级已全部清理并同步云端。');
   }
 
   // 打开创建新班级视图
@@ -2685,9 +2703,17 @@ class DinoApp {
     const list = window.storageMgr.classesList || [];
     const activeId = window.storageMgr.getActiveClassId();
 
-    container.innerHTML = list.map(c => {
+    const seenIds = new Set();
+    const cleanItems = [];
+    for (const c of list) {
+      if (!c || !c.id || seenIds.has(c.id)) continue;
+      seenIds.add(c.id);
+      cleanItems.push(c);
+    }
+
+    container.innerHTML = cleanItems.map(c => {
       const isActive = c.id === activeId;
-      const canDelete = list.length > 1;
+      const canDelete = cleanItems.length > 1;
       const count = window.storageMgr.getClassStudentCount(c.id);
       const score = window.storageMgr.getClassTotalScore(c.id);
       return `

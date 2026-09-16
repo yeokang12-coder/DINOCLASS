@@ -23,14 +23,21 @@ class StorageManager {
         if (Array.isArray(parsed) && parsed.length > 0) {
           // 过滤掉引起多端打架的历史冲突 ID class_default
           const filtered = parsed.filter(c => c && c.id !== 'class_default');
-          if (filtered.length > 0) return filtered;
+          if (filtered.length > 0) {
+            filtered.forEach(c => {
+              if (c.id === 'class_primary_5' && (c.name === '三(1)班' || c.name === '三（1）班' || !c.name)) {
+                c.name = 'ON';
+              }
+            });
+            return filtered;
+          }
         }
       }
     } catch (e) {}
     // 默认初始两班目录（使用永久唯一独立房间 ID）
     const initialList = [
       { id: 'class_3k_24', name: '3K班' },
-      { id: 'class_primary_5', name: '三(1)班' }
+      { id: 'class_primary_5', name: 'ON' }
     ];
     this.saveClassesList(initialList);
     return initialList;
@@ -74,7 +81,7 @@ class StorageManager {
       try { localStorage.setItem(this.getClassStorageKey('class_3k_24'), JSON.stringify(class3k)); } catch(e) {}
     }
 
-    // 读取或初始化 三(1)班 (5人)
+    // 读取或初始化 ON (原三(1)班, 5人)
     let classPrimary = this.loadRawData('class_primary_5');
     if (!classPrimary) {
       if (legacyData && isFiveStudents(legacyData)) {
@@ -86,7 +93,7 @@ class StorageManager {
         }
       }
       if (!classPrimary) {
-        classPrimary = this.getDefaultState('三(1)班', 'class_primary_5');
+        classPrimary = this.getDefaultState('ON', 'class_primary_5');
         classPrimary.students = [
           { id: 's_wynnie', name: 'WYNNIE', speciesKey: 'brachio', score: 244, hasCrown: false, earnedTitles: [], activePrivileges: [], history: [] },
           { id: 's_stellen', name: 'STELLEN', speciesKey: 'rex', score: 210, hasCrown: false, earnedTitles: [], activePrivileges: [], history: [] },
@@ -96,22 +103,23 @@ class StorageManager {
         ];
       }
       classPrimary.classId = 'class_primary_5';
-      classPrimary.className = '三(1)班';
+      classPrimary.className = 'ON';
+      try { localStorage.setItem(this.getClassStorageKey('class_primary_5'), JSON.stringify(classPrimary)); } catch(e) {}
+    } else {
+      classPrimary.className = 'ON';
       try { localStorage.setItem(this.getClassStorageKey('class_primary_5'), JSON.stringify(classPrimary)); } catch(e) {}
     }
 
-    // 重构纯净的两班目录（彻底清除临时名 ON、3K、class_default）
+    // 重构纯净的两班目录（彻底清除历史冲突 class_default）
     const cleanList = [
       { id: 'class_3k_24', name: '3K班' },
-      { id: 'class_primary_5', name: '三(1)班' }
+      { id: 'class_primary_5', name: 'ON' }
     ];
 
     // 保留其他有效自定义班级
     this.classesList.forEach(c => {
       if (c && c.id && c.id !== 'class_default' && c.id !== 'class_3k_24' && c.id !== 'class_primary_5') {
-        if (c.name !== 'ON' && c.name !== '3K') {
-          cleanList.push(c);
-        }
+        cleanList.push(c);
       }
     });
 
@@ -421,35 +429,87 @@ class StorageManager {
     return true;
   }
 
-  // 8. 云端漫游合并远程班级列表（实时同步新增班级与班级改名）
+  // 一键理顺并恢复标准双班级目录（彻底清理所有多端重叠加的垃圾班级）
+  sanitizeToStandardClasses() {
+    const cleanList = [
+      { id: 'class_3k_24', name: '3K班' },
+      { id: 'class_primary_5', name: 'ON' }
+    ];
+    this.classesList = cleanList;
+    this.saveClassesList();
+
+    // 确保 class_primary_5 本地数据名称更新为 ON 并同步至云端
+    const primaryData = this.loadRawData('class_primary_5');
+    if (primaryData) {
+      primaryData.className = 'ON';
+      try { localStorage.setItem(this.getClassStorageKey('class_primary_5'), JSON.stringify(primaryData)); } catch(e) {}
+      if (window.firebaseSyncMgr && typeof window.firebaseSyncMgr.pushClassData === 'function') {
+        window.firebaseSyncMgr.pushClassData('class_primary_5', primaryData);
+      }
+    }
+
+    if (this.currentClassId !== 'class_3k_24' && this.currentClassId !== 'class_primary_5') {
+      this.currentClassId = 'class_3k_24';
+      try { localStorage.setItem(ACTIVE_CLASS_ID_KEY, 'class_3k_24'); } catch (e) {}
+    }
+    this.data = this.loadData(this.currentClassId);
+
+    // 强行同步至云端，覆盖清除云端堆叠的历史垃圾目录
+    if (window.firebaseSyncMgr && typeof window.firebaseSyncMgr.syncClassesMeta === 'function') {
+      window.firebaseSyncMgr.syncClassesMeta(cleanList);
+    }
+    return cleanList;
+  }
+
+  // 8. 云端班级目录权威同步（彻底终结多端重叠加与死灰复燃）
   mergeRemoteClassesList(remoteList) {
     if (!Array.isArray(remoteList) || remoteList.length === 0) return;
-    let changed = false;
+
+    // 清洗远程列表：去重、过滤无效 ID、剔除历史冲突 ID class_default
+    const sanitized = [];
+    const seenIds = new Set();
     remoteList.forEach(rc => {
       if (!rc || !rc.id) return;
-      const existing = this.classesList.find(lc => lc.id === rc.id);
-      if (existing) {
-        // 如果云端修改了班级名称，立刻同步更新本地班级名称！
-        if (rc.name && existing.name !== rc.name) {
-          console.log(`[Storage] 🔄 Class name synced from cloud: [${existing.id}] ${existing.name} -> ${rc.name}`);
-          existing.name = rc.name;
-          changed = true;
-          // 若恰好是当前正在显示的班级，同步更新内存中的名称
-          if (existing.id === this.currentClassId && this.data) {
-            this.data.className = rc.name;
-          }
-        }
-      } else {
-        // 发现云端新增的班级，加入本地列表
-        this.classesList.push({ id: rc.id, name: rc.name || '未命名班级' });
-        changed = true;
+      if (rc.id === 'class_default') return;
+      if (seenIds.has(rc.id)) return;
+      seenIds.add(rc.id);
+
+      let cleanName = (rc.name || '').trim() || '未命名班级';
+      if (rc.id === 'class_primary_5' && (cleanName === '三(1)班' || cleanName === '三（1）班')) {
+        cleanName = 'ON';
       }
+      sanitized.push({ id: rc.id, name: cleanName });
     });
-    if (changed) {
-      this.saveClassesList();
-      if (window.dinoApp && typeof window.dinoApp.renderClassSelector === 'function') {
-        window.dinoApp.renderClassSelector();
+
+    if (sanitized.length === 0) return;
+
+    // 权威覆盖：直接以清洗后的云端目录为准！绝对不再累加本地已失效的旧班级
+    this.classesList = sanitized;
+    this.saveClassesList();
+
+    // 如果当前选中的班级已被删除或失效，自动重定向到有效班级
+    if (!this.classesList.some(c => c.id === this.currentClassId)) {
+      this.currentClassId = this.classesList[0].id;
+      try {
+        localStorage.setItem(ACTIVE_CLASS_ID_KEY, this.currentClassId);
+      } catch (e) {}
+      this.data = this.loadData(this.currentClassId);
+      if (window.dinoApp && typeof window.dinoApp.renderAll === 'function') {
+        window.dinoApp.renderAll();
       }
+    } else {
+      // 若当前班级改名，同步更新当前内存中的班级名
+      const currentMeta = this.classesList.find(c => c.id === this.currentClassId);
+      if (currentMeta && this.data && this.data.className !== currentMeta.name) {
+        this.data.className = currentMeta.name;
+      }
+    }
+
+    if (window.dinoApp && typeof window.dinoApp.renderClassSelector === 'function') {
+      window.dinoApp.renderClassSelector();
+    }
+    if (window.dinoApp && typeof window.dinoApp.renderClassManageItems === 'function') {
+      window.dinoApp.renderClassManageItems();
     }
   }
 
@@ -521,7 +581,7 @@ class StorageManager {
     return this.data.shopItems;
   }
 
-  getDefaultState(className = '三(1)班', classId = 'class_default') {
+  getDefaultState(className = 'ON', classId = 'class_primary_5') {
     return {
       classId: classId,
       className: className,

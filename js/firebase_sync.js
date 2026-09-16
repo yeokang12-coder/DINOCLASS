@@ -203,11 +203,29 @@ class FirebaseSyncManager {
       this.metaRef.on('value', (snap) => {
         const remoteList = snap.val();
         if (Array.isArray(remoteList) && remoteList.length > 0) {
-          if (window.storageMgr) {
+          // 智能检测云端列表是否存在历史遗留脏数据（如 class_default）或旧班名需自动规范为 ON
+          const hasDirty = remoteList.some(c => !c || c.id === 'class_default' || (c.id === 'class_primary_5' && (c.name === '三(1)班' || c.name === '三（1）班')));
+          const idSet = new Set();
+          let hasDuplicates = false;
+          for (const c of remoteList) {
+            if (c && c.id) {
+              if (idSet.has(c.id)) { hasDuplicates = true; break; }
+              idSet.add(c.id);
+            }
+          }
+
+          if ((hasDirty || hasDuplicates) && window.storageMgr && typeof window.storageMgr.sanitizeToStandardClasses === 'function') {
+            console.log('[FirebaseSync] 🧹 检测到云端班级列表含有历史重叠/脏数据，立即自动净化云端！');
+            window.storageMgr.sanitizeToStandardClasses();
+          } else if (window.storageMgr) {
             window.storageMgr.mergeRemoteClassesList(remoteList);
           }
+
           if (window.dinoApp && typeof window.dinoApp.renderClassSelector === 'function') {
             window.dinoApp.renderClassSelector();
+          }
+          if (window.dinoApp && typeof window.dinoApp.renderClassManageItems === 'function') {
+            window.dinoApp.renderClassManageItems();
           }
         }
       });

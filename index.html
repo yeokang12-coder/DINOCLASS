@@ -11,7 +11,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="css/style.css?v=5.3">
+  <link rel="stylesheet" href="css/style.css?v=5.4">
 </head>
 <body>
 
@@ -21,7 +21,7 @@
       <img class="brand-logo-img" src="icon.jpg" alt="DinoClass">
       <div class="brand-text">
         <div class="brand-title">DinoClass</div>
-        <span class="brand-tag">v5.3 · 班级专属独立云室版 🏫🛡️</span>
+        <span class="brand-tag">v5.4 · 班级专属独立云室版 🏫🛡️</span>
       </div>
 
       <!-- 🏫 多班级极速切换器 (Multi-Class Switcher) -->
@@ -1491,12 +1491,15 @@
         <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">
           当前所有授课班级（各班级学生与积分完全隔离，各享云端同步）：
         </div>
-        <div id="class-manage-items-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:20px; max-height:240px; overflow-y:auto;">
+        <div id="class-manage-items-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px; max-height:240px; overflow-y:auto;">
           <!-- Rendered dynamically by app.js -->
         </div>
-        <div style="display:flex; gap:10px; justify-content:space-between;">
-          <button class="btn btn-gold btn-sm" onclick="window.dinoApp.openCreateClassView()">➕ 新建另一个班级</button>
-          <button class="btn btn-secondary btn-sm" onclick="window.dinoApp.closeClassManageModal()">完成</button>
+        <div style="display:flex; gap:10px; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+          <button class="btn btn-secondary btn-sm" style="color:#fbbf24; border-color:rgba(251,191,36,0.5); font-weight:600;" onclick="window.dinoApp.cleanDuplicateClasses()" title="一键清理所有多端重叠加的僵尸班级，彻底理顺双班级">🧹 一键理顺双班级</button>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-gold btn-sm" onclick="window.dinoApp.openCreateClassView()">➕ 新建另一个班级</button>
+            <button class="btn btn-secondary btn-sm" onclick="window.dinoApp.closeClassManageModal()">完成</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1506,12 +1509,12 @@
   <!-- Firebase Realtime Database SDK (Compat v9) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-  <script src="js/firebase_sync.js?v=5.3"></script>
+  <script src="js/firebase_sync.js?v=5.4"></script>
   <script src="js/sound.js"></script>
   <script src="js/confetti.js"></script>
   <script src="js/dino_data.js"></script>
-  <script src="js/storage.js?v=5.3"></script>
-  <script src="js/app.js?v=5.3"></script>
+  <script src="js/storage.js?v=5.4"></script>
+  <script src="js/app.js?v=5.4"></script>
 
   <!-- 🎮 DinoClass Welcome Play Gate Splash Overlay -->
   <div class="welcome-overlay" id="welcome-gate">

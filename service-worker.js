@@ -1,8 +1,8 @@
-const CACHE_NAME = 'dinoclass-v5.3';
+const CACHE_NAME = 'dinoclass-v5.4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './css/style.css?v=5.3',
+  './css/style.css?v=5.4',
   './js/app.js',
   './js/sound.js',
   './js/storage.js',
