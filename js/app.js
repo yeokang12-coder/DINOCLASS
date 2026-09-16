@@ -2622,10 +2622,13 @@ class DinoApp {
       const list = window.storageMgr.classesList || [];
       dropdownList.innerHTML = list.map(c => {
         const isActive = c.id === activeId;
+        const count = window.storageMgr.getClassStudentCount(c.id);
+        const score = window.storageMgr.getClassTotalScore(c.id);
         return `
           <div class="class-dropdown-item ${isActive ? 'active' : ''}" onclick="window.dinoApp.selectClass('${c.id}')">
             <span class="class-item-icon">${isActive ? '✅' : '🏫'}</span>
             <span class="class-item-name">${c.name}</span>
+            <span style="font-size:0.75rem; color:#94a3b8; margin-left:auto; margin-right:6px;">${count}人 · ${score}分</span>
             ${isActive ? '<span class="class-item-badge">当前授课</span>' : ''}
           </div>
         `;
@@ -2685,20 +2688,49 @@ class DinoApp {
     container.innerHTML = list.map(c => {
       const isActive = c.id === activeId;
       const canDelete = list.length > 1;
+      const count = window.storageMgr.getClassStudentCount(c.id);
+      const score = window.storageMgr.getClassTotalScore(c.id);
       return `
         <div class="class-manage-row" style="display:flex; justify-content:space-between; align-items:center; background:rgba(15,23,42,0.6); padding:10px 14px; border-radius:var(--radius-md); border:1px solid var(--border-glass);">
           <div style="display:flex; align-items:center; gap:8px;">
             <span style="font-size:1.1rem;">${isActive ? '🌟' : '🏫'}</span>
-            <strong style="color:#fff; font-size:0.95rem;">${c.name}</strong>
-            ${isActive ? '<span style="font-size:0.75rem; background:rgba(245,158,11,0.2); color:#fbbf24; padding:2px 8px; border-radius:10px; font-weight:700;">当前班级</span>' : ''}
+            <div>
+              <strong style="color:#fff; font-size:0.95rem;">${c.name}</strong>
+              <span style="font-size:0.78rem; color:#94a3b8; margin-left:6px;">(${count} 人 · ${score} 分)</span>
+            </div>
+            ${isActive ? '<span style="font-size:0.72rem; background:rgba(245,158,11,0.2); color:#fbbf24; padding:2px 8px; border-radius:10px; font-weight:700;">当前班级</span>' : ''}
           </div>
           <div style="display:flex; gap:6px;">
             <button class="btn btn-secondary btn-sm" style="padding:4px 10px; font-size:0.8rem;" onclick="window.dinoApp.promptRenameClass('${c.id}')" title="重命名此班级">✏️ 改名</button>
+            <button class="btn btn-secondary btn-sm" style="padding:4px 10px; font-size:0.8rem; color:#38bdf8; border-color:rgba(56,189,248,0.3);" onclick="window.dinoApp.promptResetClass('${c.id}')" title="清空或重置此班级名单">🧹 重置</button>
             ${canDelete ? `<button class="btn btn-secondary btn-sm" style="padding:4px 10px; font-size:0.8rem; color:#f87171; border-color:rgba(248,113,113,0.3);" onclick="window.dinoApp.confirmDeleteClass('${c.id}')" title="删除班级">🗑️</button>` : ''}
           </div>
         </div>
       `;
     }).join('');
+  }
+
+  // 独立清空/重置某一班级名单
+  promptResetClass(classId) {
+    const name = window.storageMgr.getClassNameById(classId);
+    const count = window.storageMgr.getClassStudentCount(classId);
+    const choice = confirm(
+      `⚠️ 班级数据独立重置提示：\n\n` +
+      `确定要清空【${name}】（当前 ${count} 名学生）的数据吗？\n\n` +
+      `【确定】：清空该班级学生名单（变为空白班级，供录入新学生）\n` +
+      `【取消】：放弃操作\n\n` +
+      `🛡️ 安全保证：此操作仅重置【${name}】，其他所有班级的数据 100% 独立保留，绝不受影响！`
+    );
+    if (choice) {
+      window.storageMgr.resetClassData(classId, 'empty');
+      this.renderClassSelector();
+      this.renderClassManageItems();
+      if (classId === window.storageMgr.getActiveClassId()) {
+        this.selectedStudentIds.clear();
+        this.renderAll();
+      }
+      this.showToast(`🧹 已成功重置并清空【${name}】的学生名单！`);
+    }
   }
 
   // 提交新建班级

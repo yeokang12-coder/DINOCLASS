@@ -42,7 +42,11 @@ class StorageManager {
   }
 
   getActiveClassName() {
-    const found = this.classesList.find(c => c.id === this.currentClassId);
+    return this.getClassNameById(this.currentClassId);
+  }
+
+  getClassNameById(classId) {
+    const found = this.classesList.find(c => c.id === classId);
     return found ? found.name : (this.data?.className || '三(1)班');
   }
 
@@ -52,13 +56,50 @@ class StorageManager {
     return id === 'class_default' ? STORAGE_KEY : `${STORAGE_KEY}_${id}`;
   }
 
-  // 2. 班级数据加载与解析
-  loadData(classId = null) {
+  getClassStudentCount(classId) {
+    if (classId === this.currentClassId && this.data && Array.isArray(this.data.students)) {
+      return this.data.students.length;
+    }
     const targetKey = this.getClassStorageKey(classId);
     try {
       const raw = localStorage.getItem(targetKey);
       if (raw) {
         const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed.students)) return parsed.students.length;
+      }
+    } catch(e) {}
+    return 0;
+  }
+
+  getClassTotalScore(classId) {
+    if (classId === this.currentClassId && this.data && Array.isArray(this.data.students)) {
+      return this.data.students.reduce((acc, s) => acc + (s.score || 0), 0);
+    }
+    const targetKey = this.getClassStorageKey(classId);
+    try {
+      const raw = localStorage.getItem(targetKey);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed.students)) {
+          return parsed.students.reduce((acc, s) => acc + (s.score || 0), 0);
+        }
+      }
+    } catch(e) {}
+    return 0;
+  }
+
+  // 2. 班级数据加载与解析
+  loadData(classId = null) {
+    const effectiveClassId = classId || this.currentClassId || 'class_default';
+    const targetKey = this.getClassStorageKey(effectiveClassId);
+    try {
+      const raw = localStorage.getItem(targetKey);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        parsed.classId = effectiveClassId;
+        if (!parsed.className) {
+          parsed.className = this.getClassNameById(effectiveClassId);
+        }
         if (typeof DINO_DATA !== 'undefined' && Array.isArray(DINO_DATA.SHOP_ITEMS)) {
           parsed.shopItems = JSON.parse(JSON.stringify(DINO_DATA.SHOP_ITEMS));
         }
@@ -101,25 +142,30 @@ class StorageManager {
       console.warn('Failed to parse localStorage for key:', targetKey, e);
     }
 
-    return this.getDefaultState(this.getActiveClassName());
+    return this.getDefaultState(this.getClassNameById(effectiveClassId), effectiveClassId);
   }
 
-  // 3. 极速切换班级
+  // 3. 极速切换班级 (严密隔离，防止数据交叉)
   switchClass(targetClassId) {
     if (!targetClassId || targetClassId === this.currentClassId) return this.data;
     
-    // 先保存当前班级
+    // 1. 先保存当前班级，并取消当前班级任何尚未发出的延迟云端推送（严防把老班级数据推到新班级房间）
+    const oldClassId = this.currentClassId;
     this.save();
+    if (window.firebaseSyncMgr && typeof window.firebaseSyncMgr.flushPendingPush === 'function') {
+      window.firebaseSyncMgr.flushPendingPush(oldClassId);
+    }
 
+    // 2. 切换当前激活班级
     this.currentClassId = targetClassId;
     try {
       localStorage.setItem(ACTIVE_CLASS_ID_KEY, targetClassId);
     } catch (e) {}
 
-    // 加载新班级数据
+    // 3. 严格载入目标班级的独立本地数据
     this.data = this.loadData(targetClassId);
 
-    // 联动 Firebase 切换房间监听
+    // 4. 联动 Firebase 切换房间监听
     if (window.firebaseSyncMgr && typeof window.firebaseSyncMgr.switchRoom === 'function') {
       window.firebaseSyncMgr.switchRoom(targetClassId);
     }
@@ -127,7 +173,7 @@ class StorageManager {
     return this.data;
   }
 
-  // 4. 创建新班级
+  // 4. 创建新班级 (独立存储、独立云端房间)
   createClass(className, withSample = false) {
     const cleanName = (className || '').trim();
     if (!cleanName) return null;
@@ -137,16 +183,22 @@ class StorageManager {
     this.classesList.push(newClassMeta);
     this.saveClassesList();
 
-    // 初始化新班级数据
-    const newClassState = this.getDefaultState(cleanName);
+    // 初始化新班级专属独立数据
+    const newClassState = this.getDefaultState(cleanName, newId);
     if (!withSample) {
       newClassState.students = []; // 纯净空白班级
     }
+    const targetKey = this.getClassStorageKey(newId);
     try {
-      localStorage.setItem(this.getClassStorageKey(newId), JSON.stringify(newClassState));
+      localStorage.setItem(targetKey, JSON.stringify(newClassState));
     } catch (e) {}
 
-    // 云端同步班级列表
+    // 立即向云端该班级的独立房间推送初始化状态
+    if (window.firebaseSyncMgr && typeof window.firebaseSyncMgr.pushClassData === 'function') {
+      window.firebaseSyncMgr.pushClassData(newId, newClassState);
+    }
+
+    // 云端同步班级列表目录
     if (window.firebaseSyncMgr && typeof window.firebaseSyncMgr.syncClassesMeta === 'function') {
       window.firebaseSyncMgr.syncClassesMeta(this.classesList);
     }
@@ -170,6 +222,19 @@ class StorageManager {
     if (classId === this.currentClassId) {
       this.data.className = cleanName;
       this.save();
+    } else {
+      const key = this.getClassStorageKey(classId);
+      try {
+        const raw = localStorage.getItem(key);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          parsed.className = cleanName;
+          localStorage.setItem(key, JSON.stringify(parsed));
+          if (window.firebaseSyncMgr && typeof window.firebaseSyncMgr.pushClassData === 'function') {
+            window.firebaseSyncMgr.pushClassData(classId, parsed);
+          }
+        }
+      } catch(e) {}
     }
 
     if (window.firebaseSyncMgr && typeof window.firebaseSyncMgr.syncClassesMeta === 'function') {
@@ -204,7 +269,40 @@ class StorageManager {
     return true;
   }
 
-  // 7. 云端漫游合并远程班级列表
+  // 7. 独立清空/重置某一指定班级数据（不影响任何其他班级）
+  resetClassData(classId, mode = 'empty') {
+    if (!classId) return false;
+    const name = this.getClassNameById(classId);
+    const newState = this.getDefaultState(name, classId);
+    if (mode === 'empty') {
+      newState.students = [];
+    } else {
+      newState.students.forEach(s => {
+        s.score = 0;
+        s.hasCrown = false;
+        s.earnedTitles = [];
+        s.activePrivileges = [];
+        s.history = [];
+      });
+    }
+    newState.logs = [];
+
+    const key = this.getClassStorageKey(classId);
+    try {
+      localStorage.setItem(key, JSON.stringify(newState));
+    } catch(e) {}
+
+    if (classId === this.currentClassId) {
+      this.data = newState;
+    }
+
+    if (window.firebaseSyncMgr && typeof window.firebaseSyncMgr.pushClassData === 'function') {
+      window.firebaseSyncMgr.pushClassData(classId, newState);
+    }
+    return true;
+  }
+
+  // 8. 云端漫游合并远程班级列表
   mergeRemoteClassesList(remoteList) {
     if (!Array.isArray(remoteList) || remoteList.length === 0) return;
     let changed = false;
@@ -219,14 +317,66 @@ class StorageManager {
     }
   }
 
+  // 9. 严格应用远程班级数据（绝对防串班、防覆盖）
+  applyRemoteClassData(classId, remoteData) {
+    if (!classId || !remoteData || !Array.isArray(remoteData.students)) return false;
+
+    // 严格绑定班级身份
+    remoteData.classId = classId;
+    if (!remoteData.className) {
+      remoteData.className = this.getClassNameById(classId);
+    }
+
+    // 规范商城与记录上限
+    if (typeof DINO_DATA !== 'undefined' && Array.isArray(DINO_DATA.SHOP_ITEMS)) {
+      remoteData.shopItems = JSON.parse(JSON.stringify(DINO_DATA.SHOP_ITEMS));
+    }
+    if (Array.isArray(remoteData.logs) && remoteData.logs.length > 200) {
+      remoteData.logs = remoteData.logs.slice(0, 200);
+    }
+    if (Array.isArray(remoteData.students)) {
+      remoteData.students.forEach(s => {
+        s.equipped = s.equipped || {};
+        s.earned = s.earned || {};
+        if (Array.isArray(s.history) && s.history.length > 30) {
+          s.history = s.history.slice(0, 30);
+        }
+      });
+    }
+
+    // 1. 始终严格写入该班级专属的本地独立 LocalStorage 键中
+    const key = this.getClassStorageKey(classId);
+    try {
+      localStorage.setItem(key, JSON.stringify(remoteData));
+    } catch(e) {
+      console.error('LocalStorage write failed for remote class:', key, e);
+    }
+
+    // 2. 只有当此班级正是当前屏幕激活显示的班级时，才更新活动内存并刷新页面渲染！
+    if (classId === this.currentClassId) {
+      this.data = remoteData;
+      if (window.dinoApp) {
+        if (typeof window.dinoApp.onRemoteDataSynced === 'function') {
+          window.dinoApp.onRemoteDataSynced(remoteData);
+        } else if (typeof window.dinoApp.renderAll === 'function') {
+          window.dinoApp.renderAll();
+        }
+      }
+    } else {
+      console.log(`[Storage] Remote data for background class [${classId}] saved to isolated storage.`);
+    }
+    return true;
+  }
+
   forceSyncShopItems() {
     this.data.shopItems = JSON.parse(JSON.stringify(DINO_DATA.SHOP_ITEMS));
     this.save();
     return this.data.shopItems;
   }
 
-  getDefaultState(className = '三(1)班') {
+  getDefaultState(className = '三(1)班', classId = 'class_default') {
     return {
+      classId: classId,
       className: className,
       students: JSON.parse(JSON.stringify(DINO_DATA.INITIAL_STUDENTS)),
       shopItems: JSON.parse(JSON.stringify(DINO_DATA.SHOP_ITEMS)),
@@ -237,20 +387,25 @@ class StorageManager {
   }
 
   save() {
-    const key = this.getClassStorageKey(this.currentClassId);
+    const classId = this.currentClassId || 'class_default';
+    if (!this.data) return;
+    this.data.classId = classId;
+    this.data.className = this.getActiveClassName();
+
+    const key = this.getClassStorageKey(classId);
     try {
       localStorage.setItem(key, JSON.stringify(this.data));
     } catch (e) {
       console.error('LocalStorage write failed for key:', key, e);
     }
-    // Auto-sync to Firebase Realtime Database
+    // 自动同步至云端对应独立房间（严格绑定 classId）
     if (window.firebaseSyncMgr && typeof window.firebaseSyncMgr.schedulePush === 'function') {
-      window.firebaseSyncMgr.schedulePush(this.data, this.currentClassId);
+      window.firebaseSyncMgr.schedulePush(classId, this.data);
     }
   }
 
   resetToDefault() {
-    this.data = this.getDefaultState(this.getActiveClassName());
+    this.data = this.getDefaultState(this.getActiveClassName(), this.getActiveClassId());
     this.save();
   }
 
