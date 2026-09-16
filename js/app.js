@@ -22,15 +22,17 @@ class DinoApp {
 
   init() {
     this.bindEvents();
+    this.renderClassSelector();
     this.renderAll();
     this.initTools();
     this.initHutSystem();
 
     // Multi-tab cross-page sync
     window.addEventListener('storage', (e) => {
-      if (e.key === STORAGE_KEY) {
+      if (e.key === STORAGE_KEY || (e.key && e.key.startsWith(STORAGE_KEY))) {
         window.storageMgr.data = window.storageMgr.loadData();
         this.renderAll();
+        this.renderClassSelector();
       }
     });
 
@@ -43,6 +45,36 @@ class DinoApp {
   }
 
   bindEvents() {
+    // Class Selector Dropdown Events
+    const btnClassSelector = document.getElementById('btn-class-selector');
+    const classDropdown = document.getElementById('class-dropdown-menu');
+    if (btnClassSelector && classDropdown) {
+      btnClassSelector.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = classDropdown.classList.contains('active');
+        classDropdown.classList.toggle('active', !isOpen);
+        if (!isOpen) this.renderClassSelector();
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('#class-selector-wrap')) {
+          classDropdown.classList.remove('active');
+        }
+      });
+    }
+
+    document.getElementById('btn-menu-add-class')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.getElementById('class-dropdown-menu')?.classList.remove('active');
+      this.openCreateClassView();
+    });
+
+    document.getElementById('btn-menu-manage-classes')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.getElementById('class-dropdown-menu')?.classList.remove('active');
+      this.openClassManageModal();
+    });
+
     // Nav Tabs
     document.querySelectorAll('.nav-tab').forEach(tab => {
       tab.addEventListener('click', (e) => {
@@ -110,6 +142,8 @@ class DinoApp {
     document.getElementById('btn-reset-demo')?.addEventListener('click', () => this.resetDemoData());
     document.getElementById('btn-export-data')?.addEventListener('click', () => window.storageMgr.exportJSON());
     document.getElementById('btn-import-data')?.addEventListener('click', () => this.triggerImportJSON());
+    document.getElementById('btn-cloud-sync-pill')?.addEventListener('click', () => this.openFirebaseModal());
+    document.getElementById('btn-cloud-sync-toolbar')?.addEventListener('click', () => this.openFirebaseModal());
 
     // Select All Checkbox
     document.getElementById('checkbox-select-all')?.addEventListener('change', (e) => {
@@ -1774,8 +1808,22 @@ class DinoApp {
   }
 
   openRedeemModal(itemId) {
-    const item = window.storageMgr.data.shopItems.find(i => i.id === itemId);
+    let item = (typeof DINO_DATA !== 'undefined' && Array.isArray(DINO_DATA.SHOP_ITEMS))
+      ? DINO_DATA.SHOP_ITEMS.find(i => i.id === itemId)
+      : null;
+    if (!item) {
+      item = (window.storageMgr.data.shopItems || []).find(i => i.id === itemId);
+    }
     if (!item) return;
+
+    // Ensure item is synced in storageMgr.data.shopItems
+    if (window.storageMgr && window.storageMgr.data) {
+      window.storageMgr.data.shopItems = window.storageMgr.data.shopItems || [];
+      if (!window.storageMgr.data.shopItems.some(i => i.id === itemId)) {
+        window.storageMgr.data.shopItems.push(JSON.parse(JSON.stringify(item)));
+        window.storageMgr.save();
+      }
+    }
 
     const allStudents = window.storageMgr.getStudents();
     if (allStudents.length === 0) {
@@ -1825,7 +1873,12 @@ class DinoApp {
   submitRedeem() {
     const modal = document.getElementById('modal-redeem');
     const itemId = modal.dataset.itemId;
-    const item = window.storageMgr.data.shopItems.find(i => i.id === itemId);
+    let item = (typeof DINO_DATA !== 'undefined' && Array.isArray(DINO_DATA.SHOP_ITEMS))
+      ? DINO_DATA.SHOP_ITEMS.find(i => i.id === itemId)
+      : null;
+    if (!item) {
+      item = (window.storageMgr.data.shopItems || []).find(i => i.id === itemId);
+    }
     const selectEl = document.getElementById('select-redeem-student');
     const studentId = selectEl ? selectEl.value : null;
 
@@ -2409,6 +2462,324 @@ class DinoApp {
       }
     };
     input.click();
+  }
+
+  // 🍞 浮动吐司通知 (Toast Notification)
+  showToast(msg, duration = 3200) {
+    let toast = document.getElementById('dinoclass-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'dinoclass-toast';
+      toast.className = 'dinoclass-toast';
+      document.body.appendChild(toast);
+    }
+    toast.innerHTML = msg;
+    toast.classList.add('show');
+    clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => {
+      toast.classList.remove('show');
+    }, duration);
+  }
+
+  // 📲 远程数据变动监听响应回调
+  onRemoteDataSynced(data, payload) {
+    this.renderAll();
+    this.showToast('📲 收到远程变动，班级大屏已实时同步更新！');
+    if (window.soundCtrl && typeof window.soundCtrl.playCoin === 'function') {
+      window.soundCtrl.playCoin();
+    }
+  }
+
+  // ☁️ 打开 Firebase 配置与遥控中心弹窗
+  openFirebaseModal() {
+    const modal = document.getElementById('modal-firebase-config');
+    if (!modal) return;
+    modal.classList.add('active');
+
+    const mgr = window.firebaseSyncMgr;
+    const roomInput = document.getElementById('fb-room-id-input');
+    const directUrlInput = document.getElementById('fb-direct-url-display');
+    const configInput = document.getElementById('fb-config-raw-input');
+
+    if (roomInput && mgr) roomInput.value = mgr.roomId || 'class_3k_24';
+    if (directUrlInput && mgr && mgr.config) {
+      directUrlInput.value = mgr.generateDirectUrl();
+    }
+    if (mgr && mgr.config && configInput && !configInput.value) {
+      configInput.value = JSON.stringify(mgr.config, null, 2);
+    }
+    mgr?.updateStatusUI();
+  }
+
+  closeFirebaseModal() {
+    document.getElementById('modal-firebase-config')?.classList.remove('active');
+  }
+
+  // 提交并连接 Firebase 配置
+  submitFirebaseConfig() {
+    const mgr = window.firebaseSyncMgr;
+    if (!mgr) return;
+
+    const rawInput = document.getElementById('fb-config-raw-input')?.value.trim();
+    const roomId = document.getElementById('fb-room-id-input')?.value.trim() || 'class_3k_24';
+
+    if (!rawInput && !mgr.config) {
+      alert('⚠️ 请先在文本框中粘贴 Firebase 控制台中的配置代码！');
+      return;
+    }
+
+    let parsedConfig = mgr.config;
+    if (rawInput) {
+      parsedConfig = mgr.parseRawConfigInput(rawInput);
+      if (!parsedConfig) {
+        alert('⚠️ 无法识别您输入的 Firebase 配置，请确保包含 apiKey 和 projectId 或 databaseURL！');
+        return;
+      }
+    }
+
+    const ok = mgr.connect(parsedConfig, roomId);
+    if (ok) {
+      this.showToast('🚀 正在连接 Firebase 实时数据库...');
+      const directUrlInput = document.getElementById('fb-direct-url-display');
+      if (directUrlInput) directUrlInput.value = mgr.generateDirectUrl();
+    }
+  }
+
+  // 复制手机遥控免密直连地址
+  copyMobileRemoteLink() {
+    const mgr = window.firebaseSyncMgr;
+    if (!mgr || !mgr.config) {
+      alert('⚠️ 请先成功连接 Firebase 后再获取手机遥控链接！');
+      return;
+    }
+    const directUrl = mgr.generateDirectUrl();
+    navigator.clipboard.writeText(directUrl).then(() => {
+      this.showToast('📋 手机专属直连网址已复制！发送到微信在手机打开即可随堂遥控！');
+    }).catch(() => {
+      prompt('请手动复制以下手机专属网址：', directUrl);
+    });
+  }
+
+  // 下载 D 盘极速启动器
+  downloadFirebaseLauncher() {
+    const mgr = window.firebaseSyncMgr;
+    if (!mgr || !mgr.config) {
+      alert('⚠️ 请先成功连接 Firebase 后再下载启动器！');
+      return;
+    }
+    mgr.downloadLauncherHtml();
+    this.showToast('💾 D 盘启动器已下载！请将它存放在学校电脑的 D 盘或 U 盘');
+  }
+
+  // 手动推送与拉取
+  manualPushFirebase() {
+    const mgr = window.firebaseSyncMgr;
+    if (!mgr) return;
+    mgr.pushDataImmediately(window.storageMgr.data)
+      .then(() => this.showToast('✅ 已成功推送全班数据至 Firebase 云端！'))
+      .catch((e) => alert('❌ 上传失败: ' + e.message));
+  }
+
+  manualPullFirebase() {
+    const mgr = window.firebaseSyncMgr;
+    if (!mgr) return;
+    mgr.pullDataImmediately()
+      .then((hasData) => {
+        if (hasData) this.showToast('✅ 已成功从云端恢复全班最新数据！');
+        else alert('ℹ️ 云端暂无存档数据');
+      })
+      .catch((e) => alert('❌ 拉取失败: ' + e.message));
+  }
+
+  // 清除配置
+  clearFirebaseConfig() {
+    if (confirm('确认清除当前 Firebase 云端配置并断开连接吗？（本地学生数据不受影响）')) {
+      window.firebaseSyncMgr?.clearConfig();
+      const configInput = document.getElementById('fb-config-raw-input');
+      if (configInput) configInput.value = '';
+      const directUrlInput = document.getElementById('fb-direct-url-display');
+      if (directUrlInput) directUrlInput.value = '';
+      this.showToast('🧹 已清除 Firebase 配置并切换为纯本地模式');
+    }
+  }
+
+  // ==========================================================================
+  // 🏫 多班级管理与极速切换核心 UI 方法
+  // ==========================================================================
+
+  // 渲染顶部班级切换器与下拉菜单
+  renderClassSelector() {
+    const nameDisplay = document.getElementById('current-class-name-display');
+    const dropdownList = document.getElementById('class-dropdown-list');
+    const activeId = window.storageMgr.getActiveClassId();
+    const activeName = window.storageMgr.getActiveClassName();
+
+    if (nameDisplay) {
+      nameDisplay.textContent = activeName;
+    }
+
+    if (dropdownList) {
+      const list = window.storageMgr.classesList || [];
+      dropdownList.innerHTML = list.map(c => {
+        const isActive = c.id === activeId;
+        const count = window.storageMgr.getClassStudentCount(c.id);
+        const score = window.storageMgr.getClassTotalScore(c.id);
+        return `
+          <div class="class-dropdown-item ${isActive ? 'active' : ''}" onclick="window.dinoApp.selectClass('${c.id}')">
+            <span class="class-item-icon">${isActive ? '✅' : '🏫'}</span>
+            <span class="class-item-name">${c.name}</span>
+            <span style="font-size:0.75rem; color:#94a3b8; margin-left:auto; margin-right:6px;">${count}人 · ${score}分</span>
+            ${isActive ? '<span class="class-item-badge">当前授课</span>' : ''}
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  // 切换激活班级
+  selectClass(classId) {
+    document.getElementById('class-dropdown-menu')?.classList.remove('active');
+    window.storageMgr.switchClass(classId);
+    this.selectedStudentIds.clear();
+    this.renderClassSelector();
+    this.renderAll();
+    this.showToast(`🏫 已切换至【${window.storageMgr.getActiveClassName()}】！数据已就绪`);
+  }
+
+  // 打开创建新班级视图
+  openCreateClassView() {
+    const modal = document.getElementById('modal-class-manage');
+    if (!modal) return;
+    const title = document.getElementById('class-manage-modal-title');
+    if (title) title.textContent = '➕ 新建授课班级';
+    document.getElementById('class-manage-view-create').style.display = 'block';
+    document.getElementById('class-manage-view-list').style.display = 'none';
+    const input = document.getElementById('input-new-class-name');
+    if (input) {
+      input.value = '';
+      setTimeout(() => input.focus(), 150);
+    }
+    modal.classList.add('active');
+  }
+
+  // 打开班级管理中心视图
+  openClassManageModal() {
+    const modal = document.getElementById('modal-class-manage');
+    if (!modal) return;
+    const title = document.getElementById('class-manage-modal-title');
+    if (title) title.textContent = '🏫 班级管理中心';
+    document.getElementById('class-manage-view-create').style.display = 'none';
+    document.getElementById('class-manage-view-list').style.display = 'block';
+    this.renderClassManageItems();
+    modal.classList.add('active');
+  }
+
+  closeClassManageModal() {
+    document.getElementById('modal-class-manage')?.classList.remove('active');
+  }
+
+  // 渲染管理中心列表
+  renderClassManageItems() {
+    const container = document.getElementById('class-manage-items-list');
+    if (!container) return;
+    const list = window.storageMgr.classesList || [];
+    const activeId = window.storageMgr.getActiveClassId();
+
+    container.innerHTML = list.map(c => {
+      const isActive = c.id === activeId;
+      const canDelete = list.length > 1;
+      const count = window.storageMgr.getClassStudentCount(c.id);
+      const score = window.storageMgr.getClassTotalScore(c.id);
+      return `
+        <div class="class-manage-row" style="display:flex; justify-content:space-between; align-items:center; background:rgba(15,23,42,0.6); padding:10px 14px; border-radius:var(--radius-md); border:1px solid var(--border-glass);">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:1.1rem;">${isActive ? '🌟' : '🏫'}</span>
+            <div>
+              <strong style="color:#fff; font-size:0.95rem;">${c.name}</strong>
+              <span style="font-size:0.78rem; color:#94a3b8; margin-left:6px;">(${count} 人 · ${score} 分)</span>
+            </div>
+            ${isActive ? '<span style="font-size:0.72rem; background:rgba(245,158,11,0.2); color:#fbbf24; padding:2px 8px; border-radius:10px; font-weight:700;">当前班级</span>' : ''}
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-secondary btn-sm" style="padding:4px 10px; font-size:0.8rem;" onclick="window.dinoApp.promptRenameClass('${c.id}')" title="重命名此班级">✏️ 改名</button>
+            <button class="btn btn-secondary btn-sm" style="padding:4px 10px; font-size:0.8rem; color:#38bdf8; border-color:rgba(56,189,248,0.3);" onclick="window.dinoApp.promptResetClass('${c.id}')" title="清空或重置此班级名单">🧹 重置</button>
+            ${canDelete ? `<button class="btn btn-secondary btn-sm" style="padding:4px 10px; font-size:0.8rem; color:#f87171; border-color:rgba(248,113,113,0.3);" onclick="window.dinoApp.confirmDeleteClass('${c.id}')" title="删除班级">🗑️</button>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // 独立清空/重置某一班级名单
+  promptResetClass(classId) {
+    const name = window.storageMgr.getClassNameById(classId);
+    const count = window.storageMgr.getClassStudentCount(classId);
+    const choice = confirm(
+      `⚠️ 班级数据独立重置提示：\n\n` +
+      `确定要清空【${name}】（当前 ${count} 名学生）的数据吗？\n\n` +
+      `【确定】：清空该班级学生名单（变为空白班级，供录入新学生）\n` +
+      `【取消】：放弃操作\n\n` +
+      `🛡️ 安全保证：此操作仅重置【${name}】，其他所有班级的数据 100% 独立保留，绝不受影响！`
+    );
+    if (choice) {
+      window.storageMgr.resetClassData(classId, 'empty');
+      this.renderClassSelector();
+      this.renderClassManageItems();
+      if (classId === window.storageMgr.getActiveClassId()) {
+        this.selectedStudentIds.clear();
+        this.renderAll();
+      }
+      this.showToast(`🧹 已成功重置并清空【${name}】的学生名单！`);
+    }
+  }
+
+  // 提交新建班级
+  submitCreateClass() {
+    const input = document.getElementById('input-new-class-name');
+    const name = input?.value.trim();
+    if (!name) {
+      alert('⚠️ 请输入新班级名称（例如：三(2)班）！');
+      return;
+    }
+    const withSample = !!document.getElementById('checkbox-with-sample-students')?.checked;
+    const created = window.storageMgr.createClass(name, withSample);
+    if (created) {
+      this.closeClassManageModal();
+      this.selectedStudentIds.clear();
+      this.renderClassSelector();
+      this.renderAll();
+      this.showToast(`🎉 成功创建并切换至新班级：【${name}】！`);
+    }
+  }
+
+  // 重命名班级提示框
+  promptRenameClass(classId) {
+    const currentClass = window.storageMgr.classesList.find(c => c.id === classId);
+    if (!currentClass) return;
+    const newName = prompt('请输入班级的新名称：', currentClass.name);
+    if (newName && newName.trim()) {
+      window.storageMgr.renameClass(classId, newName.trim());
+      this.renderClassSelector();
+      this.renderClassManageItems();
+      if (classId === window.storageMgr.getActiveClassId()) {
+        this.renderAll();
+      }
+      this.showToast(`✏️ 班级名称已更新为：【${newName.trim()}】`);
+    }
+  }
+
+  // 删除班级确认
+  confirmDeleteClass(classId) {
+    const target = window.storageMgr.classesList.find(c => c.id === classId);
+    if (!target) return;
+    if (confirm(`⚠️ 确认删除班级【${target.name}】吗？\n删除后该班级的学生和积分将一并移除。`)) {
+      window.storageMgr.deleteClass(classId);
+      this.selectedStudentIds.clear();
+      this.renderClassSelector();
+      this.renderClassManageItems();
+      this.renderAll();
+      this.showToast(`🗑️ 已删除班级：【${target.name}】`);
+    }
   }
 }
 

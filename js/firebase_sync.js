@@ -18,7 +18,7 @@ const DEFAULT_FIREBASE_CONFIG = {
 class FirebaseSyncManager {
   constructor() {
     this.config = DEFAULT_FIREBASE_CONFIG;
-    this.roomId = 'class_default';
+    this.roomId = 'class_3k_24';
     this.app = null;
     this.database = null;
     this.dataRef = null;
@@ -39,7 +39,7 @@ class FirebaseSyncManager {
     const hashConfig = this.parseHashConfig();
     if (hashConfig) {
       this.config = hashConfig.config;
-      this.roomId = hashConfig.roomId || 'class_default';
+      this.roomId = hashConfig.roomId || 'class_3k_24';
       this.saveLocalConfig(this.config, this.roomId);
       try {
         window.history.replaceState(null, '', window.location.pathname + window.location.search);
@@ -49,10 +49,10 @@ class FirebaseSyncManager {
       const saved = this.loadLocalConfig();
       if (saved && saved.config) {
         this.config = saved.config;
-        this.roomId = saved.roomId || 'class_default';
+        this.roomId = (saved.roomId && saved.roomId !== 'class_default') ? saved.roomId : 'class_3k_24';
       } else {
         this.config = DEFAULT_FIREBASE_CONFIG;
-        this.roomId = 'class_default';
+        this.roomId = 'class_3k_24';
         this.saveLocalConfig(this.config, this.roomId);
       }
     }
@@ -180,7 +180,7 @@ class FirebaseSyncManager {
       
       // 同步班级房间 ID（优先采用当前激活班级）
       if (window.storageMgr) {
-        this.roomId = window.storageMgr.getActiveClassId() || 'class_default';
+        this.roomId = window.storageMgr.getActiveClassId() || 'class_3k_24';
       }
 
       // 监听连接健康状态 (.info/connected)
@@ -233,7 +233,7 @@ class FirebaseSyncManager {
       this.dataRef = null;
     }
 
-    const currentListeningRoom = (this.roomId || 'class_default').replace(/[^a-zA-Z0-9_\u4e00-\u9fa5-]/g, '_');
+    const currentListeningRoom = (this.roomId || 'class_3k_24').replace(/[^a-zA-Z0-9_\u4e00-\u9fa5-]/g, '_');
     this.dataRef = this.database.ref(`dinoclass_rooms/${currentListeningRoom}`);
 
     console.log('[FirebaseSync] 🔒 Strictly listening to room:', currentListeningRoom);
@@ -359,7 +359,7 @@ class FirebaseSyncManager {
   pushClassData(classId, data) {
     if (!this.database || !classId || !data) return Promise.resolve();
 
-    const safeRoomId = (classId || 'class_default').replace(/[^a-zA-Z0-9_\u4e00-\u9fa5-]/g, '_');
+    const safeRoomId = (classId || 'class_3k_24').replace(/[^a-zA-Z0-9_\u4e00-\u9fa5-]/g, '_');
     const roomRef = this.database.ref(`dinoclass_rooms/${safeRoomId}`);
 
     const payload = {
@@ -389,7 +389,7 @@ class FirebaseSyncManager {
 
   // 立即推送数据兼容别名
   pushDataImmediately(data = null, classId = null) {
-    const targetClassId = classId || this.roomId || 'class_default';
+    const targetClassId = classId || this.roomId || 'class_3k_24';
     const targetData = data || (window.storageMgr ? window.storageMgr.data : null);
     return this.pushClassData(targetClassId, targetData);
   }
@@ -401,7 +401,7 @@ class FirebaseSyncManager {
     this.status = 'syncing';
     this.updateStatusUI();
 
-    const currentRoom = (this.roomId || 'class_default').replace(/[^a-zA-Z0-9_\u4e00-\u9fa5-]/g, '_');
+    const currentRoom = (this.roomId || 'class_3k_24').replace(/[^a-zA-Z0-9_\u4e00-\u9fa5-]/g, '_');
     const roomRef = this.database.ref(`dinoclass_rooms/${currentRoom}`);
 
     return roomRef.once('value').then((snapshot) => {
@@ -431,7 +431,7 @@ class FirebaseSyncManager {
     if (!this.config) return window.location.href;
     const payload = {
       config: this.config,
-      roomId: this.roomId || 'class_default'
+      roomId: this.roomId || 'class_3k_24'
     };
     const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
     const baseUrl = window.location.origin + window.location.pathname;
