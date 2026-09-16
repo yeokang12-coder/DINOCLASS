@@ -275,7 +275,12 @@ class FirebaseSyncManager {
         // 云端该班级首次为空：只有当本地当前激活班级正是此房间时，才推送本地数据
         if (window.storageMgr && window.storageMgr.getActiveClassId() === currentListeningRoom) {
           const localData = window.storageMgr.loadData(currentListeningRoom);
-          if (localData) {
+          if (localData && Array.isArray(localData.students)) {
+            const score = localData.students.reduce((a, s) => a + (s.score || 0), 0);
+            if (currentListeningRoom === 'class_3k_24' && score === 0) {
+              console.warn('[FirebaseSync] 🛡️ 拦截将 3K班 0 分推入空房间！');
+              return;
+            }
             console.log(`[FirebaseSync] Room [${currentListeningRoom}] is empty in cloud, pushing local state...`);
             this.pushClassData(currentListeningRoom, localData);
           }
@@ -360,6 +365,15 @@ class FirebaseSyncManager {
     if (!this.database || this.isRemoteUpdating || this.status === 'unconfigured') return;
     if (!classId || !data) return;
 
+    // 🛡️ 拦截 0 分向云端推送，绝对保护云端权威 5379 分
+    if (classId === 'class_3k_24') {
+      const score = Array.isArray(data.students) ? data.students.reduce((a, s) => a + (s.score || 0), 0) : 0;
+      if (score === 0) {
+        console.warn('[FirebaseSync] 🛡️ 拦截 3K班 0 分定时推送！');
+        return;
+      }
+    }
+
     this.status = 'syncing';
     this.updateStatusUI();
 
@@ -386,6 +400,15 @@ class FirebaseSyncManager {
   // 严格向指定班级房间推送数据（绝对不会推错房间）
   pushClassData(classId, data) {
     if (!this.database || !classId || !data) return Promise.resolve();
+
+    // 🛡️ 拦截 0 分向云端推送，绝对保护云端 5379 分权威数据
+    if (classId === 'class_3k_24') {
+      const score = Array.isArray(data.students) ? data.students.reduce((a, s) => a + (s.score || 0), 0) : 0;
+      if (score === 0) {
+        console.warn('[FirebaseSync] 🛡️ 阻止将 3K班 0 分推送到云端！保护云端 5379 分权威数据');
+        return Promise.resolve();
+      }
+    }
 
     const safeRoomId = (classId || 'class_3k_24').replace(/[^a-zA-Z0-9_\u4e00-\u9fa5-]/g, '_');
     const roomRef = this.database.ref(`dinoclass_rooms/${safeRoomId}`);
