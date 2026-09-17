@@ -306,6 +306,9 @@ class FirebaseSyncManager {
       this.isRemoteUpdating = true;
       try {
         if (window.storageMgr && typeof window.storageMgr.applyRemoteClassData === 'function') {
+          if (payload.data && typeof payload.data === 'object') {
+            payload.data.updatedAt = payload.updatedAt || Date.now();
+          }
           window.storageMgr.applyRemoteClassData(currentListeningRoom, payload.data);
           this.lastSyncTime = new Date(payload.updatedAt || Date.now());
         }
@@ -381,12 +384,16 @@ class FirebaseSyncManager {
       clearTimeout(this.debounceTimers[classId]);
     }
 
-    // 深拷贝数据快照，防止防抖等待期间内存被其他班级操作修改
+    // 确保数据打上最新本地修改时间戳
+    const now = Date.now();
+    data.updatedAt = now;
+
+    // 深拷贝数据快照，防止防抖等待期间内存被其他操作修改
     const dataClone = JSON.parse(JSON.stringify(data));
     this.debounceTimers[classId] = setTimeout(() => {
       delete this.debounceTimers[classId];
       this.pushClassData(classId, dataClone);
-    }, 600);
+    }, 350);
   }
 
   // 取消某一班级未发出的防抖推送
@@ -395,6 +402,21 @@ class FirebaseSyncManager {
       clearTimeout(this.debounceTimers[classId]);
       delete this.debounceTimers[classId];
     }
+  }
+
+  // 立即发出所有尚未推送的待处理数据（用于锁屏、切后台或关闭页面前）
+  flushAndPushAll() {
+    if (!this.debounceTimers || !this.database) return;
+    Object.keys(this.debounceTimers).forEach(classId => {
+      clearTimeout(this.debounceTimers[classId]);
+      delete this.debounceTimers[classId];
+      if (window.storageMgr) {
+        const currentData = window.storageMgr.loadRawData(classId);
+        if (currentData) {
+          this.pushClassData(classId, currentData);
+        }
+      }
+    });
   }
 
   // 严格向指定班级房间推送数据（绝对不会推错房间）
@@ -413,11 +435,14 @@ class FirebaseSyncManager {
     const safeRoomId = (classId || 'class_3k_24').replace(/[^a-zA-Z0-9_\u4e00-\u9fa5-]/g, '_');
     const roomRef = this.database.ref(`dinoclass_rooms/${safeRoomId}`);
 
+    const pushTime = data.updatedAt || Date.now();
+    data.updatedAt = pushTime;
+
     const payload = {
       classId: classId,
       className: data.className || '',
       data: data,
-      updatedAt: Date.now(),
+      updatedAt: pushTime,
       clientDevice: this.deviceId
     };
 
@@ -609,3 +634,18 @@ class FirebaseSyncManager {
 
 // 挂载至全局
 window.firebaseSyncMgr = new FirebaseSyncManager();
+
+// 📱 移动端与平板专属防护：锁屏、切换应用或关闭页面时，立即强制发出所有尚未送达的加分数据！
+if (typeof window !== 'undefined') {
+  window.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden' && window.firebaseSyncMgr) {
+      console.log('[FirebaseSync] 📱 侦测到页面进入后台/锁屏，立即极速冲刷并同步所有待发送积分！');
+      window.firebaseSyncMgr.flushAndPushAll();
+    }
+  });
+  window.addEventListener('beforeunload', () => {
+    if (window.firebaseSyncMgr) {
+      window.firebaseSyncMgr.flushAndPushAll();
+    }
+  });
+}
