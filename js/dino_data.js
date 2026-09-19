@@ -235,14 +235,14 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
             <circle cx="100" cy="100" r="90" fill="none" stroke="url(#starmagicgrad)" stroke-width="2.5" stroke-dasharray="6,4" opacity="0.95"/>
             <circle cx="100" cy="100" r="76" fill="none" stroke="#7dd3fc" stroke-width="1.8" opacity="0.85"/>
             <!-- 8 Constellation Stars on Outer Ring -->
-            <path d="M100,4 L104,15 L115,18 L104,21 L100,32 L96,21 L85,18 L96,15 Z" fill="#fff" stroke="#fde047" stroke-width="0.8" filter="drop-shadow(0 0 6px #ffd700)"/>
-            <path d="M100,168 L104,179 L115,182 L104,185 L100,196 L96,185 L85,182 L96,179 Z" fill="#fff" stroke="#fde047" stroke-width="0.8" filter="drop-shadow(0 0 6px #ffd700)"/>
-            <path d="M4,100 L15,104 L18,115 L21,104 L32,100 L21,96 L18,85 L15,96 Z" fill="#fff" stroke="#fde047" stroke-width="0.8" filter="drop-shadow(0 0 6px #ffd700)"/>
-            <path d="M168,100 L179,104 L182,115 L185,104 L196,100 L185,96 L182,85 L179,96 Z" fill="#fff" stroke="#fde047" stroke-width="0.8" filter="drop-shadow(0 0 6px #ffd700)"/>
-            <circle cx="34" cy="34" r="4" fill="#ffffff" filter="drop-shadow(0 0 6px #38bdf8)"/>
-            <circle cx="166" cy="34" r="4" fill="#ffffff" filter="drop-shadow(0 0 6px #38bdf8)"/>
-            <circle cx="34" cy="166" r="4" fill="#ffffff" filter="drop-shadow(0 0 6px #38bdf8)"/>
-            <circle cx="166" cy="166" r="4" fill="#ffffff" filter="drop-shadow(0 0 6px #38bdf8)"/>
+            <path d="M100,4 L104,15 L115,18 L104,21 L100,32 L96,21 L85,18 L96,15 Z" fill="#fff" stroke="#fde047" stroke-width="1.2"/>
+            <path d="M100,168 L104,179 L115,182 L104,185 L100,196 L96,185 L85,182 L96,179 Z" fill="#fff" stroke="#fde047" stroke-width="1.2"/>
+            <path d="M4,100 L15,104 L18,115 L21,104 L32,100 L21,96 L18,85 L15,96 Z" fill="#fff" stroke="#fde047" stroke-width="1.2"/>
+            <path d="M168,100 L179,104 L182,115 L185,104 L196,100 L185,96 L182,85 L179,96 Z" fill="#fff" stroke="#fde047" stroke-width="1.2"/>
+            <circle cx="34" cy="34" r="4.2" fill="#ffffff" stroke="#38bdf8" stroke-width="1"/>
+            <circle cx="166" cy="34" r="4.2" fill="#ffffff" stroke="#38bdf8" stroke-width="1"/>
+            <circle cx="34" cy="166" r="4.2" fill="#ffffff" stroke="#38bdf8" stroke-width="1"/>
+            <circle cx="166" cy="166" r="4.2" fill="#ffffff" stroke="#38bdf8" stroke-width="1"/>
             <circle cx="100" cy="18" r="2.2" fill="#ffffff"/>
             <circle cx="100" cy="182" r="2.2" fill="#ffffff"/>
             <circle cx="18" cy="100" r="2.2" fill="#ffffff"/>
@@ -250,10 +250,10 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
           </g>
           <!-- Inner Interlocking Double 8-Point Star Array (Counter-Clockwise) -->
           <g class="starry-ring-spin-ccw">
-            <polygon points="100,32 148,148 22,72 178,72 52,148" fill="rgba(56,189,248,0.22)" stroke="#38bdf8" stroke-width="2.4" filter="drop-shadow(0 0 6px #38bdf8)"/>
-            <polygon points="100,42 142,142 42,66 158,66 58,142" fill="rgba(250,204,21,0.2)" stroke="#facc15" stroke-width="2.4" transform="rotate(45,100,100)" filter="drop-shadow(0 0 6px #facc15)"/>
+            <polygon points="100,32 148,148 22,72 178,72 52,148" fill="rgba(56,189,248,0.22)" stroke="#38bdf8" stroke-width="2.4"/>
+            <polygon points="100,42 142,142 42,66 158,66 58,142" fill="rgba(250,204,21,0.2)" stroke="#facc15" stroke-width="2.4" transform="rotate(45,100,100)"/>
             <circle cx="100" cy="100" r="24" fill="none" stroke="#fff7ad" stroke-width="2" stroke-dasharray="4,2"/>
-            <polygon points="100,80 105,95 120,100 105,105 100,120 95,105 80,100 95,95" fill="#ffffff" filter="drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 16px #ffd700)"/>
+            <polygon points="100,80 105,95 120,100 105,105 100,120 95,105 80,100 95,95" fill="#ffffff" stroke="#ffd700" stroke-width="1.5"/>
           </g>
         </svg>
         <span class="star-float-particle p1">✦</span>
@@ -295,21 +295,21 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
             <line x1="29"  y1="171" x2="52"  y2="148" stroke="#fbbf24" stroke-width="2"   opacity="0.75"/>
             <line x1="171" y1="171" x2="148" y2="148" stroke="#fbbf24" stroke-width="2"   opacity="0.75"/>
             <!-- Lava bubble nodes on ring -->
-            <circle cx="100" cy="10"  r="5" fill="#ff3d00" filter="drop-shadow(0 0 6px #fbbf24)"/>
-            <circle cx="100" cy="190" r="5" fill="#ff3d00" filter="drop-shadow(0 0 6px #fbbf24)"/>
-            <circle cx="10"  cy="100" r="5" fill="#ff3d00" filter="drop-shadow(0 0 6px #fbbf24)"/>
-            <circle cx="190" cy="100" r="5" fill="#ff3d00" filter="drop-shadow(0 0 6px #fbbf24)"/>
+            <circle cx="100" cy="10"  r="5" fill="#ff3d00" stroke="#fbbf24" stroke-width="1.5"/>
+            <circle cx="100" cy="190" r="5" fill="#ff3d00" stroke="#fbbf24" stroke-width="1.5"/>
+            <circle cx="10"  cy="100" r="5" fill="#ff3d00" stroke="#fbbf24" stroke-width="1.5"/>
+            <circle cx="190" cy="100" r="5" fill="#ff3d00" stroke="#fbbf24" stroke-width="1.5"/>
           </g>
           <!-- Inner inverted triangle rune ring (CCW) -->
           <g class="lava-ring-spin-ccw">
             <circle cx="100" cy="100" r="68" fill="none" stroke="#b91c1c" stroke-width="1.8" stroke-dasharray="5,4" opacity="0.8"/>
             <!-- Inverted triangle rune -->
-            <polygon points="100,46 148,136 52,136" fill="rgba(185,28,28,0.18)" stroke="#ef4444" stroke-width="2.5" filter="drop-shadow(0 0 8px #ff3d00)"/>
+            <polygon points="100,46 148,136 52,136" fill="rgba(185,28,28,0.18)" stroke="#ef4444" stroke-width="2.5"/>
             <!-- Inner dark rune triangle -->
-            <polygon points="100,154 52,64 148,64" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" filter="drop-shadow(0 0 6px #fbbf24)"/>
+            <polygon points="100,154 52,64 148,64" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2"/>
             <!-- Center 6-point dark flame star -->
             <polygon points="100,76 107,94 125,94 111,106 116,124 100,114 84,124 89,106 75,94 93,94"
-              fill="#fbbf24" filter="drop-shadow(0 0 10px #ff3d00) drop-shadow(0 0 20px #fbbf24)"/>
+              fill="#fbbf24" stroke="#ff3d00" stroke-width="1.5"/>
           </g>
         </svg>
         <span class="lava-float-particle lp1">🔥</span>
@@ -341,25 +341,25 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
           <g class="cyber-ring-spin-cw-fast">
             <circle cx="100" cy="100" r="90" fill="none" stroke="url(#cyberArcGrad${cid})" stroke-width="2.5" stroke-dasharray="30,15,10,15" opacity="0.95"/>
             <!-- Arc endpoint arrows -->
-            <polygon points="100,5  106,18 94,18"  fill="#0ea5e9" filter="drop-shadow(0 0 5px #06b6d4)"/>
-            <polygon points="100,195 94,182 106,182" fill="#0ea5e9" filter="drop-shadow(0 0 5px #06b6d4)"/>
-            <polygon points="5,100  18,106  18,94"  fill="#6366f1" filter="drop-shadow(0 0 5px #6366f1)"/>
-            <polygon points="195,100 182,94 182,106" fill="#6366f1" filter="drop-shadow(0 0 5px #6366f1)"/>
+            <polygon points="100,5  106,18 94,18"  fill="#0ea5e9" stroke="#67e8f9" stroke-width="0.8"/>
+            <polygon points="100,195 94,182 106,182" fill="#0ea5e9" stroke="#67e8f9" stroke-width="0.8"/>
+            <polygon points="5,100  18,106  18,94"  fill="#6366f1" stroke="#a5b4fc" stroke-width="0.8"/>
+            <polygon points="195,100 182,94 182,106" fill="#6366f1" stroke="#a5b4fc" stroke-width="0.8"/>
           </g>
           <!-- Middle hex grid ring (CCW) -->
           <g class="cyber-ring-spin-ccw">
             <circle cx="100" cy="100" r="72" fill="none" stroke="#0ea5e9" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.7"/>
             <!-- Hexagonal grid lines -->
-            <polygon points="100,32 148,62 148,122 100,152 52,122 52,62" fill="none" stroke="#0ea5e9" stroke-width="1.8" opacity="0.6" filter="drop-shadow(0 0 4px #06b6d4)"/>
-            <polygon points="100,50 134,70 134,110 100,130 66,110 66,70"  fill="rgba(6,182,212,0.08)" stroke="#6366f1" stroke-width="1.5" opacity="0.7" filter="drop-shadow(0 0 4px #6366f1)"/>
+            <polygon points="100,32 148,62 148,122 100,152 52,122 52,62" fill="none" stroke="#0ea5e9" stroke-width="2" opacity="0.85"/>
+            <polygon points="100,50 134,70 134,110 100,130 66,110 66,70"  fill="rgba(6,182,212,0.12)" stroke="#6366f1" stroke-width="1.8" opacity="0.9"/>
           </g>
           <!-- Inner eye rune + core (CCW slow) -->
           <g class="cyber-ring-spin-ccw-slow">
             <!-- Eye shape -->
-            <ellipse cx="100" cy="100" rx="26" ry="16" fill="none" stroke="#06b6d4" stroke-width="2" filter="drop-shadow(0 0 6px #06b6d4)"/>
+            <ellipse cx="100" cy="100" rx="26" ry="16" fill="none" stroke="#06b6d4" stroke-width="2.2"/>
             <!-- Diamond cross inside eye -->
             <polygon points="100,88 108,100 100,112 92,100"
-              fill="#06b6d4" filter="drop-shadow(0 0 10px #0ea5e9) drop-shadow(0 0 20px #6366f1)"/>
+              fill="#06b6d4" stroke="#e0f2fe" stroke-width="1"/>
           </g>
         </svg>
         <span class="cyber-float-particle cp1">⚡</span>
@@ -393,21 +393,21 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
             <circle cx="100" cy="100" r="90" fill="none" stroke="url(#sakuraRingGrad${sid})" stroke-width="3.5" opacity="0.9"/>
             <circle cx="100" cy="100" r="84" fill="none" stroke="#fde68a" stroke-width="1" opacity="0.6"/>
             <!-- 8 petal tips on outer ring -->
-            <ellipse cx="100" cy="12"  rx="5" ry="8" fill="#f43f5e" transform="rotate(0,100,100)"   filter="drop-shadow(0 0 5px #fde68a)"/>
-            <ellipse cx="100" cy="12"  rx="5" ry="8" fill="#f43f5e" transform="rotate(45,100,100)"  filter="drop-shadow(0 0 5px #fde68a)"/>
-            <ellipse cx="100" cy="12"  rx="5" ry="8" fill="#f43f5e" transform="rotate(90,100,100)"  filter="drop-shadow(0 0 5px #fde68a)"/>
-            <ellipse cx="100" cy="12"  rx="5" ry="8" fill="#f43f5e" transform="rotate(135,100,100)" filter="drop-shadow(0 0 5px #fde68a)"/>
-            <ellipse cx="100" cy="12"  rx="5" ry="8" fill="#f43f5e" transform="rotate(180,100,100)" filter="drop-shadow(0 0 5px #fde68a)"/>
-            <ellipse cx="100" cy="12"  rx="5" ry="8" fill="#f43f5e" transform="rotate(225,100,100)" filter="drop-shadow(0 0 5px #fde68a)"/>
-            <ellipse cx="100" cy="12"  rx="5" ry="8" fill="#f43f5e" transform="rotate(270,100,100)" filter="drop-shadow(0 0 5px #fde68a)"/>
-            <ellipse cx="100" cy="12"  rx="5" ry="8" fill="#f43f5e" transform="rotate(315,100,100)" filter="drop-shadow(0 0 5px #fde68a)"/>
+            <ellipse cx="100" cy="12"  rx="5" ry="8" fill="#f43f5e" stroke="#fde68a" stroke-width="1" transform="rotate(0,100,100)"/>
+            <ellipse cx="100" cy="12"  rx="5" ry="8" fill="#f43f5e" stroke="#fde68a" stroke-width="1" transform="rotate(45,100,100)"/>
+            <ellipse cx="100" cy="12"  rx="5" ry="8" fill="#f43f5e" stroke="#fde68a" stroke-width="1" transform="rotate(90,100,100)"/>
+            <ellipse cx="100" cy="12"  rx="5" ry="8" fill="#f43f5e" stroke="#fde68a" stroke-width="1" transform="rotate(135,100,100)"/>
+            <ellipse cx="100" cy="12"  rx="5" ry="8" fill="#f43f5e" stroke="#fde68a" stroke-width="1" transform="rotate(180,100,100)"/>
+            <ellipse cx="100" cy="12"  rx="5" ry="8" fill="#f43f5e" stroke="#fde68a" stroke-width="1" transform="rotate(225,100,100)"/>
+            <ellipse cx="100" cy="12"  rx="5" ry="8" fill="#f43f5e" stroke="#fde68a" stroke-width="1" transform="rotate(270,100,100)"/>
+            <ellipse cx="100" cy="12"  rx="5" ry="8" fill="#f43f5e" stroke="#fde68a" stroke-width="1" transform="rotate(315,100,100)"/>
           </g>
           <!-- Middle 8-fold octagonal shrine pattern (CCW) -->
           <g class="sakura-ring-spin-ccw">
             <circle cx="100" cy="100" r="65" fill="none" stroke="#fda4af" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.8"/>
             <!-- Octagon -->
             <polygon points="100,40 134,52 152,80 152,120 134,148 100,160 66,148 48,120 48,80 66,52"
-              fill="rgba(244,63,94,0.08)" stroke="#f43f5e" stroke-width="2" filter="drop-shadow(0 0 6px #f43f5e)"/>
+              fill="rgba(244,63,94,0.08)" stroke="#f43f5e" stroke-width="2.2"/>
             <!-- Inner 4-petal shrine motif -->
             <ellipse cx="100" cy="70" rx="8" ry="14" fill="rgba(253,230,138,0.35)" stroke="#fde68a" stroke-width="1.2"/>
             <ellipse cx="100" cy="70" rx="8" ry="14" fill="rgba(253,230,138,0.35)" stroke="#fde68a" stroke-width="1.2" transform="rotate(90,100,100)"/>
@@ -419,7 +419,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
             <circle cx="100" cy="100" r="22" fill="none" stroke="#fde68a" stroke-width="1.5" stroke-dasharray="3,2"/>
             <!-- Gold-white 4-fold symmetry star core -->
             <polygon points="100,80 105,95 120,100 105,105 100,120 95,105 80,100 95,95"
-              fill="#fff" stroke="#fde68a" stroke-width="1" filter="drop-shadow(0 0 8px #fde68a) drop-shadow(0 0 18px #f43f5e)"/>
+              fill="#fff" stroke="#fde68a" stroke-width="1.5"/>
           </g>
         </svg>
         <span class="sakura-float-particle sp1">🌸</span>
@@ -487,10 +487,10 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
             <circle cx="110" cy="110" r="84" fill="none" stroke="url(#goldRingGrad${gid})" stroke-width="1.2" stroke-dasharray="6,3" opacity="0.8"/>
             <circle cx="110" cy="110" r="89" fill="none" stroke="#fff7ad" stroke-width="0.8" opacity="0.4"/>
             <!-- 8 Subtle Golden Star Nodes -->
-            <circle cx="110" cy="26" r="2" fill="#ffffff" filter="drop-shadow(0 0 3px #ffd700)"/>
-            <circle cx="110" cy="194" r="2" fill="#ffffff" filter="drop-shadow(0 0 3px #ffd700)"/>
-            <circle cx="26" cy="110" r="2" fill="#ffffff" filter="drop-shadow(0 0 3px #ffd700)"/>
-            <circle cx="194" cy="110" r="2" fill="#ffffff" filter="drop-shadow(0 0 3px #ffd700)"/>
+            <circle cx="110" cy="26" r="2.2" fill="#ffffff" stroke="#ffd700" stroke-width="0.8"/>
+            <circle cx="110" cy="194" r="2.2" fill="#ffffff" stroke="#ffd700" stroke-width="0.8"/>
+            <circle cx="26" cy="110" r="2.2" fill="#ffffff" stroke="#ffd700" stroke-width="0.8"/>
+            <circle cx="194" cy="110" r="2.2" fill="#ffffff" stroke="#ffd700" stroke-width="0.8"/>
             <circle cx="51" cy="51" r="1.6" fill="#ffffff" opacity="0.85"/>
             <circle cx="169" cy="51" r="1.6" fill="#ffffff" opacity="0.85"/>
             <circle cx="51" cy="169" r="1.6" fill="#ffffff" opacity="0.85"/>
@@ -532,7 +532,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
 
   // 👼 Sacred Angel Halo (High-Elevation Floating Golden Ring)
   const drawAngelHalo = (cx, cy, rx = 18, ry = 5) => isAngel ? `
-    <g class="dino-angel-halo" filter="drop-shadow(0 0 10px #ffd700) drop-shadow(0 0 18px #fff59d)">
+    <g class="dino-angel-halo">
       <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="#ffd700" stroke-width="2.8"/>
       <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="4,2"/>
       <ellipse cx="${cx}" cy="${cy}" rx="${rx*0.88}" ry="${ry*0.75}" fill="rgba(255,249,196,0.35)"/>
@@ -542,7 +542,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
 
   // 🪽 Sacred Classical Feathered Angel Wings (Graceful 3-Tier Layered Wings)
   const drawAngelWings = (leftX, rightX, y, scale = 1) => isAngel ? `
-    <g class="dino-angel-wings" filter="drop-shadow(0 0 10px rgba(255,255,255,0.95)) drop-shadow(0 0 16px rgba(245,158,11,0.45))">
+    <g class="dino-angel-wings">
       <!-- Left Classical Archangel Wing -->
       <g transform="translate(${leftX}, ${y}) scale(${scale})">
         <g class="angel-wing-anim-left" style="transform-origin: 0px 0px;">
