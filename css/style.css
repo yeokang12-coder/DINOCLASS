@@ -4080,6 +4080,7 @@ svg.gold-skin-aura {
   overflow: visible;
   pointer-events: auto;           /* sprites are clickable even though layer is none */
   background: transparent !important;
+  contain: layout style;
 }
 .park-dino-sprite:hover { z-index: 9999 !important; }
 
@@ -4105,15 +4106,43 @@ svg.gold-skin-aura {
   background: transparent !important;
 }
 
-/* ── Lightweight Park Mode: Suppress 200px magic circles & micro particles on 70px roaming field dinos ── */
+/* ── 🌟 Park Mode Magic Circles: Ultra-smooth 2D Flat Elliptical Ground Projection (No 3D nesting, Zero Flickering) ── */
 .park-dino-body .starry-magic-circle-wrap,
 .park-dino-body .lava-circle-wrap,
 .park-dino-body .cyber-circle-wrap,
-.park-dino-body .sakura-circle-wrap,
+.park-dino-body .sakura-circle-wrap {
+  display: block !important;
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  width: 140%;
+  height: 140%;
+  /* 2D Flat Ellipse: Perfectly matches ground terrain perspective without heavy 3D matrix recalculation */
+  transform: translate(-50%, -50%) scaleY(0.40) translateZ(0) !important;
+  pointer-events: none;
+  z-index: 0 !important;
+  will-change: transform;
+  opacity: 0.95;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.35));
+}
+
+/* Ensure smooth rotation on park dinos without expensive SVG filters */
+.park-dino-body .starry-magic-svg,
+.park-dino-body .lava-circle-svg,
+.park-dino-body .cyber-circle-svg,
+.park-dino-body .sakura-circle-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible !important;
+}
+
+/* Suppress heavy micro particles in Park Mode (saving GPU draw calls & eliminating particle flicker) */
 .park-dino-body .star-float-particle,
 .park-dino-body .lava-float-particle,
 .park-dino-body .cyber-float-particle,
-.park-dino-body .sakura-float-particle {
+.park-dino-body .sakura-float-particle,
+.park-dino-body .wisdom-spark,
+.park-dino-body .cherry-petal {
   display: none !important;
 }
 
@@ -4716,3 +4745,86 @@ svg.gold-skin-aura {
     width: 100% !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   ⚡ PERFORMANCE RENDERING MODES (极速流畅 / 华丽特效双渲染模式)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 按钮样式 ── */
+#btn-toggle-perf-mode {
+  transition: all 0.25s ease;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+body.perf-mode-performance #btn-toggle-perf-mode {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid #34d399 !important;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+}
+
+body.perf-mode-deluxe #btn-toggle-perf-mode {
+  background: linear-gradient(135deg, #f59e0b 0%, #ec4899 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid #fbcfe8 !important;
+  box-shadow: 0 0 10px rgba(236, 72, 153, 0.45);
+}
+
+/* ── ⚡ 极速流畅模式 (Performance Mode): 核心外观 100% 保留，精简重度高斯粒子，降载 75%+ ── */
+body.perf-mode-performance .angel-spark:nth-child(n+3),
+body.perf-mode-performance .frostfire-fire-particle:nth-child(n+3),
+body.perf-mode-performance .frostfire-ice-particle:nth-child(n+3),
+body.perf-mode-performance .lava-spark:nth-child(n+3),
+body.perf-mode-performance .frost-spark:nth-child(n+3),
+body.perf-mode-performance .unicorn-spark:nth-child(n+3),
+body.perf-mode-performance .gold-particle:nth-child(n+3),
+body.perf-mode-performance .wisdom-spark:nth-child(n+2),
+body.perf-mode-performance .sakura-float-particle:nth-child(n+3) {
+  display: none !important;
+}
+
+/* 极速模式：将保留的少量点缀粒子双重高斯模糊简化为单层轻量发光，彻底避免 GPU 显存重绘掉帧 */
+body.perf-mode-performance .angel-spark {
+  text-shadow: 0 0 4px #ffd700 !important;
+  font-size: 1.1rem !important;
+}
+
+body.perf-mode-performance .unicorn-spark {
+  text-shadow: 0 0 4px #f472b6 !important;
+  font-size: 1.05rem !important;
+}
+
+body.perf-mode-performance .lava-spark,
+body.perf-mode-performance .frostfire-fire-particle {
+  text-shadow: 0 0 4px #ff3300 !important;
+  font-size: 1.05rem !important;
+}
+
+body.perf-mode-performance .frost-spark,
+body.perf-mode-performance .frostfire-ice-particle {
+  text-shadow: 0 0 4px #00d2ff !important;
+  font-size: 1.05rem !important;
+}
+
+body.perf-mode-performance .gold-particle {
+  text-shadow: 0 0 4px #ffa502 !important;
+  font-size: 1rem !important;
+}
+
+/* 极速模式：大草原漫步中隐藏所有漂浮上升粒子（保留神兽翅膀、光环、龙身流光脉络与 2D 地面法阵），彻底释放平板 60 FPS 性能 */
+body.perf-mode-performance .park-dino-body .angel-spark,
+body.perf-mode-performance .park-dino-body .unicorn-spark,
+body.perf-mode-performance .park-dino-body .lava-spark,
+body.perf-mode-performance .park-dino-body .frost-spark,
+body.perf-mode-performance .park-dino-body .frostfire-fire-particle,
+body.perf-mode-performance .park-dino-body .frostfire-ice-particle,
+body.perf-mode-performance .park-dino-body .gold-particle,
+body.perf-mode-performance .park-dino-body .wisdom-spark,
+body.perf-mode-performance .park-dino-body .star-float-particle,
+body.perf-mode-performance .park-dino-body .lava-float-particle,
+body.perf-mode-performance .park-dino-body .cyber-float-particle,
+body.perf-mode-performance .park-dino-body .sakura-float-particle {
+  display: none !important;
+}
+

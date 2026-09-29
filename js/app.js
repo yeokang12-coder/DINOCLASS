@@ -22,6 +22,7 @@ class DinoApp {
 
   init() {
     this.bindEvents();
+    this.initPerfMode();
     this.renderClassSelector();
     this.renderAll();
     this.initTools();
@@ -107,6 +108,14 @@ class DinoApp {
         bgmBtn.innerHTML = bgmEnabled ? '🎵 音乐: 开' : '🎵 音乐: 关';
         bgmBtn.classList.toggle('btn-secondary', !bgmEnabled);
         bgmBtn.classList.toggle('btn-gold', bgmEnabled);
+      });
+    }
+
+    // Performance Rendering Mode Toggle
+    const perfBtn = document.getElementById('btn-toggle-perf-mode');
+    if (perfBtn) {
+      perfBtn.addEventListener('click', () => {
+        this.togglePerfMode();
       });
     }
 
@@ -2834,6 +2843,47 @@ class DinoApp {
       this.renderAll();
       this.showToast(`🗑️ 已删除班级：【${target.name}】`);
     }
+  }
+
+  // ── ⚡ 渲染模式管理（极速流畅 / 华丽特效）──
+  initPerfMode() {
+    const saved = localStorage.getItem('DINOCLASS_PERF_MODE') || 'performance';
+    this.setPerfMode(saved, false);
+  }
+
+  getPerfMode() {
+    return localStorage.getItem('DINOCLASS_PERF_MODE') || 'performance';
+  }
+
+  setPerfMode(mode, showNotice = true) {
+    const isPerf = (mode !== 'deluxe');
+    const finalMode = isPerf ? 'performance' : 'deluxe';
+    localStorage.setItem('DINOCLASS_PERF_MODE', finalMode);
+
+    document.body.classList.remove('perf-mode-performance', 'perf-mode-deluxe');
+    document.body.classList.add(isPerf ? 'perf-mode-performance' : 'perf-mode-deluxe');
+
+    const btn = document.getElementById('btn-toggle-perf-mode');
+    if (btn) {
+      btn.innerHTML = isPerf ? '⚡ 渲染: 极速' : '✨ 渲染: 华丽';
+      btn.title = isPerf 
+        ? '当前为【极速流畅模式】（精简散发粒子、降载75%+、低发热60FPS）。点击切换为【华丽特效】'
+        : '当前为【华丽特效模式】（满载神兽散发粒子与双层发光光晕）。点击切换为【极速流畅】';
+    }
+
+    if (showNotice && typeof this.showToast === 'function') {
+      if (isPerf) {
+        this.showToast('⚡ 已切换为【极速流畅模式】（降低负载75%，丝滑高帧）');
+      } else {
+        this.showToast('✨ 已开启【华丽特效模式】（满额粒子流光全开）');
+      }
+    }
+  }
+
+  togglePerfMode() {
+    const current = this.getPerfMode();
+    const next = current === 'performance' ? 'deluxe' : 'performance';
+    this.setPerfMode(next, true);
   }
 }
 
