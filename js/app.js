@@ -18,6 +18,7 @@ class DinoApp {
     this.shopTryOnTitle = '';
     this.shopTryOnHasFireworks = false;
     this.shopMannequinSpecies = 'rex';
+    this.shopMannequinStage = 'legend';
   }
 
   init() {
@@ -1485,6 +1486,8 @@ class DinoApp {
     if (itemId === 'item_frost_skin') return !!this.shopTryOnEquipped.frost_skin;
     if (itemId === 'item_angel_skin') return !!this.shopTryOnEquipped.angel_skin;
     if (itemId === 'item_unicorn_skin') return !!this.shopTryOnEquipped.unicorn_skin;
+    if (itemId === 'item_rainbow_skin') return !!this.shopTryOnEquipped.rainbow_skin;
+    if (itemId === 'item_fallen_skin') return !!this.shopTryOnEquipped.fallen_skin;
     if (itemId === 'item_grad_cap') return !!this.shopTryOnEquipped.grad_cap;
     if (itemId === 'item_dialogue') return !!this.shopTryOnHasDialogue;
     if (itemId === 'item_fireworks') return !!this.shopTryOnHasFireworks;
@@ -1522,6 +1525,9 @@ class DinoApp {
         this.shopTryOnEquipped.frostfire_skin = false;
         this.shopTryOnEquipped.angel_skin = false;
         this.shopTryOnEquipped.unicorn_skin = false;
+        this.shopTryOnEquipped.rainbow_skin = false;
+        this.shopTryOnEquipped.fallen_skin = false;
+        this.shopTryOnEquipped.chaos_skin = false;
       }
       this.shopTryOnEquipped.chroma_gold = willEnable;
     } else if (itemId === 'item_lava_skin') {
@@ -1531,6 +1537,9 @@ class DinoApp {
         this.shopTryOnEquipped.chroma_gold = false;
         this.shopTryOnEquipped.angel_skin = false;
         this.shopTryOnEquipped.unicorn_skin = false;
+        this.shopTryOnEquipped.rainbow_skin = false;
+        this.shopTryOnEquipped.fallen_skin = false;
+        this.shopTryOnEquipped.chaos_skin = false;
       }
       if (this.shopTryOnEquipped.lava_skin && this.shopTryOnEquipped.frost_skin) {
         this.shopTryOnEquipped.frostfire_skin = true;
@@ -1544,6 +1553,9 @@ class DinoApp {
         this.shopTryOnEquipped.chroma_gold = false;
         this.shopTryOnEquipped.angel_skin = false;
         this.shopTryOnEquipped.unicorn_skin = false;
+        this.shopTryOnEquipped.rainbow_skin = false;
+        this.shopTryOnEquipped.fallen_skin = false;
+        this.shopTryOnEquipped.chaos_skin = false;
       }
       if (this.shopTryOnEquipped.lava_skin && this.shopTryOnEquipped.frost_skin) {
         this.shopTryOnEquipped.frostfire_skin = true;
@@ -1558,8 +1570,14 @@ class DinoApp {
         this.shopTryOnEquipped.frost_skin = false;
         this.shopTryOnEquipped.frostfire_skin = false;
         this.shopTryOnEquipped.unicorn_skin = false;
+        this.shopTryOnEquipped.rainbow_skin = false;
       }
       this.shopTryOnEquipped.angel_skin = willEnable;
+      if (this.shopTryOnEquipped.angel_skin && this.shopTryOnEquipped.fallen_skin) {
+        this.shopTryOnEquipped.chaos_skin = true;
+      } else {
+        this.shopTryOnEquipped.chaos_skin = false;
+      }
     } else if (itemId === 'item_unicorn_skin') {
       const willEnable = !this.shopTryOnEquipped.unicorn_skin;
       if (willEnable) {
@@ -1568,8 +1586,40 @@ class DinoApp {
         this.shopTryOnEquipped.frost_skin = false;
         this.shopTryOnEquipped.frostfire_skin = false;
         this.shopTryOnEquipped.angel_skin = false;
+        this.shopTryOnEquipped.rainbow_skin = false;
+        this.shopTryOnEquipped.fallen_skin = false;
+        this.shopTryOnEquipped.chaos_skin = false;
       }
       this.shopTryOnEquipped.unicorn_skin = willEnable;
+    } else if (itemId === 'item_rainbow_skin') {
+      const willEnable = !this.shopTryOnEquipped.rainbow_skin;
+      if (willEnable) {
+        this.shopTryOnEquipped.chroma_gold = false;
+        this.shopTryOnEquipped.lava_skin = false;
+        this.shopTryOnEquipped.frost_skin = false;
+        this.shopTryOnEquipped.frostfire_skin = false;
+        this.shopTryOnEquipped.angel_skin = false;
+        this.shopTryOnEquipped.unicorn_skin = false;
+        this.shopTryOnEquipped.fallen_skin = false;
+        this.shopTryOnEquipped.chaos_skin = false;
+      }
+      this.shopTryOnEquipped.rainbow_skin = willEnable;
+    } else if (itemId === 'item_fallen_skin') {
+      const willEnable = !this.shopTryOnEquipped.fallen_skin;
+      this.shopTryOnEquipped.fallen_skin = willEnable;
+      if (willEnable) {
+        this.shopTryOnEquipped.chroma_gold = false;
+        this.shopTryOnEquipped.lava_skin = false;
+        this.shopTryOnEquipped.frost_skin = false;
+        this.shopTryOnEquipped.frostfire_skin = false;
+        this.shopTryOnEquipped.unicorn_skin = false;
+        this.shopTryOnEquipped.rainbow_skin = false;
+      }
+      if (this.shopTryOnEquipped.angel_skin && this.shopTryOnEquipped.fallen_skin) {
+        this.shopTryOnEquipped.chaos_skin = true;
+      } else {
+        this.shopTryOnEquipped.chaos_skin = false;
+      }
     } else if (itemId === 'item_grad_cap') {
       this.shopTryOnEquipped.grad_cap = !this.shopTryOnEquipped.grad_cap;
     } else if (itemId === 'item_dialogue') {
@@ -1635,6 +1685,45 @@ class DinoApp {
     this.renderShopMannequin();
   }
 
+  // 🌟 Change Mannequin Evolution Stage (egg, baby, teen, apex, legend)
+  setShopMannequinStage(stageKey) {
+    const validStages = ['egg', 'baby', 'teen', 'apex', 'legend'];
+    this.shopMannequinStage = validStages.includes(stageKey) ? stageKey : 'legend';
+
+    const stageSelect = document.getElementById('select-shop-stage');
+    if (stageSelect) stageSelect.value = this.shopMannequinStage;
+
+    const pills = document.querySelectorAll('.stage-pill-btn');
+    pills.forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-stage') === this.shopMannequinStage);
+    });
+
+    if (window.soundCtrl && typeof window.soundCtrl.playClick === 'function') {
+      window.soundCtrl.playClick();
+    }
+
+    this.renderShopMannequin();
+  }
+
+  // 👤 Sync mannequin with specific student's dinosaur
+  syncShopMannequinWithStudent(studentId) {
+    if (!studentId || !window.storageMgr) return;
+    const student = window.storageMgr.getStudentById(studentId);
+    if (!student) return;
+
+    if (student.speciesKey) {
+      this.setShopMannequinSpecies(student.speciesKey);
+    }
+
+    const stageObj = typeof getStageByScore === 'function' ? getStageByScore(student.score || 0) : null;
+    const stageKey = stageObj ? stageObj.key : 'legend';
+    this.setShopMannequinStage(stageKey);
+
+    if (window.soundCtrl && typeof window.soundCtrl.playLevelUp === 'function') {
+      window.soundCtrl.playLevelUp();
+    }
+  }
+
   // 👗 Render the single ultra-clear central dressing room mannequin
   renderShopMannequin() {
     const avatarEl = document.getElementById('shop-mannequin-avatar');
@@ -1647,7 +1736,17 @@ class DinoApp {
       stageWrap.classList.toggle('fireworks-card', !!this.shopTryOnHasFireworks);
     }
 
-    const svgCode = generateDinoSVG(this.shopMannequinSpecies, 'teen', this.shopTryOnEquipped);
+    const stage = this.shopMannequinStage || 'legend';
+    const stageSelect = document.getElementById('select-shop-stage');
+    if (stageSelect && stageSelect.value !== stage) {
+      stageSelect.value = stage;
+    }
+    const pills = document.querySelectorAll('.stage-pill-btn');
+    pills.forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-stage') === stage);
+    });
+
+    const svgCode = generateDinoSVG(this.shopMannequinSpecies, stage, this.shopTryOnEquipped);
     
     avatarEl.innerHTML = `
       <div class="fitting-dino-stage-inner ${this.shopTryOnHasFireworks ? 'fireworks-card' : ''} ${this.shopTryOnHasCrown ? 'crowned' : ''}">
@@ -1671,13 +1770,17 @@ class DinoApp {
     if (this.shopTryOnEquipped.fairy) activeNames.push('🧚 小仙子');
     if (this.shopTryOnEquipped.frostfire_skin) {
       activeNames.push('☯️ 冰火双生·极境神龙（羁绊触发）');
+    } else if (this.shopTryOnEquipped.chaos_skin) {
+      activeNames.push('☯️ 光暗双生·混沌天神（羁绊触发）');
     } else {
       if (this.shopTryOnEquipped.chroma_gold) activeNames.push('🏆 黄金龙');
       if (this.shopTryOnEquipped.lava_skin) activeNames.push('🌋 熔岩火龙');
       if (this.shopTryOnEquipped.frost_skin) activeNames.push('❄️ 极寒冰龙');
+      if (this.shopTryOnEquipped.angel_skin) activeNames.push('👼 炽天大天使');
+      if (this.shopTryOnEquipped.fallen_skin) activeNames.push('🌌 幽冥堕天使');
     }
-    if (this.shopTryOnEquipped.angel_skin) activeNames.push('👼 炽天大天使');
     if (this.shopTryOnEquipped.unicorn_skin) activeNames.push('🦄 梦幻独角兽');
+    if (this.shopTryOnEquipped.rainbow_skin) activeNames.push('🌈 虹彩炽天龙');
     if (this.shopTryOnEquipped.grad_cap) activeNames.push('🎓 博士帽');
     if (this.shopTryOnHasFireworks) activeNames.push('🎇 璀璨烟火');
     if (this.shopTryOnHasDialogue) activeNames.push('💬 专属台词');
@@ -1813,6 +1916,16 @@ class DinoApp {
       }
     }
 
+    // Populate student select for quick dinosaur try-on sync
+    const studentSelect = document.getElementById('select-shop-student');
+    if (studentSelect && window.storageMgr) {
+      const students = window.storageMgr.getStudents() || [];
+      const currentVal = studentSelect.value;
+      studentSelect.innerHTML = '<option value="">-- 选择学生快速试穿 --</option>' +
+        students.map(s => `<option value="${s.id}">${s.name} (${s.score}分)</option>`).join('');
+      if (currentVal) studentSelect.value = currentVal;
+    }
+
     this.renderShopMannequin();
   }
 
@@ -1900,7 +2013,7 @@ class DinoApp {
     student.earned = student.earned || {};
 
     const stateKey = itemId.replace('item_', '').replace('companion_fairy', 'fairy');
-    const fullBodySkinKeys = ['chroma_gold', 'lava_skin', 'frost_skin', 'angel_skin', 'unicorn_skin', 'frostfire_skin'];
+    const fullBodySkinKeys = ['chroma_gold', 'lava_skin', 'frost_skin', 'angel_skin', 'unicorn_skin', 'frostfire_skin', 'rainbow_skin', 'fallen_skin', 'chaos_skin'];
 
     // ── CHECK IF PERMANENT ITEM IS ALREADY OWNED (Direct Free Re-equip) ──
     if (item.durationDays === 0) {
@@ -1987,7 +2100,7 @@ class DinoApp {
     }
 
     // ── OTHER VISUAL DINO REWARDS (Skins & Accessories) ──
-    const visualRewardIds = ['item_crown', 'item_sunglasses', 'item_cherry_blossom', 'item_magic_circle', 'item_lava_circle', 'item_cyber_circle', 'item_sakura_circle', 'item_companion_fairy', 'item_chroma_gold', 'item_lava_skin', 'item_frost_skin', 'item_angel_skin', 'item_unicorn_skin', 'item_grad_cap'];
+    const visualRewardIds = ['item_crown', 'item_sunglasses', 'item_cherry_blossom', 'item_magic_circle', 'item_lava_circle', 'item_cyber_circle', 'item_sakura_circle', 'item_companion_fairy', 'item_chroma_gold', 'item_lava_skin', 'item_frost_skin', 'item_angel_skin', 'item_unicorn_skin', 'item_rainbow_skin', 'item_fallen_skin', 'item_grad_cap'];
     if (visualRewardIds.includes(itemId)) {
       this.adjustScore(studentId, -item.cost, `兑换【${item.title}】`);
       if (itemId === 'item_crown') {
@@ -2010,6 +2123,20 @@ class DinoApp {
           window.storageMgr.save();
           modal.classList.remove('active');
           alert(`🎉 恭喜触发神级羁绊！\n${student.name} 同时集齐了【🌋 熔岩火龙】与【❄️ 极寒冰龙】，成功觉醒隐藏神兽【☯️ 冰火双生·极境神龙】！\n已自动为你换上全新冰火形态，也可在装扮衣橱中随时切换！`);
+          this.renderAll();
+          return;
+        }
+      }
+
+      // Check Chaos (Light & Dark) synergy unlock
+      if (itemId === 'item_angel_skin' || itemId === 'item_fallen_skin') {
+        if (student.earned.angel_skin && student.earned.fallen_skin) {
+          student.earned.chaos_skin = true;
+          fullBodySkinKeys.forEach(k => { student.equipped[k] = false; });
+          student.equipped.chaos_skin = true;
+          window.storageMgr.save();
+          modal.classList.remove('active');
+          alert(`🎉 恭喜触发神级羁绊！\n${student.name} 同时集齐了【👼 炽天大天使】与【🌌 幽冥堕天使】，成功觉醒隐藏神兽【☯️ 光暗双生·混沌天神龙】！\n已自动为你换上全新光暗形态，也可在装扮衣橱中随时切换！`);
           this.renderAll();
           return;
         }
@@ -2130,12 +2257,18 @@ class DinoApp {
       setupItem('frostfire', student.earned.frostfire_skin, student.equipped.frostfire_skin);
       setupItem('angel', student.earned.angel_skin, student.equipped.angel_skin);
       setupItem('unicorn', student.earned.unicorn_skin, student.equipped.unicorn_skin);
+      setupItem('rainbow', student.earned.rainbow_skin, student.equipped.rainbow_skin);
+      setupItem('fallen', student.earned.fallen_skin, student.equipped.fallen_skin);
+      if (student.earned.angel_skin && student.earned.fallen_skin) {
+        student.earned.chaos_skin = true;
+      }
+      setupItem('chaos', student.earned.chaos_skin, student.equipped.chaos_skin);
       setupItem('grad', student.earned.grad_cap, student.equipped.grad_cap);
       setupItem('fireworks', student.earned.fireworks, student.equipped.fireworks);
       setupItem('dialogue', !!student.customDialogue, !!student.customDialogue);
 
       // Attach mutual exclusion handler on full-body skin checkboxes
-      const skinCheckboxIds = ['detail-chroma-checkbox', 'detail-lava-checkbox', 'detail-frost-checkbox', 'detail-frostfire-checkbox', 'detail-angel-checkbox', 'detail-unicorn-checkbox'];
+      const skinCheckboxIds = ['detail-chroma-checkbox', 'detail-lava-checkbox', 'detail-frost-checkbox', 'detail-frostfire-checkbox', 'detail-angel-checkbox', 'detail-unicorn-checkbox', 'detail-rainbow-checkbox', 'detail-fallen-checkbox', 'detail-chaos-checkbox'];
       skinCheckboxIds.forEach(id => {
         const cb = document.getElementById(id);
         if (cb) {
@@ -2235,6 +2368,9 @@ class DinoApp {
     const frostfireCb = getCb('frostfire');
     const angelCb = getCb('angel');
     const unicornCb = getCb('unicorn');
+    const rainbowCb = getCb('rainbow');
+    const fallenCb = getCb('fallen');
+    const chaosCb = getCb('chaos');
     const gradCb = getCb('grad');
     const fireworksCb = getCb('fireworks');
     const dialogueCb = getCb('dialogue');
@@ -2264,6 +2400,9 @@ class DinoApp {
     student.equipped.frostfire_skin = frostfireCb && student.earned.frostfire_skin ? frostfireCb.checked : false;
     student.equipped.angel_skin = angelCb && student.earned.angel_skin ? angelCb.checked : false;
     student.equipped.unicorn_skin = unicornCb && student.earned.unicorn_skin ? unicornCb.checked : false;
+    student.equipped.rainbow_skin = rainbowCb && student.earned.rainbow_skin ? rainbowCb.checked : false;
+    student.equipped.fallen_skin = fallenCb && student.earned.fallen_skin ? fallenCb.checked : false;
+    student.equipped.chaos_skin = chaosCb && student.earned.chaos_skin ? chaosCb.checked : false;
 
     if (gradCb && student.earned.grad_cap) student.equipped.grad_cap = gradCb.checked;
     if (fireworksCb && student.earned.fireworks) student.equipped.fireworks = fireworksCb.checked;

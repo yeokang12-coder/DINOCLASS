@@ -168,17 +168,47 @@
             </div>
           </div>
 
-          <!-- 模特控制与种族切换 -->
+          <!-- 模特控制与形态/种族切换 -->
           <div class="fitting-controls-box">
+            <!-- 快速载入学生恐龙 -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span style="font-size:0.82rem; font-weight:700; color:var(--text-muted);">👤 载入学生恐龙：</span>
+              <select class="select-input" id="select-shop-student" style="padding:4px 8px; font-size:0.78rem; max-width:140px;" onchange="window.dinoApp.syncShopMannequinWithStudent(this.value)">
+                <option value="">-- 选择学生快速试穿 --</option>
+              </select>
+            </div>
+
+            <!-- 模特种族切换 -->
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
               <span style="font-size:0.82rem; font-weight:700; color:var(--text-muted);">🦖 模特种族切换：</span>
-              <select class="select-input" id="select-shop-species" style="padding:4px 10px; font-size:0.8rem;" onchange="window.dinoApp.setShopMannequinSpecies(this.value)">
+              <select class="select-input" id="select-shop-species" style="padding:4px 8px; font-size:0.78rem; max-width:140px;" onchange="window.dinoApp.setShopMannequinSpecies(this.value)">
                 <option value="rex">霸王龙</option>
                 <option value="tri">三角龙</option>
                 <option value="ptero">翼龙</option>
                 <option value="brachio">腕龙</option>
                 <option value="mythic">幻彩圣龙</option>
               </select>
+            </div>
+
+            <!-- 恐龙成长形态切换 -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <span style="font-size:0.82rem; font-weight:700; color:var(--text-muted);">🌟 恐龙形态切换：</span>
+              <select class="select-input" id="select-shop-stage" style="padding:4px 8px; font-size:0.78rem; max-width:140px;" onchange="window.dinoApp.setShopMannequinStage(this.value)">
+                <option value="egg">🥚 恐龙蛋 (0-10分)</option>
+                <option value="baby">🐣 破壳幼龙 (11-60分)</option>
+                <option value="teen">🦖 酷炫青年龙 (61-150分)</option>
+                <option value="apex">🔥 霸王战龙 (151-300分)</option>
+                <option value="legend" selected>👑 传说圣龙 (301+分 · 展翼)</option>
+              </select>
+            </div>
+
+            <!-- 快捷形态药丸切换按钮 -->
+            <div class="fitting-stage-pills" id="fitting-stage-pills">
+              <button type="button" class="stage-pill-btn" data-stage="egg" onclick="window.dinoApp.setShopMannequinStage('egg')">🥚 蛋</button>
+              <button type="button" class="stage-pill-btn" data-stage="baby" onclick="window.dinoApp.setShopMannequinStage('baby')">🐣 幼龙</button>
+              <button type="button" class="stage-pill-btn" data-stage="teen" onclick="window.dinoApp.setShopMannequinStage('teen')">🦖 青年</button>
+              <button type="button" class="stage-pill-btn" data-stage="apex" onclick="window.dinoApp.setShopMannequinStage('apex')">🔥 战龙</button>
+              <button type="button" class="stage-pill-btn active" data-stage="legend" onclick="window.dinoApp.setShopMannequinStage('legend')">👑 传说</button>
             </div>
 
             <!-- 当前已穿戴标签 -->
@@ -1265,6 +1295,18 @@
             <label id="wardrobe-unicorn" style="display:none; align-items:center; gap:8px; font-weight:700; color:#f472b6; cursor:pointer;">
               <input type="checkbox" id="detail-unicorn-checkbox" style="accent-color:#f472b6; width:18px; height:18px;">
               🦄 穿戴/脱下 梦幻独角兽皮肤
+            </label>
+            <label id="wardrobe-rainbow" style="display:none; align-items:center; gap:8px; font-weight:700; color:#38bdf8; cursor:pointer;">
+              <input type="checkbox" id="detail-rainbow-checkbox" style="accent-color:#38bdf8; width:18px; height:18px;">
+              🌈 穿戴/脱下 虹彩炽天龙皮肤
+            </label>
+            <label id="wardrobe-fallen" style="display:none; align-items:center; gap:8px; font-weight:700; color:#c084fc; cursor:pointer;">
+              <input type="checkbox" id="detail-fallen-checkbox" style="accent-color:#a855f7; width:18px; height:18px;">
+              🌌 穿戴/脱下 幽冥堕天使皮肤
+            </label>
+            <label id="wardrobe-chaos" style="display:none; align-items:center; gap:8px; font-weight:700; color:#e2e8f0; cursor:pointer; background:linear-gradient(90deg, rgba(255,255,255,0.15), rgba(88,28,135,0.25)); border:1px solid rgba(192,132,252,0.4); border-radius:6px; padding:3px 6px;">
+              <input type="checkbox" id="detail-chaos-checkbox" style="accent-color:#c084fc; width:18px; height:18px;">
+              ☯️ 穿戴/脱下 光暗双生·混沌天神龙（羁绊专属）
             </label>
             <label id="wardrobe-grad" style="display:none; align-items:center; gap:8px; font-weight:700; color:#f1c40f; cursor:pointer;">
               <input type="checkbox" id="detail-grad-checkbox" style="accent-color:#f1c40f; width:18px; height:18px;">

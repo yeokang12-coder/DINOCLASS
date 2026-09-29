@@ -282,7 +282,7 @@ class StorageManager {
               s.history = s.history.slice(0, 30);
             }
             if (Array.isArray(s.activePrivileges)) {
-              const visualIds = ['item_lava_skin', 'item_frost_skin', 'item_angel_skin', 'item_unicorn_skin', 'item_chroma_gold', 'item_crown', 'item_sunglasses', 'item_grad_cap', 'item_cherry_blossom', 'item_magic_circle', 'item_lava_circle', 'item_cyber_circle', 'item_sakura_circle', 'item_companion_fairy', 'item_fireworks'];
+              const visualIds = ['item_lava_skin', 'item_frost_skin', 'item_angel_skin', 'item_unicorn_skin', 'item_rainbow_skin', 'item_fallen_skin', 'item_chroma_gold', 'item_crown', 'item_sunglasses', 'item_grad_cap', 'item_cherry_blossom', 'item_magic_circle', 'item_lava_circle', 'item_cyber_circle', 'item_sakura_circle', 'item_companion_fairy', 'item_fireworks'];
               for (let i = s.activePrivileges.length - 1; i >= 0; i--) {
                 const priv = s.activePrivileges[i];
                 if (priv && visualIds.includes(priv.itemId)) {
@@ -926,7 +926,7 @@ class StorageManager {
         s.history = s.history.slice(0, 50);
       }
       if (Array.isArray(s.activePrivileges)) {
-        const visualIds = ['item_lava_skin', 'item_frost_skin', 'item_angel_skin', 'item_unicorn_skin', 'item_chroma_gold', 'item_crown', 'item_sunglasses', 'item_grad_cap', 'item_cherry_blossom', 'item_magic_circle', 'item_lava_circle', 'item_cyber_circle', 'item_sakura_circle', 'item_companion_fairy', 'item_fireworks'];
+        const visualIds = ['item_lava_skin', 'item_frost_skin', 'item_angel_skin', 'item_unicorn_skin', 'item_rainbow_skin', 'item_fallen_skin', 'item_chroma_gold', 'item_crown', 'item_sunglasses', 'item_grad_cap', 'item_cherry_blossom', 'item_magic_circle', 'item_lava_circle', 'item_cyber_circle', 'item_sakura_circle', 'item_companion_fairy', 'item_fireworks'];
         for (let i = s.activePrivileges.length - 1; i >= 0; i--) {
           const priv = s.activePrivileges[i];
           if (priv && visualIds.includes(priv.itemId)) {

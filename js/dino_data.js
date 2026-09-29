@@ -46,6 +46,8 @@ const DINO_DATA = {
     { id: 'item_lava_skin',   title: '🌋 熔岩火龙皮肤',     desc: '基因重构为黑曜石暗红脉络皮肤，环绕动态上升爆发火山火花粒子', cost: 80, category: 'dino', subCategory: 'skin', icon: '🌋', stock: 99, durationDays: 0 },
     { id: 'item_frost_skin',  title: '❄️ 极寒冰龙皮肤',     desc: '基因重构为千年玄冰幽蓝霜雪皮肤，环绕晶莹冰棱碎屑与极寒冰霜雪花粒子', cost: 80, category: 'dino', subCategory: 'skin', icon: '❄️', stock: 99, durationDays: 0 },
     { id: 'item_angel_skin',  title: '👼 炽天大天使皮肤',   desc: '基因重构为纯白圣洁大天使皮肤，展开圣光羽翼并悬浮神圣天使光环', cost: 80, category: 'dino', subCategory: 'skin', icon: '👼', stock: 99, durationDays: 0 },
+    { id: 'item_fallen_skin', title: '🌌 幽冥堕天使皮肤',   desc: '基因重构为暗曜蚀光黑翼皮肤，展开幽黑紫曜神翼与月蚀神环，深邃霸气', cost: 80, category: 'dino', subCategory: 'skin', icon: '🌌', stock: 99, durationDays: 0 },
+    { id: 'item_rainbow_skin',title: '🌈 虹彩炽天龙皮肤',   desc: '基因重构为七彩虹光天神皮肤，展开七彩流光羽翼与天界旋转棱镜神环', cost: 80, category: 'dino', subCategory: 'skin', icon: '🌈', stock: 99, durationDays: 0 },
     { id: 'item_unicorn_skin',title: '🦄 梦幻独角兽皮肤',   desc: '基因重构为极光彩虹梦幻皮肤，额前挺立螺旋星芒独角与梦幻星屑', cost: 80, category: 'dino', subCategory: 'skin', icon: '🦄', stock: 99, durationDays: 0 },
     { id: 'item_chroma_gold', title: '🏆 耀世黄金龙皮肤',   desc: '改变恐龙基因，使其基础颜色变为璀璨的黄金色',         cost: 90, category: 'dino', subCategory: 'skin', icon: '🏆', stock: 99, durationDays: 0 },
 
@@ -134,26 +136,66 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     const spec = DINO_DATA.SPECIES[speciesKey] || DINO_DATA.SPECIES.rex;
 
     let activeSkin = null;
-    if (equipped.frostfire_skin) activeSkin = 'frostfire';
+    if (equipped.chaos_skin) activeSkin = 'chaos';
+    else if (equipped.frostfire_skin) activeSkin = 'frostfire';
+    else if (equipped.rainbow_skin) activeSkin = 'rainbow';
+    else if (equipped.fallen_skin) activeSkin = 'fallen';
     else if (equipped.unicorn_skin) activeSkin = 'unicorn';
     else if (equipped.angel_skin) activeSkin = 'angel';
     else if (equipped.frost_skin) activeSkin = 'frost';
     else if (equipped.lava_skin) activeSkin = 'lava';
     else if (equipped.chroma_gold) activeSkin = 'gold';
 
+    const isChaos = activeSkin === 'chaos';
+    const isRainbow = activeSkin === 'rainbow';
+    const isFallen = activeSkin === 'fallen';
     const isFrostFire = activeSkin === 'frostfire';
     const isUnicorn = activeSkin === 'unicorn';
     const isAngel = activeSkin === 'angel';
     const isFrost = activeSkin === 'frost';
     const isLava = activeSkin === 'lava';
     const isGold = activeSkin === 'gold';
+    const isCelestial = isAngel || isRainbow || isFallen || isChaos;
 
-    const c1 = isFrostFire ? '#ff4757' : (isUnicorn ? '#e9d5ff' : (isAngel ? '#e2e8f0' : (isFrost ? '#0284c7' : (isLava ? '#ff4757' : (isGold ? '#fec84d' : spec.color)))));
-    const c2 = isFrostFire ? '#00d2ff' : (isUnicorn ? '#c084fc' : (isAngel ? '#94a3b8' : (isFrost ? '#00d2ff' : (isLava ? '#ff3300' : (isGold ? '#e69500' : spec.secondaryColor)))));
-    const cA = isFrostFire ? '#fbbf24' : (isUnicorn ? '#38bdf8' : (isAngel ? '#f59e0b' : (isFrost ? '#a8f0ff' : (isLava ? '#ff9f43' : (isGold ? '#fffbeb' : spec.accent)))));
+    const c1 = isChaos ? '#ffffff' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isUnicorn ? '#e9d5ff' : (isAngel ? '#e2e8f0' : (isFrost ? '#0284c7' : (isLava ? '#ff4757' : (isGold ? '#fec84d' : spec.color))))))));
+    const c2 = isChaos ? '#18181b' : (isRainbow ? '#818cf8' : (isFallen ? '#7c3aed' : (isFrostFire ? '#00d2ff' : (isUnicorn ? '#c084fc' : (isAngel ? '#94a3b8' : (isFrost ? '#00d2ff' : (isLava ? '#ff3300' : (isGold ? '#e69500' : spec.secondaryColor))))))));
+    const cA = isChaos ? '#fbbf24' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isFrostFire ? '#fbbf24' : (isUnicorn ? '#38bdf8' : (isAngel ? '#f59e0b' : (isFrost ? '#a8f0ff' : (isLava ? '#ff9f43' : (isGold ? '#fffbeb' : spec.accent))))))));
     const id = `d${speciesKey}${stageKey}${Math.floor(Math.random()*9999)}`;
 
     let effectsHtml = '';
+    if (isChaos) {
+      effectsHtml += `
+        <div class="chaos-skin-aura">
+          <span class="chaos-spark" style="left:10%; bottom:14%; animation-delay:0s;">☯️</span>
+          <span class="chaos-spark" style="right:10%; bottom:18%; animation-delay:0.7s;">⭐</span>
+          <span class="chaos-spark" style="left:48%; bottom:8%; animation-delay:1.4s;">🌑</span>
+          <span class="chaos-spark" style="right:32%; bottom:26%; animation-delay:0.3s;">✨</span>
+          <span class="chaos-spark" style="left:24%; bottom:28%; animation-delay:1.1s;">💜</span>
+          <span class="chaos-spark" style="right:20%; bottom:10%; animation-delay:1.8s;">💫</span>
+        </div>`;
+    }
+    if (isRainbow) {
+      effectsHtml += `
+        <div class="rainbow-skin-aura">
+          <span class="rainbow-spark" style="left:10%; bottom:14%; animation-delay:0s;">🌈</span>
+          <span class="rainbow-spark" style="right:10%; bottom:18%; animation-delay:0.7s;">💎</span>
+          <span class="rainbow-spark" style="left:48%; bottom:8%; animation-delay:1.4s;">✨</span>
+          <span class="rainbow-spark" style="right:32%; bottom:26%; animation-delay:0.3s;">⭐</span>
+          <span class="rainbow-spark" style="left:24%; bottom:28%; animation-delay:1.1s;">🌸</span>
+          <span class="rainbow-spark" style="right:20%; bottom:10%; animation-delay:1.8s;">💫</span>
+        </div>`;
+    }
+    if (isFallen) {
+      effectsHtml += `
+        <div class="fallen-skin-aura">
+          <span class="fallen-spark" style="left:12%; bottom:14%; animation-delay:0s;">🌑</span>
+          <span class="fallen-spark" style="right:12%; bottom:20%; animation-delay:0.8s;">💜</span>
+          <span class="fallen-spark" style="left:48%; bottom:10%; animation-delay:1.5s;">🔮</span>
+          <span class="fallen-spark" style="right:34%; bottom:26%; animation-delay:0.4s;">✦</span>
+          <span class="fallen-spark" style="left:24%; bottom:30%; animation-delay:1.1s;">✨</span>
+          <span class="fallen-spark" style="right:22%; bottom:12%; animation-delay:1.9s;">🖤</span>
+        </div>`;
+    }
     if (isFrostFire) {
       effectsHtml += `
         <div class="frostfire-skin-aura">
@@ -530,54 +572,415 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
       </div>`;
   }
 
-  // 👼 Sacred Angel Halo (High-Elevation Floating Golden Ring)
-  const drawAngelHalo = (cx, cy, rx = 18, ry = 5) => isAngel ? `
-    <g class="dino-angel-halo">
-      <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="#ffd700" stroke-width="2.8"/>
-      <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="4,2"/>
-      <ellipse cx="${cx}" cy="${cy}" rx="${rx*0.88}" ry="${ry*0.75}" fill="rgba(255,249,196,0.35)"/>
-      <polygon points="${cx-rx},${cy} ${cx-rx+2.5},${cy-1.5} ${cx-rx+5},${cy} ${cx-rx+2.5},${cy+1.5}" fill="#ffffff"/>
-      <polygon points="${cx+rx},${cy} ${cx+rx-2.5},${cy-1.5} ${cx+rx-5},${cy} ${cx+rx-2.5},${cy+1.5}" fill="#ffffff"/>
-    </g>` : '';
+  // 👼 Celestial Halo (Angel Golden Ring, Rainbow Spectrum Ring, Fallen Eclipse Ring, Chaos Yin-Yang Ring)
+  const drawAngelHalo = (cx, cy, rx = 18, ry = 5) => {
+    if (!isCelestial) return '';
+    if (isChaos) {
+      return `
+      <g class="dino-chaos-halo">
+        <defs>
+          <linearGradient id="chhaloL${id}" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ffd700"/>
+            <stop offset="100%" stop-color="#fffbeb"/>
+          </linearGradient>
+          <linearGradient id="chhaloR${id}" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#c084fc"/>
+            <stop offset="100%" stop-color="#18181b"/>
+          </linearGradient>
+        </defs>
+        <path d="M${cx},${cy-ry} A${rx},${ry} 0 0,0 ${cx},${cy+ry}" fill="none" stroke="#ffd700" stroke-width="3" filter="drop-shadow(0 0 5px #f59e0b)"/>
+        <path d="M${cx},${cy-ry} A${rx},${ry} 0 0,0 ${cx},${cy+ry}" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="4,2"/>
+        <path d="M${cx},${cy+ry} A${rx},${ry} 0 0,0 ${cx},${cy-ry}" fill="none" stroke="#7c3aed" stroke-width="3" filter="drop-shadow(0 0 5px #a855f7)"/>
+        <path d="M${cx},${cy+ry} A${rx},${ry} 0 0,0 ${cx},${cy-ry}" fill="none" stroke="#c084fc" stroke-width="1.2" stroke-dasharray="4,2"/>
+        <ellipse cx="${cx}" cy="${cy}" rx="${rx*0.88}" ry="${ry*0.75}" fill="rgba(88,28,135,0.3)"/>
+        <circle cx="${cx-rx}" cy="${cy}" r="2.2" fill="#ffd700" filter="drop-shadow(0 0 4px #ffd700)"/>
+        <circle cx="${cx+rx}" cy="${cy}" r="2.2" fill="#c084fc" filter="drop-shadow(0 0 4px #c084fc)"/>
+        <circle cx="${cx}" cy="${cy-ry}" r="2" fill="#ffffff" stroke="#7c3aed" stroke-width="0.8"/>
+        <circle cx="${cx}" cy="${cy+ry}" r="2" fill="#18181b" stroke="#ffd700" stroke-width="0.8"/>
+      </g>`;
+    } else if (isRainbow) {
+      return `
+      <g class="dino-rainbow-halo">
+        <defs>
+          <linearGradient id="rbhalo${id}" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#f43f5e"/>
+            <stop offset="25%" stop-color="#fbbf24"/>
+            <stop offset="50%" stop-color="#34d399"/>
+            <stop offset="75%" stop-color="#38bdf8"/>
+            <stop offset="100%" stop-color="#c084fc"/>
+          </linearGradient>
+        </defs>
+        <ellipse cx="${cx}" cy="${cy}" rx="${rx+2}" ry="${ry+1.5}" fill="none" stroke="url(#rbhalo${id})" stroke-width="3.5" opacity="0.65" filter="drop-shadow(0 0 6px rgba(244,114,182,0.8))"/>
+        <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="url(#rbhalo${id})" stroke-width="2.6"/>
+        <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="5,3"/>
+        <ellipse cx="${cx}" cy="${cy}" rx="${rx*0.88}" ry="${ry*0.75}" fill="rgba(253,244,255,0.4)"/>
+        <polygon points="${cx-rx},${cy} ${cx-rx+3},${cy-1.8} ${cx-rx+6},${cy} ${cx-rx+3},${cy+1.8}" fill="#f472b6"/>
+        <polygon points="${cx+rx},${cy} ${cx+rx-3},${cy-1.8} ${cx+rx-6},${cy} ${cx+rx-3},${cy+1.8}" fill="#38bdf8"/>
+        <circle cx="${cx}" cy="${cy-ry}" r="1.8" fill="#fde047" filter="drop-shadow(0 0 4px #fde047)"/>
+      </g>`;
+    } else if (isFallen) {
+      return `
+      <g class="dino-fallen-halo">
+        <defs>
+          <linearGradient id="flhalo${id}" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#7c3aed"/>
+            <stop offset="50%" stop-color="#c084fc"/>
+            <stop offset="100%" stop-color="#3b0764"/>
+          </linearGradient>
+        </defs>
+        <ellipse cx="${cx}" cy="${cy}" rx="${rx+2.5}" ry="${ry+1.8}" fill="none" stroke="#7c3aed" stroke-width="3" opacity="0.75" filter="drop-shadow(0 0 8px rgba(168,85,247,0.9))"/>
+        <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="#18181b" stroke-width="3.2"/>
+        <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="url(#flhalo${id})" stroke-width="1.8" stroke-dasharray="6,3"/>
+        <ellipse cx="${cx}" cy="${cy}" rx="${rx*0.88}" ry="${ry*0.75}" fill="rgba(46,16,101,0.5)"/>
+        <circle cx="${cx-rx}" cy="${cy}" r="2" fill="#c084fc" filter="drop-shadow(0 0 4px #c084fc)"/>
+        <circle cx="${cx+rx}" cy="${cy}" r="2" fill="#c084fc" filter="drop-shadow(0 0 4px #c084fc)"/>
+        <polygon points="${cx},${cy-ry-2} ${cx+2.5},${cy-ry} ${cx},${cy-ry+2} ${cx-2.5},${cy-ry}" fill="#ffffff" filter="drop-shadow(0 0 4px #c084fc)"/>
+      </g>`;
+    } else {
+      return `
+      <g class="dino-angel-halo">
+        <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="#ffd700" stroke-width="2.8"/>
+        <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="4,2"/>
+        <ellipse cx="${cx}" cy="${cy}" rx="${rx*0.88}" ry="${ry*0.75}" fill="rgba(255,249,196,0.35)"/>
+        <polygon points="${cx-rx},${cy} ${cx-rx+2.5},${cy-1.5} ${cx-rx+5},${cy} ${cx-rx+2.5},${cy+1.5}" fill="#ffffff"/>
+        <polygon points="${cx+rx},${cy} ${cx+rx-2.5},${cy-1.5} ${cx+rx-5},${cy} ${cx+rx-2.5},${cy+1.5}" fill="#ffffff"/>
+      </g>`;
+    }
+  };
 
-  // 🪽 Sacred Classical Feathered Angel Wings (Graceful 3-Tier Layered Wings)
-  const drawAngelWings = (leftX, rightX, y, scale = 1) => isAngel ? `
-    <g class="dino-angel-wings">
-      <!-- Left Classical Archangel Wing -->
+  // 🪽 Majestic Feathered Wings Engine (Angel, Rainbow, Fallen, Chaos, Lava, Frost, FrostFire, Unicorn, Gold, Species)
+  const drawAngelWings = (leftX, rightX, y, scale = 1, forceRender = false) => {
+    if (!isCelestial && !forceRender) return '';
+
+    const getWingConfig = (isLeft) => {
+      if (isChaos) return isLeft ? 'angel' : 'fallen';
+      if (isFrostFire) return isLeft ? 'lava' : 'frost';
+      if (isRainbow) return 'rainbow';
+      if (isFallen) return 'fallen';
+      if (isAngel) return 'angel';
+      if (isLava) return 'lava';
+      if (isFrost) return 'frost';
+      if (isUnicorn) return 'unicorn';
+      if (isGold) return 'gold';
+      return 'species';
+    };
+
+    const renderWingFeathers = (cfg, idSuffix) => {
+      if (cfg === 'rainbow') {
+        return `
+          <defs>
+            <linearGradient id="rbw1${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fdf4ff"/>
+              <stop offset="100%" stop-color="#fce7f3"/>
+            </linearGradient>
+            <linearGradient id="rbw2${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#e0f2fe"/>
+              <stop offset="100%" stop-color="#bae6fd"/>
+            </linearGradient>
+            <linearGradient id="rbw3${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fef9c3"/>
+              <stop offset="100%" stop-color="#fde047"/>
+            </linearGradient>
+            <linearGradient id="rbsp${idSuffix}" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#f43f5e"/>
+              <stop offset="50%" stop-color="#38bdf8"/>
+              <stop offset="100%" stop-color="#a855f7"/>
+            </linearGradient>
+          </defs>
+          <!-- Soft Depth Shadow Silhouette -->
+          <path d="M0,4 C-8,-20 -20,-50 -32,-62 C-38,-56 -30,-32 -18,-18 C-28,-28 -38,-24 -36,-14 C-32,0 -20,6 0,4 Z" fill="#c084fc" opacity="0.45"/>
+          <!-- Tier 1: Long Primary Flight Feather (Pastel Pink/Violet) -->
+          <path d="M0,0 C-6,-24 -18,-52 -30,-60 C-34,-54 -24,-32 -14,-16 C-8,-8 -3,-2 0,0 Z" fill="url(#rbw1${idSuffix})" stroke="#f472b6" stroke-width="1.3"/>
+          <!-- Tier 2: Middle Secondary Feather (Sky Shimmer) -->
+          <path d="M-8,-10 C-18,-28 -30,-36 -34,-34 C-36,-26 -26,-14 -12,-4 Z" fill="url(#rbw2${idSuffix})" stroke="#38bdf8" stroke-width="1.3"/>
+          <!-- Tier 3: Lower Base Covert Feather (Warm Sun Shimmer) -->
+          <path d="M-8,-2 C-18,-14 -28,-14 -28,-8 C-26,4 -14,6 0,2 Z" fill="url(#rbw3${idSuffix})" stroke="#fbbf24" stroke-width="1.3"/>
+          <!-- Flowing Prismatic Wing Spine Along Upper Curve -->
+          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="url(#rbsp${idSuffix})" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#ffffff" stroke-width="1" stroke-linecap="round" fill="none"/>
+          <!-- Rainbow Prism Star Tip -->
+          <circle cx="-28" cy="-56" r="2.2" fill="#ffffff" filter="drop-shadow(0 0 5px #f472b6) drop-shadow(0 0 8px #38bdf8)"/>
+        `;
+      } else if (cfg === 'fallen') {
+        return `
+          <defs>
+            <linearGradient id="flw1${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#18181b"/>
+              <stop offset="100%" stop-color="#2e1065"/>
+            </linearGradient>
+            <linearGradient id="flw2${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#2e1065"/>
+              <stop offset="100%" stop-color="#3b0764"/>
+            </linearGradient>
+            <linearGradient id="flw3${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#3b0764"/>
+              <stop offset="100%" stop-color="#4c1d95"/>
+            </linearGradient>
+          </defs>
+          <!-- Soft Depth Shadow Silhouette -->
+          <path d="M0,4 C-8,-20 -20,-50 -32,-62 C-38,-56 -30,-32 -18,-18 C-28,-28 -38,-24 -36,-14 C-32,0 -20,6 0,4 Z" fill="#09090b" opacity="0.8"/>
+          <!-- Tier 1: Long Primary Flight Feather (Obsidian / Dark Midnight) -->
+          <path d="M0,0 C-6,-24 -18,-52 -30,-60 C-34,-54 -24,-32 -14,-16 C-8,-8 -3,-2 0,0 Z" fill="url(#flw1${idSuffix})" stroke="#7c3aed" stroke-width="1.3"/>
+          <!-- Tier 2: Middle Secondary Feather (Deep Purple) -->
+          <path d="M-8,-10 C-18,-28 -30,-36 -34,-34 C-36,-26 -26,-14 -12,-4 Z" fill="url(#flw2${idSuffix})" stroke="#9333ea" stroke-width="1.3"/>
+          <!-- Tier 3: Lower Base Covert Feather (Shadow Violet) -->
+          <path d="M-8,-2 C-18,-14 -28,-14 -28,-8 C-26,4 -14,6 0,2 Z" fill="url(#flw3${idSuffix})" stroke="#c084fc" stroke-width="1.3"/>
+          <!-- Flowing Dark Violet Eclipse Wing Spine Along Upper Curve -->
+          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#c084fc" stroke-width="1" stroke-linecap="round" fill="none"/>
+          <!-- Eclipse Amethyst Star Tip -->
+          <circle cx="-28" cy="-56" r="2.2" fill="#c084fc" filter="drop-shadow(0 0 6px #a855f7)"/>
+        `;
+      } else if (cfg === 'lava') {
+        return `
+          <defs>
+            <linearGradient id="lvw1${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#ffa502"/>
+              <stop offset="50%" stop-color="#ff4757"/>
+              <stop offset="100%" stop-color="#b91c1c"/>
+            </linearGradient>
+            <linearGradient id="lvw2${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#ffd000"/>
+              <stop offset="100%" stop-color="#ff6b81"/>
+            </linearGradient>
+            <linearGradient id="lvw3${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#ff4757"/>
+              <stop offset="100%" stop-color="#7f1d1d"/>
+            </linearGradient>
+            <linearGradient id="lvsp${idSuffix}" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#ffd000"/>
+              <stop offset="50%" stop-color="#ff4500"/>
+              <stop offset="100%" stop-color="#b91c1c"/>
+            </linearGradient>
+          </defs>
+          <!-- Soft Depth Shadow Silhouette -->
+          <path d="M0,4 C-8,-20 -20,-50 -32,-62 C-38,-56 -30,-32 -18,-18 C-28,-28 -38,-24 -36,-14 C-32,0 -20,6 0,4 Z" fill="#450a0a" opacity="0.8"/>
+          <!-- Tier 1: Long Primary Flight Feather (Molten Crimson Flame) -->
+          <path d="M0,0 C-6,-24 -18,-52 -30,-60 C-34,-54 -24,-32 -14,-16 C-8,-8 -3,-2 0,0 Z" fill="url(#lvw1${idSuffix})" stroke="#ff4500" stroke-width="1.3"/>
+          <!-- Tier 2: Middle Secondary Feather (Core Magma Gold) -->
+          <path d="M-8,-10 C-18,-28 -30,-36 -34,-34 C-36,-26 -26,-14 -12,-4 Z" fill="url(#lvw2${idSuffix})" stroke="#ff7b00" stroke-width="1.3"/>
+          <!-- Tier 3: Lower Base Covert Feather (Dark Obsidian Red) -->
+          <path d="M-8,-2 C-18,-14 -28,-14 -28,-8 C-26,4 -14,6 0,2 Z" fill="url(#lvw3${idSuffix})" stroke="#b91c1c" stroke-width="1.3"/>
+          <!-- Flowing Molten Wing Spine Along Upper Curve -->
+          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="url(#lvsp${idSuffix})" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#fff3bf" stroke-width="1" stroke-linecap="round" fill="none"/>
+          <!-- Magma Flame Crystal Star Tip -->
+          <circle cx="-28" cy="-56" r="2.4" fill="#ffffff" filter="drop-shadow(0 0 5px #ff4500) drop-shadow(0 0 9px #ffa502)"/>
+        `;
+      } else if (cfg === 'frost') {
+        return `
+          <defs>
+            <linearGradient id="frw1${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f0fdfa"/>
+              <stop offset="50%" stop-color="#38bdf8"/>
+              <stop offset="100%" stop-color="#0284c7"/>
+            </linearGradient>
+            <linearGradient id="frw2${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#e0f2fe"/>
+              <stop offset="100%" stop-color="#0369a1"/>
+            </linearGradient>
+            <linearGradient id="frw3${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#38bdf8"/>
+              <stop offset="100%" stop-color="#0c4a6e"/>
+            </linearGradient>
+            <linearGradient id="frsp${idSuffix}" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="50%" stop-color="#7dd3fc"/>
+              <stop offset="100%" stop-color="#0284c7"/>
+            </linearGradient>
+          </defs>
+          <!-- Soft Depth Shadow Silhouette -->
+          <path d="M0,4 C-8,-20 -20,-50 -32,-62 C-38,-56 -30,-32 -18,-18 C-28,-28 -38,-24 -36,-14 C-32,0 -20,6 0,4 Z" fill="#082f49" opacity="0.7"/>
+          <!-- Tier 1: Long Primary Flight Feather (Glacial Crystal White/Blue) -->
+          <path d="M0,0 C-6,-24 -18,-52 -30,-60 C-34,-54 -24,-32 -14,-16 C-8,-8 -3,-2 0,0 Z" fill="url(#frw1${idSuffix})" stroke="#38bdf8" stroke-width="1.3"/>
+          <!-- Tier 2: Middle Secondary Feather (Deep Arctic Blue) -->
+          <path d="M-8,-10 C-18,-28 -30,-36 -34,-34 C-36,-26 -26,-14 -12,-4 Z" fill="url(#frw2${idSuffix})" stroke="#0284c7" stroke-width="1.3"/>
+          <!-- Tier 3: Lower Base Covert Feather (Permafrost Ice Violet) -->
+          <path d="M-8,-2 C-18,-14 -28,-14 -28,-8 C-26,4 -14,6 0,2 Z" fill="url(#frw3${idSuffix})" stroke="#0369a1" stroke-width="1.3"/>
+          <!-- Flowing Frostwing Spine Along Upper Curve -->
+          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="url(#frsp${idSuffix})" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#ffffff" stroke-width="1" stroke-linecap="round" fill="none"/>
+          <!-- Glacial Ice Crystal Star Tip -->
+          <circle cx="-28" cy="-56" r="2.4" fill="#ffffff" filter="drop-shadow(0 0 5px #38bdf8) drop-shadow(0 0 9px #00d2ff)"/>
+        `;
+      } else if (cfg === 'unicorn') {
+        return `
+          <defs>
+            <linearGradient id="unw1${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fff0f5"/>
+              <stop offset="60%" stop-color="#fbcfe8"/>
+              <stop offset="100%" stop-color="#f472b6"/>
+            </linearGradient>
+            <linearGradient id="unw2${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fdf4ff"/>
+              <stop offset="100%" stop-color="#e879f9"/>
+            </linearGradient>
+            <linearGradient id="unw3${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f5d0fe"/>
+              <stop offset="100%" stop-color="#c084fc"/>
+            </linearGradient>
+            <linearGradient id="unsp${idSuffix}" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#f43f5e"/>
+              <stop offset="50%" stop-color="#e879f9"/>
+              <stop offset="100%" stop-color="#fef08a"/>
+            </linearGradient>
+          </defs>
+          <!-- Soft Depth Shadow Silhouette -->
+          <path d="M0,4 C-8,-20 -20,-50 -32,-62 C-38,-56 -30,-32 -18,-18 C-28,-28 -38,-24 -36,-14 C-32,0 -20,6 0,4 Z" fill="#701a75" opacity="0.45"/>
+          <!-- Tier 1: Long Primary Flight Feather (Dreamy Sakura Pink) -->
+          <path d="M0,0 C-6,-24 -18,-52 -30,-60 C-34,-54 -24,-32 -14,-16 C-8,-8 -3,-2 0,0 Z" fill="url(#unw1${idSuffix})" stroke="#f472b6" stroke-width="1.3"/>
+          <!-- Tier 2: Middle Secondary Feather (Lavender Mist Violet) -->
+          <path d="M-8,-10 C-18,-28 -30,-36 -34,-34 C-36,-26 -26,-14 -12,-4 Z" fill="url(#unw2${idSuffix})" stroke="#e879f9" stroke-width="1.3"/>
+          <!-- Tier 3: Lower Base Covert Feather (Pastel Fairy Lilac) -->
+          <path d="M-8,-2 C-18,-14 -28,-14 -28,-8 C-26,4 -14,6 0,2 Z" fill="url(#unw3${idSuffix})" stroke="#c084fc" stroke-width="1.3"/>
+          <!-- Flowing Starlight Wing Spine Along Upper Curve -->
+          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="url(#unsp${idSuffix})" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#ffffff" stroke-width="1" stroke-linecap="round" fill="none"/>
+          <!-- Unicorn Stardust Diamond Tip -->
+          <circle cx="-28" cy="-56" r="2.3" fill="#ffffff" filter="drop-shadow(0 0 5px #ec4899) drop-shadow(0 0 8px #f472b6)"/>
+        `;
+      } else if (cfg === 'gold') {
+        return `
+          <defs>
+            <linearGradient id="gdw1${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fffdf0"/>
+              <stop offset="50%" stop-color="#fde047"/>
+              <stop offset="100%" stop-color="#d97706"/>
+            </linearGradient>
+            <linearGradient id="gdw2${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fef9c3"/>
+              <stop offset="100%" stop-color="#eab308"/>
+            </linearGradient>
+            <linearGradient id="gdw3${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fde047"/>
+              <stop offset="100%" stop-color="#854d0e"/>
+            </linearGradient>
+            <linearGradient id="gdsp${idSuffix}" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="50%" stop-color="#fbbf24"/>
+              <stop offset="100%" stop-color="#b45309"/>
+            </linearGradient>
+          </defs>
+          <!-- Soft Depth Shadow Silhouette -->
+          <path d="M0,4 C-8,-20 -20,-50 -32,-62 C-38,-56 -30,-32 -18,-18 C-28,-28 -38,-24 -36,-14 C-32,0 -20,6 0,4 Z" fill="#713f12" opacity="0.6"/>
+          <!-- Tier 1: Long Primary Flight Feather (Imperial Shimmer Gold) -->
+          <path d="M0,0 C-6,-24 -18,-52 -30,-60 C-34,-54 -24,-32 -14,-16 C-8,-8 -3,-2 0,0 Z" fill="url(#gdw1${idSuffix})" stroke="#d97706" stroke-width="1.3"/>
+          <!-- Tier 2: Middle Secondary Feather (Radiant Sun Gold) -->
+          <path d="M-8,-10 C-18,-28 -30,-36 -34,-34 C-36,-26 -26,-14 -12,-4 Z" fill="url(#gdw2${idSuffix})" stroke="#eab308" stroke-width="1.3"/>
+          <!-- Tier 3: Lower Base Covert Feather (Deep Amber Gold) -->
+          <path d="M-8,-2 C-18,-14 -28,-14 -28,-8 C-26,4 -14,6 0,2 Z" fill="url(#gdw3${idSuffix})" stroke="#b45309" stroke-width="1.3"/>
+          <!-- Flowing Imperial Wing Spine Along Upper Curve -->
+          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="url(#gdsp${idSuffix})" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#ffffff" stroke-width="1" stroke-linecap="round" fill="none"/>
+          <!-- Pure Gold Octagram Diamond Tip -->
+          <circle cx="-28" cy="-56" r="2.4" fill="#ffffff" filter="drop-shadow(0 0 5px #ffd700) drop-shadow(0 0 9px #eab308)"/>
+        `;
+      } else if (cfg === 'species') {
+        return `
+          <defs>
+            <linearGradient id="spw1${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="50%" stop-color="${cA}"/>
+              <stop offset="100%" stop-color="${c1}"/>
+            </linearGradient>
+            <linearGradient id="spw2${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="${cA}"/>
+              <stop offset="100%" stop-color="${c1}"/>
+            </linearGradient>
+            <linearGradient id="spw3${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="${c1}"/>
+              <stop offset="100%" stop-color="${c2}"/>
+            </linearGradient>
+            <linearGradient id="spsp${idSuffix}" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="50%" stop-color="${cA}"/>
+              <stop offset="100%" stop-color="${c1}"/>
+            </linearGradient>
+          </defs>
+          <!-- Soft Depth Shadow Silhouette -->
+          <path d="M0,4 C-8,-20 -20,-50 -32,-62 C-38,-56 -30,-32 -18,-18 C-28,-28 -38,-24 -36,-14 C-32,0 -20,6 0,4 Z" fill="rgba(0,0,0,0.4)"/>
+          <!-- Tier 1: Long Primary Flight Feather -->
+          <path d="M0,0 C-6,-24 -18,-52 -30,-60 C-34,-54 -24,-32 -14,-16 C-8,-8 -3,-2 0,0 Z" fill="url(#spw1${idSuffix})" stroke="${c1}" stroke-width="1.3"/>
+          <!-- Tier 2: Middle Secondary Feather -->
+          <path d="M-8,-10 C-18,-28 -30,-36 -34,-34 C-36,-26 -26,-14 -12,-4 Z" fill="url(#spw2${idSuffix})" stroke="${c1}" stroke-width="1.3"/>
+          <!-- Tier 3: Lower Base Covert Feather -->
+          <path d="M-8,-2 C-18,-14 -28,-14 -28,-8 C-26,4 -14,6 0,2 Z" fill="url(#spw3${idSuffix})" stroke="${c2}" stroke-width="1.3"/>
+          <!-- Flowing Wing Spine Along Upper Curve -->
+          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="url(#spsp${idSuffix})" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#ffffff" stroke-width="1" stroke-linecap="round" fill="none"/>
+          <!-- Energy Star Tip -->
+          <circle cx="-28" cy="-56" r="2.2" fill="#ffffff" filter="drop-shadow(0 0 5px ${cA})"/>
+        `;
+      } else {
+        return `
+          <!-- Soft Depth Shadow Silhouette -->
+          <path d="M0,4 C-8,-20 -20,-50 -32,-62 C-38,-56 -30,-32 -18,-18 C-28,-28 -38,-24 -36,-14 C-32,0 -20,6 0,4 Z" fill="#94a3b8" opacity="0.6"/>
+          <!-- Tier 1: Long Primary Flight Feather -->
+          <path d="M0,0 C-6,-24 -18,-52 -30,-60 C-34,-54 -24,-32 -14,-16 C-8,-8 -3,-2 0,0 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
+          <!-- Tier 2: Middle Secondary Feather -->
+          <path d="M-8,-10 C-18,-28 -30,-36 -34,-34 C-36,-26 -26,-14 -12,-4 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
+          <!-- Tier 3: Lower Base Covert Feather -->
+          <path d="M-8,-2 C-18,-14 -28,-14 -28,-8 C-26,4 -14,6 0,2 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
+          <!-- Flowing Golden Wing Spine Along Upper Curve -->
+          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#fef08a" stroke-width="1" stroke-linecap="round" fill="none"/>
+          <circle cx="-28" cy="-56" r="1.8" fill="#ffffff" filter="drop-shadow(0 0 4px #ffd700)"/>
+        `;
+      }
+    };
+
+    const leftCfg = getWingConfig(true);
+    const rightCfg = getWingConfig(false);
+
+    return `
+    <g class="dino-angel-wings ${isRainbow ? 'dino-rainbow-wings' : (isFallen ? 'dino-fallen-wings' : (isChaos ? 'dino-chaos-wings' : ''))}">
+      <!-- Left Wing -->
       <g transform="translate(${leftX}, ${y}) scale(${scale})">
         <g class="angel-wing-anim-left" style="transform-origin: 0px 0px;">
-          <!-- Soft Depth Shadow Silhouette -->
-          <path d="M0,4 C-8,-20 -20,-50 -32,-62 C-38,-56 -30,-32 -18,-18 C-28,-28 -38,-24 -36,-14 C-32,0 -20,6 0,4 Z" fill="#94a3b8" opacity="0.6"/>
-          <!-- Tier 1: Long Primary Flight Feather -->
-          <path d="M0,0 C-6,-24 -18,-52 -30,-60 C-34,-54 -24,-32 -14,-16 C-8,-8 -3,-2 0,0 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
-          <!-- Tier 2: Middle Secondary Feather -->
-          <path d="M-8,-10 C-18,-28 -30,-36 -34,-34 C-36,-26 -26,-14 -12,-4 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
-          <!-- Tier 3: Lower Base Covert Feather -->
-          <path d="M-8,-2 C-18,-14 -28,-14 -28,-8 C-26,4 -14,6 0,2 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
-          <!-- Flowing Golden Wing Spine Along Upper Curve -->
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#fef08a" stroke-width="1" stroke-linecap="round" fill="none"/>
-          <circle cx="-28" cy="-56" r="1.8" fill="#ffffff" filter="drop-shadow(0 0 4px #ffd700)"/>
+          ${renderWingFeathers(leftCfg, 'L' + id)}
         </g>
       </g>
-      <!-- Right Classical Archangel Wing (Mirrored) -->
+      <!-- Right Wing (Mirrored) -->
       <g transform="translate(${rightX}, ${y}) scale(${-scale}, ${scale})">
         <g class="angel-wing-anim-right" style="transform-origin: 0px 0px;">
-          <!-- Soft Depth Shadow Silhouette -->
-          <path d="M0,4 C-8,-20 -20,-50 -32,-62 C-38,-56 -30,-32 -18,-18 C-28,-28 -38,-24 -36,-14 C-32,0 -20,6 0,4 Z" fill="#94a3b8" opacity="0.6"/>
-          <!-- Tier 1: Long Primary Flight Feather -->
-          <path d="M0,0 C-6,-24 -18,-52 -30,-60 C-34,-54 -24,-32 -14,-16 C-8,-8 -3,-2 0,0 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
-          <!-- Tier 2: Middle Secondary Feather -->
-          <path d="M-8,-10 C-18,-28 -30,-36 -34,-34 C-36,-26 -26,-14 -12,-4 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
-          <!-- Tier 3: Lower Base Covert Feather -->
-          <path d="M-8,-2 C-18,-14 -28,-14 -28,-8 C-26,4 -14,6 0,2 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
-          <!-- Flowing Golden Wing Spine Along Upper Curve -->
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#fef08a" stroke-width="1" stroke-linecap="round" fill="none"/>
-          <circle cx="-28" cy="-56" r="1.8" fill="#ffffff" filter="drop-shadow(0 0 4px #ffd700)"/>
+          ${renderWingFeathers(rightCfg, 'R' + id)}
         </g>
       </g>
-    </g>` : '';
+    </g>`;
+  };
+
+  // ⚜️ Celestial Breastplate (Angel Cross, Rainbow Prism Star, Fallen Eclipse Amethyst, Chaos Yin-Yang Orb)
+  const drawCelestialBreastplate = (cx, cy, scale = 1) => {
+    if (!isCelestial) return '';
+    if (isChaos) {
+      return `
+      <g class="chaos-breastplate" transform="translate(${cx}, ${cy}) scale(${scale})">
+        <path d="M0,-8 A8,8 0 0,0 0,8 A4,4 0 0,1 0,0 A4,4 0 0,0 0,-8 Z" fill="#ffd700" filter="drop-shadow(0 0 5px #f59e0b)"/>
+        <path d="M0,8 A8,8 0 0,0 0,-8 A4,4 0 0,1 0,0 A4,4 0 0,0 0,8 Z" fill="#7c3aed" filter="drop-shadow(0 0 5px #a855f7)"/>
+        <circle cx="0" cy="-4" r="1.5" fill="#18181b"/>
+        <circle cx="0" cy="4" r="1.5" fill="#ffffff"/>
+      </g>`;
+    } else if (isRainbow) {
+      return `
+      <g class="rainbow-breastplate" transform="translate(${cx}, ${cy}) scale(${scale})">
+        <path d="M0,-8 L2.5,-2.5 L8,0 L2.5,2.5 L0,8 L-2.5,2.5 L-8,0 L-2.5,-2.5 Z" fill="#ffffff" stroke="#f472b6" stroke-width="1" filter="drop-shadow(0 0 6px #f472b6) drop-shadow(0 0 10px #38bdf8)"/>
+        <circle cx="0" cy="0" r="2.2" fill="#fde047" stroke="#ffffff" stroke-width="0.8"/>
+      </g>`;
+    } else if (isFallen) {
+      return `
+      <g class="fallen-breastplate" transform="translate(${cx}, ${cy}) scale(${scale})">
+        <polygon points="0,-8 7,0 0,8 -7,0" fill="#2e1065" stroke="#c084fc" stroke-width="1.2" filter="drop-shadow(0 0 6px #a855f7)"/>
+        <polygon points="0,-4 3.5,0 0,4 -3.5,0" fill="#c084fc"/>
+        <circle cx="0" cy="0" r="1.5" fill="#ffffff"/>
+      </g>`;
+    } else {
+      return `
+      <g class="holy-breastplate" transform="translate(${cx}, ${cy}) scale(${scale})">
+        <path d="M0,-8 L1.5,-2 L7,0 L1.5,2 L0,8 L-1.5,2 L-7,0 L-1.5,-2 Z" fill="#ffd700" stroke="#ffffff" stroke-width="0.9" filter="drop-shadow(0 0 6px #f59e0b)"/>
+        <circle cx="0" cy="0" r="1.8" fill="#ffffff"/>
+      </g>`;
+    }
+  };
 
   // 🦄 Dreamy Rainbow Spiral Unicorn Horn (Magical Glowing Horn)
   const drawUnicornHorn = (cx, cy, height = 26, w = 8) => isUnicorn ? `
@@ -653,38 +1056,46 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     const svg = `<svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-wobble ${isGold ? 'gold-skin-aura' : ''}">
   <defs>
     <radialGradient id="eg${id}" cx="42%" cy="32%" r="70%">
-      <stop offset="0%" stop-color="${isFrostFire ? '#fff5f5' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#fff0f6' : (isLava ? '#ff9f43' : (isFrost ? '#e0f7fa' : '#fff9f0')))))}"/>
-      <stop offset="${isAngel ? '40%' : '50%'}" stop-color="${isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#ff4757' : (isFrost ? '#38bdf8' : (isUnicorn ? '#f3e8ff' : c1)))))}"/>
-      <stop offset="${isAngel ? '75%' : '85%'}" stop-color="${isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#990000' : (isFrost ? '#0284c7' : (isUnicorn ? '#d8b4fe' : c2)))))}"/>
-      ${isFrostFire ? `<stop offset="100%" stop-color="#082f49"/>` : (isAngel ? `<stop offset="100%" stop-color="#94a3b8"/>` : (isLava ? `<stop offset="100%" stop-color="#590000"/>` : (isFrost ? `<stop offset="100%" stop-color="#082f49"/>` : (isGold ? `<stop offset="100%" stop-color="#b45309"/>` : ''))))}
+      <stop offset="0%" stop-color="${isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#fff5f5' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#fff0f6' : (isLava ? '#ff9f43' : (isFrost ? '#e0f7fa' : '#fff9f0'))))))))}"/>
+      <stop offset="${isAngel ? '40%' : '50%'}" stop-color="${isChaos ? '#e2e8f0' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#ff4757' : (isFrost ? '#38bdf8' : (isUnicorn ? '#f3e8ff' : c1))))))))}"/>
+      <stop offset="${isAngel ? '75%' : '85%'}" stop-color="${isChaos ? '#3b0764' : (isRainbow ? '#c7d2fe' : (isFallen ? '#2e1065' : (isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#990000' : (isFrost ? '#0284c7' : (isUnicorn ? '#d8b4fe' : c2))))))))}"/>
+      ${isChaos ? `<stop offset="100%" stop-color="#09090b"/>` : (isRainbow ? `<stop offset="100%" stop-color="#fbcfe8"/>` : (isFallen ? `<stop offset="100%" stop-color="#09090b"/>` : (isFrostFire ? `<stop offset="100%" stop-color="#082f49"/>` : (isAngel ? `<stop offset="100%" stop-color="#94a3b8"/>` : (isLava ? `<stop offset="100%" stop-color="#590000"/>` : (isFrost ? `<stop offset="100%" stop-color="#082f49"/>` : (isGold ? `<stop offset="100%" stop-color="#b45309"/>` : '')))))))}
     </radialGradient>
   </defs>
   <ellipse cx="50" cy="98" rx="24" ry="5" fill="rgba(0,0,0,0.2)"/>
   ${drawAngelWings(28, 72, 66, 0.45)}
-  <ellipse cx="50" cy="58" rx="30" ry="38" fill="url(#eg${id})" stroke="${isAngel ? '#cbd5e1' : 'none'}" stroke-width="1.2"/>
+  <ellipse cx="50" cy="58" rx="30" ry="38" fill="url(#eg${id})" stroke="${isAngel ? '#cbd5e1' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isChaos ? '#a855f7' : 'none')))}" stroke-width="1.2"/>
   ${drawUnicornHorn(50, 24, 18, 6)}
   <!-- Front Crack -->
-  ${isFrostFire ? `
+  ${isChaos ? `
+    <polyline points="38,36 44,44 38,52 46,56" stroke="#fbbf24" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 4px #ffd700)"/>
+    <polyline points="54,34 58,42 62,48 54,58" stroke="#c084fc" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 4px #7c3aed)"/>
+  ` : (isRainbow ? `
+    <polyline points="38,36 44,44 38,52 50,56 46,64" stroke="#f472b6" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 5px #f472b6)"/>
+    <polyline points="38,36 44,44 38,52 50,56 46,64" stroke="#38bdf8" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+  ` : (isFallen ? `
+    <polyline points="38,36 44,44 38,52 50,56 46,64" stroke="#c084fc" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 5px #7c3aed)"/>
+    <polyline points="38,36 44,44 38,52 50,56 46,64" stroke="#a855f7" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
+  ` : (isFrostFire ? `
     <polyline points="38,36 44,44 38,52 46,56" stroke="#ff4500" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 4px #ff3300)"/>
     <polyline points="54,34 58,42 62,48 54,58" stroke="#00d2ff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 4px #00b4d8)"/>
   ` : `
     <polyline class="egg-crack-line" points="38,36 44,44 38,52 50,56 46,64" stroke="${isLava ? '#ff4500' : (isFrost ? '#00d2ff' : (isAngel ? '#f59e0b' : (isUnicorn ? '#f472b6' : '#f59e0b')))}" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    ${isLava ? `<polyline points="38,36 44,44 38,52 50,56 46,64" stroke="#ff9900" stroke-width="1" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>` : (isFrost ? `<polyline points="38,36 44,44 38,52 50,56 46,64" stroke="#a8f0ff" stroke-width="1" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>` : (isAngel ? `<polyline points="38,36 44,44 38,52 50,56 46,64" stroke="#ffd700" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>` : (isUnicorn ? `<polyline points="38,36 44,44 38,52 50,56 46,64" stroke="#38bdf8" stroke-width="1" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>` : '')))}
-  `}
+  `)))}
   <!-- Symmetrical Peeking Eyes -->
   <g class="dino-part-eye">
     <ellipse cx="38" cy="48" rx="4.5" ry="5" fill="white"/>
-    <ellipse cx="38" cy="48" rx="3" ry="3.5" fill="${isFrostFire ? '#ff3d00' : '#1a1a2e'}"/>
+    <ellipse cx="38" cy="48" rx="3" ry="3.5" fill="${isFrostFire ? '#ff3d00' : (isChaos ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#9333ea' : '#1a1a2e')))}"/>
     <circle cx="39.2" cy="46.8" r="1" fill="white"/>
 
     <ellipse cx="62" cy="48" rx="4.5" ry="5" fill="white"/>
-    <ellipse cx="62" cy="48" rx="3" ry="3.5" fill="${isFrostFire ? '#00d2ff' : '#1a1a2e'}"/>
+    <ellipse cx="62" cy="48" rx="3" ry="3.5" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#9333ea' : (isRainbow ? '#38bdf8' : (isFallen ? '#9333ea' : '#1a1a2e')))}"/>
     <circle cx="63.2" cy="46.8" r="1" fill="white"/>
   </g>
   ${drawAngelHalo(50, 10, 16, 4.5)}
   ${drawSunglasses(50, 48, 36, 10)}
   ${drawGradCap(50, 32)}
-  <text x="50" y="106" font-size="8" text-anchor="middle" fill="${isFrostFire ? '#ff4757' : (isAngel ? '#d97706' : c1)}" font-weight="bold">30分破壳!</text>
+  <text x="50" y="106" font-size="8" text-anchor="middle" fill="${isFrostFire ? '#ff4757' : (isChaos ? '#8b5cf6' : (isRainbow ? '#db2777' : (isFallen ? '#9333ea' : (isAngel ? '#d97706' : c1))))}" font-weight="bold">30分破壳!</text>
 </svg>`;
     return effectsHtml + svg;
   }
@@ -694,10 +1105,10 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     const svg = `<svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-bounce ${isGold ? 'gold-skin-aura' : ''}">
   <defs>
     <radialGradient id="bk${id}" cx="42%" cy="26%" r="74%">
-      <stop offset="0%" stop-color="${isFrostFire ? '#ff793f' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#fff0f6' : (isLava ? '#ff9f43' : (isFrost ? '#e0f7fa' : c1)))))}"/>
-      <stop offset="${isAngel ? '40%' : '50%'}" stop-color="${isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#ff4757' : (isFrost ? '#38bdf8' : (isUnicorn ? '#f3e8ff' : c1)))))}"/>
-      <stop offset="${isAngel ? '75%' : '85%'}" stop-color="${isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#990000' : (isFrost ? '#0284c7' : (isUnicorn ? '#d8b4fe' : c2)))))}"/>
-      ${isFrostFire ? `<stop offset="100%" stop-color="#082f49"/>` : (isAngel ? `<stop offset="100%" stop-color="#94a3b8"/>` : (isLava ? `<stop offset="100%" stop-color="#590000"/>` : (isFrost ? `<stop offset="100%" stop-color="#082f49"/>` : (isGold ? `<stop offset="100%" stop-color="#b45309"/>` : ''))))}
+      <stop offset="0%" stop-color="${isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#ff793f' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#fff0f6' : (isLava ? '#ff9f43' : (isFrost ? '#e0f7fa' : c1))))))))}"/>
+      <stop offset="${isAngel ? '40%' : '50%'}" stop-color="${isChaos ? '#f1f5f9' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#ff4757' : (isFrost ? '#38bdf8' : (isUnicorn ? '#f3e8ff' : c1))))))))}"/>
+      <stop offset="${isAngel ? '75%' : '85%'}" stop-color="${isChaos ? '#3b0764' : (isRainbow ? '#c7d2fe' : (isFallen ? '#2e1065' : (isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#990000' : (isFrost ? '#0284c7' : (isUnicorn ? '#d8b4fe' : c2))))))))}"/>
+      ${isChaos ? `<stop offset="100%" stop-color="#09090b"/>` : (isRainbow ? `<stop offset="100%" stop-color="#fbcfe8"/>` : (isFallen ? `<stop offset="100%" stop-color="#09090b"/>` : (isFrostFire ? `<stop offset="100%" stop-color="#082f49"/>` : (isAngel ? `<stop offset="100%" stop-color="#94a3b8"/>` : (isLava ? `<stop offset="100%" stop-color="#590000"/>` : (isFrost ? `<stop offset="100%" stop-color="#082f49"/>` : (isGold ? `<stop offset="100%" stop-color="#b45309"/>` : '')))))))}
     </radialGradient>
   </defs>
   <ellipse cx="50" cy="100" rx="26" ry="5" fill="rgba(0,0,0,0.2)"/>
@@ -707,20 +1118,16 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   </g>
   ${drawAngelWings(28, 72, 68, 0.55)}
   <!-- Symmetrical Body -->
-  <ellipse cx="50" cy="74" rx="26" ry="22" fill="url(#bk${id})" stroke="${isAngel ? '#94a3b8' : 'none'}" stroke-width="1"/>
-  <ellipse cx="50" cy="78" rx="16" ry="14" fill="${isFrostFire ? 'rgba(254,240,138,0.5)' : (isAngel ? 'rgba(254,240,138,0.85)' : (isUnicorn ? 'rgba(254,249,195,0.5)' : (isGold ? 'rgba(255,251,235,0.7)' : 'rgba(255,255,255,0.4)')))}" stroke="${isAngel ? '#f59e0b' : 'none'}" stroke-width="${isAngel ? '1.2' : '0'}"/>
+  <ellipse cx="50" cy="74" rx="26" ry="22" fill="url(#bk${id})" stroke="${isAngel ? '#94a3b8' : (isRainbow ? '#818cf8' : (isFallen ? '#7c3aed' : (isChaos ? '#8b5cf6' : 'none')))}" stroke-width="1"/>
+  <ellipse cx="50" cy="78" rx="16" ry="14" fill="${isFrostFire ? 'rgba(254,240,138,0.5)' : (isChaos ? 'rgba(88,28,135,0.45)' : (isRainbow ? 'rgba(253,244,255,0.85)' : (isFallen ? 'rgba(46,16,101,0.65)' : (isAngel ? 'rgba(254,240,138,0.85)' : (isUnicorn ? 'rgba(254,249,195,0.5)' : (isGold ? 'rgba(255,251,235,0.7)' : 'rgba(255,255,255,0.4)'))))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isChaos ? '#ffd700' : 'none')))}" stroke-width="${isCelestial ? '1.2' : '0'}"/>
   <!-- Symmetrical Arms & Legs -->
-  <ellipse cx="28" cy="74" rx="6" ry="5" fill="${isFrostFire ? '#ff4757' : (isAngel ? '#fef08a' : c2)}" stroke="${isAngel ? '#f59e0b' : 'none'}" stroke-width="${isAngel ? '0.8' : '0'}"/>
-  <ellipse cx="72" cy="74" rx="6" ry="5" fill="${isFrostFire ? '#00d2ff' : (isAngel ? '#fef08a' : c2)}" stroke="${isAngel ? '#f59e0b' : 'none'}" stroke-width="${isAngel ? '0.8' : '0'}"/>
-  <ellipse cx="38" cy="94" rx="8" ry="6" fill="${isFrostFire ? '#ff3300' : c2}"/>
-  <ellipse cx="62" cy="94" rx="8" ry="6" fill="${isFrostFire ? '#0284c7' : c2}"/>
-  <!-- Holy Angel Chest Cross Star -->
-  ${isAngel ? `
-    <g class="holy-breastplate">
-      <path d="M50,72 L51.5,75.5 L55,77 L51.5,78.5 L50,82 L48.5,78.5 L45,77 L48.5,75.5 Z" fill="#ffd700" stroke="#ffffff" stroke-width="0.8" filter="drop-shadow(0 0 5px #f59e0b)"/>
-      <circle cx="50" cy="77" r="1.5" fill="#ffffff"/>
-    </g>` : ''}
-  <!-- Flowing Veins for Lava / Frost / FrostFire / Unicorn Skin -->
+  <ellipse cx="28" cy="74" rx="6" ry="5" fill="${isFrostFire ? '#ff4757' : (isChaos ? '#fef08a' : (isRainbow ? '#fce7f3' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : c2))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#a855f7' : (isChaos ? '#f59e0b' : 'none')))}" stroke-width="${isCelestial ? '0.8' : '0'}"/>
+  <ellipse cx="72" cy="74" rx="6" ry="5" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#3b0764' : (isRainbow ? '#e0f2fe' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : c2))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isChaos ? '#c084fc' : 'none')))}" stroke-width="${isCelestial ? '0.8' : '0'}"/>
+  <ellipse cx="38" cy="94" rx="8" ry="6" fill="${isFrostFire ? '#ff3300' : (isChaos ? '#fbbf24' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : c2)))}"/>
+  <ellipse cx="62" cy="94" rx="8" ry="6" fill="${isFrostFire ? '#0284c7' : (isChaos ? '#18181b' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : c2)))}"/>
+  <!-- Celestial Breastplate -->
+  ${drawCelestialBreastplate(50, 77, 0.85)}
+  <!-- Flowing Veins for Lava / Frost / FrostFire / Unicorn / Celestial -->
   ${isFrostFire ? `
     <g class="frostfire-flowing-vein" fill="none" stroke-width="2" stroke-linecap="round">
       <path d="M34,68 Q42,74 48,70 M38,78 Q44,84 48,80" stroke="#ff4500"/>
@@ -739,34 +1146,50 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     <g class="rainbow-flowing-vein" fill="none" stroke-width="2" stroke-linecap="round">
       <path d="M34,68 Q50,76 66,68 M38,78 Q50,86 62,78" />
       <path d="M30,36 Q50,28 70,36" />
-    </g>` : '')))}
+    </g>` : (isRainbow ? `
+    <g class="rainbow-flowing-vein" fill="none" stroke-width="2" stroke-linecap="round">
+      <path d="M34,68 Q50,76 66,68" stroke="#f472b6" opacity="0.85"/>
+      <path d="M38,78 Q50,86 62,78" stroke="#38bdf8" opacity="0.85"/>
+      <path d="M30,36 Q50,28 70,36" stroke="#fbbf24" opacity="0.85"/>
+    </g>` : (isFallen ? `
+    <g class="fallen-flowing-vein" fill="none" stroke-width="2" stroke-linecap="round">
+      <path d="M34,68 Q50,76 66,68" stroke="#7c3aed" opacity="0.9"/>
+      <path d="M38,78 Q50,86 62,78" stroke="#c084fc" opacity="0.9"/>
+      <path d="M30,36 Q50,28 70,36" stroke="#a855f7" opacity="0.9"/>
+    </g>` : (isChaos ? `
+    <g class="chaos-flowing-vein" fill="none" stroke-width="2" stroke-linecap="round">
+      <path d="M34,68 Q42,74 48,70 M38,78 Q44,84 48,80" stroke="#fbbf24" opacity="0.9"/>
+      <path d="M30,36 Q40,30 48,34" stroke="#ffd700" opacity="0.9"/>
+      <path d="M66,68 Q58,74 52,70 M62,78 Q56,84 52,80" stroke="#a855f7" opacity="0.9"/>
+      <path d="M70,36 Q60,30 52,34" stroke="#c084fc" opacity="0.9"/>
+    </g>` : ''))))))}
   <!-- Head Cast Shadow on Body -->
-  ${isAngel ? `<ellipse cx="50" cy="62" rx="16" ry="3.5" fill="rgba(15,23,42,0.2)"/>` : ''}
+  ${isCelestial ? `<ellipse cx="50" cy="62" rx="16" ry="3.5" fill="rgba(15,23,42,0.2)"/>` : ''}
   <!-- Big Front Head -->
-  <ellipse cx="50" cy="42" rx="28" ry="26" fill="url(#bk${id})" stroke="${isAngel ? '#cbd5e1' : 'none'}" stroke-width="1.2"/>
+  <ellipse cx="50" cy="42" rx="28" ry="26" fill="url(#bk${id})" stroke="${isAngel ? '#cbd5e1' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isChaos ? '#a855f7' : 'none')))}" stroke-width="1.2"/>
   ${drawUnicornHorn(50, 18, 20, 6.5)}
   <!-- Soft Blushing Cheeks -->
-  <ellipse cx="28" cy="44" rx="5" ry="3.5" fill="${isFrostFire ? 'rgba(255,80,60,0.45)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : 'rgba(255,100,100,0.3)')))}"/>
-  <ellipse cx="72" cy="44" rx="5" ry="3.5" fill="${isFrostFire ? 'rgba(56,189,248,0.45)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : 'rgba(255,100,100,0.3)')))}"/>
-  <!-- Symmetrical Front Eyes (Heterochromia on FrostFire) -->
+  <ellipse cx="28" cy="44" rx="5" ry="3.5" fill="${isFrostFire ? 'rgba(255,80,60,0.45)' : (isChaos ? 'rgba(251,191,36,0.35)' : (isRainbow ? 'rgba(244,114,182,0.45)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : 'rgba(255,100,100,0.3)'))))))}"/>
+  <ellipse cx="72" cy="44" rx="5" ry="3.5" fill="${isFrostFire ? 'rgba(56,189,248,0.45)' : (isChaos ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(56,189,248,0.4)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : 'rgba(255,100,100,0.3)'))))))}"/>
+  <!-- Symmetrical Front Eyes (Heterochromia on FrostFire, Chaos, Rainbow) -->
   <g class="dino-part-eye">
     <ellipse cx="36" cy="38" rx="8" ry="9" fill="white"/>
-    <ellipse cx="36" cy="38" rx="5.5" ry="6.5" fill="${isFrostFire ? '#ff4500' : '#1a1a2e'}"/>
+    <ellipse cx="36" cy="38" rx="5.5" ry="6.5" fill="${isFrostFire ? '#ff4500' : (isChaos ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#9333ea' : '#1a1a2e')))}"/>
     <circle cx="38" cy="35.5" r="2" fill="white"/>
     <circle cx="34.5" cy="40" r="1" fill="rgba(255,255,255,0.4)"/>
 
     <ellipse cx="64" cy="38" rx="8" ry="9" fill="white"/>
-    <ellipse cx="64" cy="38" rx="5.5" ry="6.5" fill="${isFrostFire ? '#00d2ff' : '#1a1a2e'}"/>
+    <ellipse cx="64" cy="38" rx="5.5" ry="6.5" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#9333ea' : (isRainbow ? '#38bdf8' : (isFallen ? '#9333ea' : '#1a1a2e')))}"/>
     <circle cx="66" cy="35.5" r="2" fill="white"/>
     <circle cx="62.5" cy="40" r="1" fill="rgba(255,255,255,0.4)"/>
   </g>
   <!-- Subtle Mini Dragon Nostrils -->
-  <ellipse cx="48" cy="46" rx="1" ry="1.2" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.22)')}"/>
-  <ellipse cx="52" cy="46" rx="1" ry="1.2" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.22)')}"/>
+  <ellipse cx="48" cy="46" rx="1" ry="1.2" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.22)')))}"/>
+  <ellipse cx="52" cy="46" rx="1" ry="1.2" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.22)')))}"/>
   ${drawAngelHalo(50, 6, 17, 5)}
   ${drawSunglasses(50, 38, 42, 14)}
   ${drawGradCap(50, 24)}
-  <!-- Front Smile (NO FANGS on Angel) -->
+  <!-- Front Smile (NO FANGS on Angel & Rainbow) -->
   ${isFrostFire ? `
     <path d="M43,51 Q50,54 57,51" stroke="#fbbf24" stroke-width="2.2" fill="none" stroke-linecap="round"/>
     <polygon points="45,51 47,56 49,51" fill="#ffffff" stroke="#ff4500" stroke-width="0.7"/>
@@ -779,13 +1202,23 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     <path d="M43,51 Q50,54 57,51" stroke="#00d2ff" stroke-width="2.2" fill="none" stroke-linecap="round"/>
     <polygon points="45,51 47,56 49,51" fill="#ffffff" stroke="#00d2ff" stroke-width="0.7"/>
     <polygon points="51,51 53,56 55,51" fill="#ffffff" stroke="#00d2ff" stroke-width="0.7"/>
+  ` : (isRainbow ? `
+    <path d="M44,51 Q50,55.5 56,51" stroke="#ec4899" stroke-width="2" fill="none" stroke-linecap="round"/>
+  ` : (isFallen ? `
+    <path d="M44,51 Q50,54 56,51" stroke="#9333ea" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <polygon points="46,51 47.5,55 49,51" fill="#ffffff" stroke="#7c3aed" stroke-width="0.6"/>
+    <polygon points="51,51 52.5,55 54,51" fill="#ffffff" stroke="#7c3aed" stroke-width="0.6"/>
+  ` : (isChaos ? `
+    <path d="M44,51 Q50,54.5 56,51" stroke="#8b5cf6" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <polygon points="46,51 47.5,55 49,51" fill="#ffffff" stroke="#f59e0b" stroke-width="0.6"/>
+    <polygon points="51,51 52.5,55 54,51" fill="#ffffff" stroke="#7c3aed" stroke-width="0.6"/>
   ` : (isAngel ? `
     <path d="M44,51 Q50,55.5 56,51" stroke="#d97706" stroke-width="2" fill="none" stroke-linecap="round"/>
   ` : (isUnicorn ? `
     <path d="M44,51 Q50,55.5 56,51" stroke="#c084fc" stroke-width="2" fill="none" stroke-linecap="round"/>
   ` : `
     <path d="M44,51 Q50,56 56,51" stroke="rgba(0,0,0,0.45)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-  `))))}
+  `)))))))}
 </svg>`;
     return effectsHtml + svg;
   }
@@ -795,10 +1228,10 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     const svg = `<svg viewBox="0 0 110 120" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-float ${isGold ? 'gold-skin-aura' : ''}">
   <defs>
     <radialGradient id="tk${id}" cx="42%" cy="26%" r="75%">
-      <stop offset="0%" stop-color="${isFrostFire ? '#ff793f' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#fff0f6' : (isLava ? '#ff9f43' : (isFrost ? '#e0f7fa' : c1)))))}"/>
-      <stop offset="${isAngel ? '40%' : '50%'}" stop-color="${isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#ff4757' : (isFrost ? '#38bdf8' : (isUnicorn ? '#f3e8ff' : c1)))))}"/>
-      <stop offset="${isAngel ? '75%' : '85%'}" stop-color="${isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#990000' : (isFrost ? '#0284c7' : (isUnicorn ? '#d8b4fe' : c2)))))}"/>
-      ${isFrostFire ? `<stop offset="100%" stop-color="#082f49"/>` : (isAngel ? `<stop offset="100%" stop-color="#94a3b8"/>` : (isLava ? `<stop offset="100%" stop-color="#590000"/>` : (isFrost ? `<stop offset="100%" stop-color="#082f49"/>` : (isGold ? `<stop offset="100%" stop-color="#b45309"/>` : ''))))}
+      <stop offset="0%" stop-color="${isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#ff793f' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#fff0f6' : (isLava ? '#ff9f43' : (isFrost ? '#e0f7fa' : c1))))))))}"/>
+      <stop offset="${isAngel ? '40%' : '50%'}" stop-color="${isChaos ? '#f1f5f9' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#ff4757' : (isFrost ? '#38bdf8' : (isUnicorn ? '#f3e8ff' : c1))))))))}"/>
+      <stop offset="${isAngel ? '75%' : '85%'}" stop-color="${isChaos ? '#3b0764' : (isRainbow ? '#c7d2fe' : (isFallen ? '#2e1065' : (isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#990000' : (isFrost ? '#0284c7' : (isUnicorn ? '#d8b4fe' : c2))))))))}"/>
+      ${isChaos ? `<stop offset="100%" stop-color="#09090b"/>` : (isRainbow ? `<stop offset="100%" stop-color="#fbcfe8"/>` : (isFallen ? `<stop offset="100%" stop-color="#09090b"/>` : (isFrostFire ? `<stop offset="100%" stop-color="#082f49"/>` : (isAngel ? `<stop offset="100%" stop-color="#94a3b8"/>` : (isLava ? `<stop offset="100%" stop-color="#590000"/>` : (isFrost ? `<stop offset="100%" stop-color="#082f49"/>` : (isGold ? `<stop offset="100%" stop-color="#b45309"/>` : '')))))))}
     </radialGradient>
   </defs>
   <ellipse cx="55" cy="110" rx="32" ry="6" fill="rgba(0,0,0,0.22)"/>
@@ -808,27 +1241,23 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   </g>
   ${drawAngelWings(32, 78, 72, 0.8)}
   <!-- Spiked Shoulder Armor & Lean Taller Body -->
-  <ellipse cx="55" cy="80" rx="28" ry="24" fill="url(#tk${id})" stroke="${isAngel ? '#94a3b8' : 'none'}" stroke-width="1.2"/>
-  <ellipse cx="55" cy="84" rx="17" ry="16" fill="${isFrostFire ? 'rgba(254,240,138,0.5)' : (isAngel ? 'rgba(254,240,138,0.85)' : (isUnicorn ? 'rgba(254,249,195,0.45)' : (isGold ? 'rgba(255,251,235,0.7)' : 'rgba(255,255,255,0.35)')))}" stroke="${isAngel ? '#f59e0b' : 'none'}" stroke-width="${isAngel ? '1.2' : '0'}"/>
-  <!-- Shoulder Spikes (Hidden on Angel to avoid piercing wings) -->
-  ${!isAngel ? `
+  <ellipse cx="55" cy="80" rx="28" ry="24" fill="url(#tk${id})" stroke="${isAngel ? '#94a3b8' : (isRainbow ? '#818cf8' : (isFallen ? '#7c3aed' : (isChaos ? '#8b5cf6' : 'none')))}" stroke-width="1.2"/>
+  <ellipse cx="55" cy="84" rx="17" ry="16" fill="${isFrostFire ? 'rgba(254,240,138,0.5)' : (isChaos ? 'rgba(88,28,135,0.45)' : (isRainbow ? 'rgba(253,244,255,0.85)' : (isFallen ? 'rgba(46,16,101,0.65)' : (isAngel ? 'rgba(254,240,138,0.85)' : (isUnicorn ? 'rgba(254,249,195,0.45)' : (isGold ? 'rgba(255,251,235,0.7)' : 'rgba(255,255,255,0.35)'))))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isChaos ? '#ffd700' : 'none')))}" stroke-width="${isCelestial ? '1.2' : '0'}"/>
+  <!-- Shoulder Spikes (Hidden on all Celestial to avoid piercing wings) -->
+  ${!isCelestial ? `
   <polygon points="22,70 12,60 25,64" fill="${isFrostFire ? '#ff4757' : c2}"/>
   <polygon points="88,70 98,60 85,64" fill="${isFrostFire ? '#00d2ff' : c2}"/>
   ` : ''}
   <!-- Arms & Legs -->
   <g class="dino-part-arm">
-    <ellipse cx="30" cy="78" rx="8" ry="5" fill="${isFrostFire ? '#ff4757' : (isAngel ? '#fef08a' : c1)}" stroke="${isAngel ? '#f59e0b' : 'none'}" stroke-width="${isAngel ? '0.8' : '0'}"/>
-    <ellipse cx="80" cy="78" rx="8" ry="5" fill="${isFrostFire ? '#00d2ff' : (isAngel ? '#fef08a' : c1)}" stroke="${isAngel ? '#f59e0b' : 'none'}" stroke-width="${isAngel ? '0.8' : '0'}"/>
+    <ellipse cx="30" cy="78" rx="8" ry="5" fill="${isFrostFire ? '#ff4757' : (isChaos ? '#fef08a' : (isRainbow ? '#fce7f3' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : c1))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#a855f7' : (isChaos ? '#f59e0b' : 'none')))}" stroke-width="${isCelestial ? '0.8' : '0'}"/>
+    <ellipse cx="80" cy="78" rx="8" ry="5" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#3b0764' : (isRainbow ? '#e0f2fe' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : c1))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isChaos ? '#c084fc' : 'none')))}" stroke-width="${isCelestial ? '0.8' : '0'}"/>
   </g>
-  <ellipse cx="42" cy="100" rx="9" ry="7" fill="${isFrostFire ? '#ff3300' : c2}"/>
-  <ellipse cx="68" cy="100" rx="9" ry="7" fill="${isFrostFire ? '#0284c7' : c2}"/>
-  <!-- Holy Angel Chest Cross Star -->
-  ${isAngel ? `
-    <g class="holy-breastplate">
-      <path d="M55,79 L56.5,83 L61,84.5 L56.5,86 L55,90 L53.5,86 L49,84.5 L53.5,83 Z" fill="#ffd700" stroke="#ffffff" stroke-width="0.9" filter="drop-shadow(0 0 6px #f59e0b)"/>
-      <circle cx="55" cy="84.5" r="1.8" fill="#ffffff"/>
-    </g>` : ''}
-  <!-- Flowing Veins for Lava / Frost / FrostFire / Unicorn Skin -->
+  <ellipse cx="42" cy="100" rx="9" ry="7" fill="${isFrostFire ? '#ff3300' : (isChaos ? '#fbbf24' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : c2)))}"/>
+  <ellipse cx="68" cy="100" rx="9" ry="7" fill="${isFrostFire ? '#0284c7' : (isChaos ? '#18181b' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : c2)))}"/>
+  <!-- Celestial Breastplate -->
+  ${drawCelestialBreastplate(55, 84.5, 1)}
+  <!-- Flowing Veins for Lava / Frost / FrostFire / Unicorn / Celestial -->
   ${isFrostFire ? `
     <g class="frostfire-flowing-vein" fill="none" stroke-width="2.2" stroke-linecap="round">
       <path d="M42,68 Q48,74 52,70 M46,82 Q50,88 52,84" stroke="#ff4500"/>
@@ -852,37 +1281,56 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
       <path d="M42,68 Q55,78 68,68 M46,82 Q55,92 64,82" />
       <path d="M38,26 Q55,18 72,26" />
       <path d="M34,80 Q25,88 38,92 M76,80 Q85,88 72,92" />
-    </g>` : '')))}
+    </g>` : (isRainbow ? `
+    <g class="rainbow-flowing-vein" fill="none" stroke-width="2.2" stroke-linecap="round">
+      <path d="M42,68 Q55,78 68,68 M46,82 Q55,92 64,82" stroke="#f472b6" opacity="0.85"/>
+      <path d="M38,26 Q55,18 72,26" stroke="#38bdf8" opacity="0.85"/>
+      <path d="M34,80 Q25,88 38,92 M76,80 Q85,88 72,92" stroke="#fbbf24" opacity="0.85"/>
+    </g>` : (isFallen ? `
+    <g class="fallen-flowing-vein" fill="none" stroke-width="2.2" stroke-linecap="round">
+      <path d="M42,68 Q55,78 68,68 M46,82 Q55,92 64,82" stroke="#7c3aed" opacity="0.9"/>
+      <path d="M38,26 Q55,18 72,26" stroke="#c084fc" opacity="0.9"/>
+      <path d="M34,80 Q25,88 38,92 M76,80 Q85,88 72,92" stroke="#a855f7" opacity="0.9"/>
+    </g>` : (isChaos ? `
+    <g class="chaos-flowing-vein" fill="none" stroke-width="2.2" stroke-linecap="round">
+      <path d="M42,68 Q48,74 52,70 M46,82 Q50,88 52,84" stroke="#fbbf24" opacity="0.9"/>
+      <path d="M38,26 Q46,20 52,24" stroke="#ffd700" opacity="0.9"/>
+      <path d="M34,80 Q25,88 38,92" stroke="#fbbf24" opacity="0.9"/>
+      <path d="M68,68 Q62,74 58,70 M64,82 Q60,88 58,84" stroke="#a855f7" opacity="0.9"/>
+      <path d="M72,26 Q64,20 58,24" stroke="#c084fc" opacity="0.9"/>
+      <path d="M76,80 Q85,88 72,92" stroke="#a855f7" opacity="0.9"/>
+    </g>` : ''))))))}
   <!-- Head Cast Shadow on Body -->
+  ${isCelestial ? `<ellipse cx="55" cy="62" rx="18" ry="4" fill="rgba(15,23,42,0.2)"/>` : ''}
   <!-- Cool Taller Head -->
-  <ellipse cx="55" cy="38" rx="30" ry="28" fill="url(#tk${id})" stroke="${isAngel ? '#cbd5e1' : 'none'}" stroke-width="1.2"/>
+  <ellipse cx="55" cy="38" rx="30" ry="28" fill="url(#tk${id})" stroke="${isAngel ? '#cbd5e1' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isChaos ? '#a855f7' : 'none')))}" stroke-width="1.2"/>
   <!-- Spikes Symmetrical (Center spike hidden on Unicorn to never obstruct horn) -->
-  ${!isUnicorn ? `<path d="M55,10 L50,0 L60,0 Z" fill="${isFrostFire ? '#ffd700' : (isAngel ? '#f59e0b' : cA)}"/>` : ''}
-  <path d="M42,14 L36,4 L46,10 Z" fill="${isFrostFire ? '#ff4500' : (isAngel ? '#f59e0b' : cA)}"/>
-  <path d="M68,14 L74,4 L64,10 Z" fill="${isFrostFire ? '#00d2ff' : (isAngel ? '#f59e0b' : cA)}"/>
+  ${!isUnicorn ? `<path d="M55,10 L50,0 L60,0 Z" fill="${isFrostFire ? '#ffd700' : (isChaos ? '#fbbf24' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isAngel ? '#f59e0b' : cA))))}"/>` : ''}
+  <path d="M42,14 L36,4 L46,10 Z" fill="${isFrostFire ? '#ff4500' : (isChaos ? '#ffd700' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isAngel ? '#f59e0b' : cA))))}"/>
+  <path d="M68,14 L74,4 L64,10 Z" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#a855f7' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isAngel ? '#f59e0b' : cA))))}"/>
   ${drawUnicornHorn(55, 12, 24, 7)}
   <!-- Soft Blushing Cheeks -->
-  <ellipse cx="32" cy="42" rx="6" ry="4" fill="${isFrostFire ? 'rgba(255,80,60,0.4)' : (isAngel ? 'rgba(251,191,36,0.3)' : (isUnicorn ? 'rgba(244,114,182,0.4)' : (isGold ? 'rgba(251,146,60,0.25)' : 'rgba(255,100,100,0.25)')))}"/>
-  <ellipse cx="78" cy="42" rx="6" ry="4" fill="${isFrostFire ? 'rgba(56,189,248,0.4)' : (isAngel ? 'rgba(251,191,36,0.3)' : (isUnicorn ? 'rgba(244,114,182,0.4)' : (isGold ? 'rgba(251,146,60,0.25)' : 'rgba(255,100,100,0.25)')))}"/>
-  <!-- Eyes Front (Heterochromia on FrostFire) -->
+  <ellipse cx="32" cy="42" rx="6" ry="4" fill="${isFrostFire ? 'rgba(255,80,60,0.4)' : (isChaos ? 'rgba(251,191,36,0.3)' : (isRainbow ? 'rgba(244,114,182,0.4)' : (isFallen ? 'rgba(168,85,247,0.3)' : (isAngel ? 'rgba(251,191,36,0.3)' : (isUnicorn ? 'rgba(244,114,182,0.4)' : (isGold ? 'rgba(251,146,60,0.25)' : 'rgba(255,100,100,0.25)'))))))}"/>
+  <ellipse cx="78" cy="42" rx="6" ry="4" fill="${isFrostFire ? 'rgba(56,189,248,0.4)' : (isChaos ? 'rgba(168,85,247,0.3)' : (isRainbow ? 'rgba(56,189,248,0.4)' : (isFallen ? 'rgba(168,85,247,0.3)' : (isAngel ? 'rgba(251,191,36,0.3)' : (isUnicorn ? 'rgba(244,114,182,0.4)' : (isGold ? 'rgba(251,146,60,0.25)' : 'rgba(255,100,100,0.25)'))))))}"/>
+  <!-- Eyes Front (Heterochromia on FrostFire, Chaos, Rainbow) -->
   <g class="dino-part-eye">
     <ellipse cx="41" cy="34" rx="9.5" ry="10" fill="white"/>
-    <ellipse cx="41" cy="34" rx="7" ry="7.5" fill="${isFrostFire ? '#ff4500' : '#1a1a2e'}"/>
+    <ellipse cx="41" cy="34" rx="7" ry="7.5" fill="${isFrostFire ? '#ff4500' : (isChaos ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#9333ea' : '#1a1a2e')))}"/>
     <circle cx="43.5" cy="31.5" r="2.2" fill="white"/>
     <circle cx="39.5" cy="36" r="1.1" fill="rgba(255,255,255,0.4)"/>
 
     <ellipse cx="69" cy="34" rx="9.5" ry="10" fill="white"/>
-    <ellipse cx="69" cy="34" rx="7" ry="7.5" fill="${isFrostFire ? '#00d2ff' : '#1a1a2e'}"/>
+    <ellipse cx="69" cy="34" rx="7" ry="7.5" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#9333ea' : (isRainbow ? '#38bdf8' : (isFallen ? '#9333ea' : '#1a1a2e')))}"/>
     <circle cx="71.5" cy="31.5" r="2.2" fill="white"/>
     <circle cx="67.5" cy="36" r="1.1" fill="rgba(255,255,255,0.4)"/>
   </g>
   <!-- Subtle Mini Nostrils -->
-  <ellipse cx="52.5" cy="43.5" rx="1.2" ry="1.4" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.22)')}"/>
-  <ellipse cx="57.5" cy="43.5" rx="1.2" ry="1.4" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.22)')}"/>
+  <ellipse cx="52.5" cy="43.5" rx="1.2" ry="1.4" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.22)')))}"/>
+  <ellipse cx="57.5" cy="43.5" rx="1.2" ry="1.4" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.22)')))}"/>
   ${drawAngelHalo(55, 0, 19, 5.5)}
   ${drawSunglasses(55, 34, 46, 15)}
   ${drawGradCap(55, 20)}
-  <!-- Confident Teen Smirk (NO FANGS on Angel) -->
+  <!-- Confident Teen Smirk (NO FANGS on Angel & Rainbow) -->
   ${isFrostFire ? `
     <path d="M46,49 Q55,53.5 64,49" stroke="#fbbf24" stroke-width="2.4" fill="none" stroke-linecap="round"/>
     <polygon points="48,49 50,55 52,49" fill="#ffffff" stroke="#ff4500" stroke-width="0.8"/>
@@ -895,6 +1343,16 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     <path d="M46,49 Q55,53.5 64,49" stroke="#00d2ff" stroke-width="2.4" fill="none" stroke-linecap="round"/>
     <polygon points="48,49 50,55 52,49" fill="#ffffff" stroke="#00d2ff" stroke-width="0.8"/>
     <polygon points="58,49 60,55 62,49" fill="#ffffff" stroke="#00d2ff" stroke-width="0.8"/>
+  ` : (isRainbow ? `
+    <path d="M46,49 Q55,54 64,49" stroke="#ec4899" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  ` : (isFallen ? `
+    <path d="M46,49 Q55,53.5 64,49" stroke="#9333ea" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <polygon points="48,49 50,55 52,49" fill="#ffffff" stroke="#7c3aed" stroke-width="0.8"/>
+    <polygon points="58,49 60,55 62,49" fill="#ffffff" stroke="#7c3aed" stroke-width="0.8"/>
+  ` : (isChaos ? `
+    <path d="M46,49 Q55,54 64,49" stroke="#8b5cf6" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <polygon points="48,49 50,55 52,49" fill="#ffffff" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="58,49 60,55 62,49" fill="#ffffff" stroke="#7c3aed" stroke-width="0.8"/>
   ` : (isAngel ? `
     <path d="M46,49 Q55,54 64,49" stroke="#d97706" stroke-width="2.2" fill="none" stroke-linecap="round"/>
   ` : (isUnicorn ? `
@@ -905,7 +1363,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     <path d="M46,49 Q55,54.5 64,49" stroke="rgba(0,0,0,0.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
     <polygon points="49,49 51,53.5 53,49" fill="#ffffff" stroke="rgba(0,0,0,0.3)" stroke-width="0.6"/>
     <polygon points="57,49 59,53.5 61,49" fill="#ffffff" stroke="rgba(0,0,0,0.3)" stroke-width="0.6"/>
-  `))))}
+  `)))))))}
 </svg>`;
     return effectsHtml + svg;
   }
@@ -915,29 +1373,25 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     const svg = `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-pulse ${isGold ? 'gold-skin-aura' : ''}">
   <defs>
     <radialGradient id="ak${id}" cx="42%" cy="26%" r="76%">
-      <stop offset="0%" stop-color="${isFrostFire ? '#ff793f' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#fff0f6' : (isLava ? '#ff9f43' : (isFrost ? '#e0f7fa' : c1)))))}"/>
-      <stop offset="${isAngel ? '40%' : '50%'}" stop-color="${isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#ff4757' : (isFrost ? '#38bdf8' : (isUnicorn ? '#f3e8ff' : c1)))))}"/>
-      <stop offset="${isAngel ? '75%' : '85%'}" stop-color="${isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#990000' : (isFrost ? '#0284c7' : (isUnicorn ? '#d8b4fe' : c2)))))}"/>
-      ${isFrostFire ? `<stop offset="100%" stop-color="#082f49"/>` : (isAngel ? `<stop offset="100%" stop-color="#94a3b8"/>` : (isLava ? `<stop offset="100%" stop-color="#590000"/>` : (isFrost ? `<stop offset="100%" stop-color="#082f49"/>` : (isGold ? `<stop offset="100%" stop-color="#b45309"/>` : ''))))}
+      <stop offset="0%" stop-color="${isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#ff793f' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#fff0f6' : (isLava ? '#ff9f43' : (isFrost ? '#e0f7fa' : c1))))))))}"/>
+      <stop offset="${isAngel ? '40%' : '50%'}" stop-color="${isChaos ? '#f1f5f9' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#ff4757' : (isFrost ? '#38bdf8' : (isUnicorn ? '#f3e8ff' : c1))))))))}"/>
+      <stop offset="${isAngel ? '75%' : '85%'}" stop-color="${isChaos ? '#3b0764' : (isRainbow ? '#c7d2fe' : (isFallen ? '#2e1065' : (isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#990000' : (isFrost ? '#0284c7' : (isUnicorn ? '#d8b4fe' : c2))))))))}"/>
+      ${isChaos ? `<stop offset="100%" stop-color="#09090b"/>` : (isRainbow ? `<stop offset="100%" stop-color="#fbcfe8"/>` : (isFallen ? `<stop offset="100%" stop-color="#09090b"/>` : (isFrostFire ? `<stop offset="100%" stop-color="#082f49"/>` : (isAngel ? `<stop offset="100%" stop-color="#94a3b8"/>` : (isLava ? `<stop offset="100%" stop-color="#590000"/>` : (isFrost ? `<stop offset="100%" stop-color="#082f49"/>` : (isGold ? `<stop offset="100%" stop-color="#b45309"/>` : '')))))))}
     </radialGradient>
   </defs>
   <ellipse cx="60" cy="112" rx="38" ry="6" fill="rgba(0,0,0,0.25)"/>
   ${drawAngelWings(36, 84, 70, 0.95)}
   <!-- Symmetrical Body -->
-  <ellipse cx="60" cy="78" rx="32" ry="26" fill="url(#ak${id})" stroke="${isAngel ? '#94a3b8' : 'none'}" stroke-width="1.2"/>
-  <ellipse cx="60" cy="82" rx="19" ry="17" fill="${isFrostFire ? 'rgba(254,240,138,0.55)' : (isAngel ? 'rgba(254,240,138,0.88)' : (isUnicorn ? 'rgba(254,249,195,0.48)' : (isGold ? 'rgba(255,251,235,0.7)' : 'rgba(255,220,180,0.4)')))}" stroke="${isAngel ? '#f59e0b' : 'none'}" stroke-width="${isAngel ? '1.4' : '0'}"/>
+  <ellipse cx="60" cy="78" rx="32" ry="26" fill="url(#ak${id})" stroke="${isAngel ? '#94a3b8' : (isRainbow ? '#818cf8' : (isFallen ? '#7c3aed' : (isChaos ? '#8b5cf6' : 'none')))}" stroke-width="1.2"/>
+  <ellipse cx="60" cy="82" rx="19" ry="17" fill="${isFrostFire ? 'rgba(254,240,138,0.55)' : (isChaos ? 'rgba(88,28,135,0.5)' : (isRainbow ? 'rgba(253,244,255,0.88)' : (isFallen ? 'rgba(46,16,101,0.7)' : (isAngel ? 'rgba(254,240,138,0.88)' : (isUnicorn ? 'rgba(254,249,195,0.48)' : (isGold ? 'rgba(255,251,235,0.7)' : 'rgba(255,220,180,0.4)'))))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isChaos ? '#ffd700' : 'none')))}" stroke-width="${isCelestial ? '1.4' : '0'}"/>
   <!-- Arms & Legs -->
-  <ellipse cx="34" cy="76" rx="8" ry="6" fill="${isFrostFire ? '#ff4757' : (isAngel ? '#fef08a' : c1)}" stroke="${isAngel ? '#f59e0b' : 'none'}" stroke-width="${isAngel ? '0.8' : '0'}"/>
-  <ellipse cx="86" cy="76" rx="8" ry="6" fill="${isFrostFire ? '#00d2ff' : (isAngel ? '#fef08a' : c1)}" stroke="${isAngel ? '#f59e0b' : 'none'}" stroke-width="${isAngel ? '0.8' : '0'}"/>
-  <ellipse cx="46" cy="100" rx="10" ry="8" fill="${isFrostFire ? '#ff3300' : c2}"/>
-  <ellipse cx="74" cy="100" rx="10" ry="8" fill="${isFrostFire ? '#0284c7' : c2}"/>
-  <!-- Holy Angel Chest Cross Star -->
-  ${isAngel ? `
-    <g class="holy-breastplate">
-      <path d="M60,75 L61.8,80 L67,81.5 L61.8,83 L60,88 L58.2,83 L53,81.5 L58.2,80 Z" fill="#ffd700" stroke="#ffffff" stroke-width="1" filter="drop-shadow(0 0 7px #f59e0b)"/>
-      <circle cx="60" cy="81.5" r="2" fill="#ffffff"/>
-    </g>` : ''}
-  <!-- Flowing Veins for Lava / Frost / FrostFire / Unicorn Skin -->
+  <ellipse cx="34" cy="76" rx="8" ry="6" fill="${isFrostFire ? '#ff4757' : (isChaos ? '#fef08a' : (isRainbow ? '#fce7f3' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : c1))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#a855f7' : (isChaos ? '#f59e0b' : 'none')))}" stroke-width="${isCelestial ? '0.8' : '0'}"/>
+  <ellipse cx="86" cy="76" rx="8" ry="6" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#3b0764' : (isRainbow ? '#e0f2fe' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : c1))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isChaos ? '#c084fc' : 'none')))}" stroke-width="${isCelestial ? '0.8' : '0'}"/>
+  <ellipse cx="46" cy="100" rx="10" ry="8" fill="${isFrostFire ? '#ff3300' : (isChaos ? '#fbbf24' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : c2)))}"/>
+  <ellipse cx="74" cy="100" rx="10" ry="8" fill="${isFrostFire ? '#0284c7' : (isChaos ? '#18181b' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : c2)))}"/>
+  <!-- Celestial Breastplate -->
+  ${drawCelestialBreastplate(60, 81.5, 1.15)}
+  <!-- Flowing Veins for Lava / Frost / FrostFire / Unicorn / Celestial -->
   ${isFrostFire ? `
     <g class="frostfire-flowing-vein" fill="none" stroke-width="2.2" stroke-linecap="round">
       <path d="M44,72 Q52,78 57,74 M48,88 Q54,93 57,90" stroke="#ff4500"/>
@@ -961,35 +1415,55 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
       <path d="M44,72 Q60,82 76,72 M48,88 Q60,96 72,88" />
       <path d="M40,30 Q60,22 80,30" />
       <path d="M32,80 Q22,90 36,96 M88,80 Q98,90 84,96" />
-    </g>` : '')))}
+    </g>` : (isRainbow ? `
+    <g class="rainbow-flowing-vein" fill="none" stroke-width="2.2" stroke-linecap="round">
+      <path d="M44,72 Q60,82 76,72 M48,88 Q60,96 72,88" stroke="#f472b6" opacity="0.85"/>
+      <path d="M40,30 Q60,22 80,30" stroke="#38bdf8" opacity="0.85"/>
+      <path d="M32,80 Q22,90 36,96 M88,80 Q98,90 84,96" stroke="#fbbf24" opacity="0.85"/>
+    </g>` : (isFallen ? `
+    <g class="fallen-flowing-vein" fill="none" stroke-width="2.2" stroke-linecap="round">
+      <path d="M44,72 Q60,82 76,72 M48,88 Q60,96 72,88" stroke="#7c3aed" opacity="0.9"/>
+      <path d="M40,30 Q60,22 80,30" stroke="#c084fc" opacity="0.9"/>
+      <path d="M32,80 Q22,90 36,96 M88,80 Q98,90 84,96" stroke="#a855f7" opacity="0.9"/>
+    </g>` : (isChaos ? `
+    <g class="chaos-flowing-vein" fill="none" stroke-width="2.2" stroke-linecap="round">
+      <path d="M44,72 Q52,78 57,74 M48,88 Q54,93 57,90" stroke="#fbbf24" opacity="0.9"/>
+      <path d="M40,30 Q50,24 57,28" stroke="#ffd700" opacity="0.9"/>
+      <path d="M32,80 Q22,90 36,96" stroke="#fbbf24" opacity="0.9"/>
+      <path d="M76,72 Q68,78 63,74 M72,88 Q66,93 63,90" stroke="#a855f7" opacity="0.9"/>
+      <path d="M80,30 Q70,24 63,28" stroke="#c084fc" opacity="0.9"/>
+      <path d="M88,80 Q98,90 84,96" stroke="#a855f7" opacity="0.9"/>
+    </g>` : ''))))))}
+  <!-- Head Cast Shadow on Body -->
+  ${isCelestial ? `<ellipse cx="60" cy="64" rx="20" ry="4.5" fill="rgba(15,23,42,0.2)"/>` : ''}
   <!-- Big Front Head -->
-  <ellipse cx="60" cy="38" rx="32" ry="28" fill="url(#ak${id})" stroke="${isAngel ? '#cbd5e1' : 'none'}" stroke-width="1.2"/>
+  <ellipse cx="60" cy="38" rx="32" ry="28" fill="url(#ak${id})" stroke="${isAngel ? '#cbd5e1' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isChaos ? '#a855f7' : 'none')))}" stroke-width="1.2"/>
   ${drawUnicornHorn(60, 10, 27, 8)}
   <!-- Symmetrical Spikes -->
-  <polygon points="46,12 40,2 50,8" fill="${isFrostFire ? '#ff4500' : (isAngel ? '#f59e0b' : cA)}"/>
-  <polygon points="74,12 80,2 70,8" fill="${isFrostFire ? '#00d2ff' : (isAngel ? '#f59e0b' : cA)}"/>
+  <polygon points="46,12 40,2 50,8" fill="${isFrostFire ? '#ff4500' : (isChaos ? '#ffd700' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isAngel ? '#f59e0b' : cA))))}"/>
+  <polygon points="74,12 80,2 70,8" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#a855f7' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isAngel ? '#f59e0b' : cA))))}"/>
   <!-- Soft Blushing Cheeks -->
-  <ellipse cx="36" cy="42" rx="7" ry="4.5" fill="${isFrostFire ? 'rgba(255,80,60,0.45)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : 'rgba(255,100,100,0.28)')))}"/>
-  <ellipse cx="84" cy="42" rx="7" ry="4.5" fill="${isFrostFire ? 'rgba(56,189,248,0.45)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : 'rgba(255,100,100,0.28)')))}"/>
-  <!-- Symmetrical Eyes (Heterochromia on FrostFire) -->
+  <ellipse cx="36" cy="42" rx="7" ry="4.5" fill="${isFrostFire ? 'rgba(255,80,60,0.45)' : (isChaos ? 'rgba(251,191,36,0.35)' : (isRainbow ? 'rgba(244,114,182,0.45)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : 'rgba(255,100,100,0.28)'))))))}"/>
+  <ellipse cx="84" cy="42" rx="7" ry="4.5" fill="${isFrostFire ? 'rgba(56,189,248,0.45)' : (isChaos ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(56,189,248,0.4)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : 'rgba(255,100,100,0.28)'))))))}"/>
+  <!-- Symmetrical Eyes (Heterochromia on FrostFire, Chaos, Rainbow) -->
   <g class="dino-part-eye">
     <ellipse cx="44" cy="32" rx="9" ry="10" fill="white"/>
-    <ellipse cx="44" cy="32" rx="6.5" ry="7" fill="${isFrostFire ? '#ff4500' : '#1a1a2e'}"/>
+    <ellipse cx="44" cy="32" rx="6.5" ry="7" fill="${isFrostFire ? '#ff4500' : (isChaos ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#9333ea' : '#1a1a2e')))}"/>
     <circle cx="46" cy="29.5" r="2" fill="white"/>
     <circle cx="42.5" cy="34" r="1" fill="rgba(255,255,255,0.4)"/>
 
     <ellipse cx="76" cy="32" rx="9" ry="10" fill="white"/>
-    <ellipse cx="76" cy="32" rx="6.5" ry="7" fill="${isFrostFire ? '#00d2ff' : '#1a1a2e'}"/>
+    <ellipse cx="76" cy="32" rx="6.5" ry="7" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#9333ea' : (isRainbow ? '#38bdf8' : (isFallen ? '#9333ea' : '#1a1a2e')))}"/>
     <circle cx="78" cy="29.5" r="2" fill="white"/>
     <circle cx="74.5" cy="34" r="1" fill="rgba(255,255,255,0.4)"/>
   </g>
   <!-- Subtle Mini Nostrils -->
-  <ellipse cx="57.5" cy="44.5" rx="1.3" ry="1.5" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.25)')}"/>
-  <ellipse cx="62.5" cy="44.5" rx="1.3" ry="1.5" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.25)')}"/>
+  <ellipse cx="57.5" cy="44.5" rx="1.3" ry="1.5" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.25)')))}"/>
+  <ellipse cx="62.5" cy="44.5" rx="1.3" ry="1.5" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.25)')))}"/>
   ${drawAngelHalo(60, 0, 21, 6)}
   ${drawSunglasses(60, 32, 48, 16)}
   ${drawGradCap(60, 20)}
-  <!-- Warrior Mouth & Smile (NO FANGS on Angel) -->
+  <!-- Warrior Mouth & Smile (NO FANGS on Angel & Rainbow) -->
   ${isFrostFire ? `
     <path d="M49,50 Q60,54.5 71,50" stroke="#fbbf24" stroke-width="2.6" fill="none" stroke-linecap="round"/>
     <polygon points="52,50 54,57 56,50" fill="#ffffff" stroke="#ff4500" stroke-width="0.8"/>
@@ -1002,6 +1476,16 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     <path d="M49,50 Q60,54.5 71,50" stroke="#00d2ff" stroke-width="2.6" fill="none" stroke-linecap="round"/>
     <polygon points="52,50 54,57 56,50" fill="#ffffff" stroke="#00d2ff" stroke-width="0.8"/>
     <polygon points="64,50 66,57 68,50" fill="#ffffff" stroke="#00d2ff" stroke-width="0.8"/>
+  ` : (isRainbow ? `
+    <path d="M49,50 Q60,55 71,50" stroke="#ec4899" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  ` : (isFallen ? `
+    <path d="M49,50 Q60,54.5 71,50" stroke="#9333ea" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    <polygon points="52,50 54,57 56,50" fill="#ffffff" stroke="#7c3aed" stroke-width="0.8"/>
+    <polygon points="64,50 66,57 68,50" fill="#ffffff" stroke="#7c3aed" stroke-width="0.8"/>
+  ` : (isChaos ? `
+    <path d="M49,50 Q60,54.5 71,50" stroke="#8b5cf6" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    <polygon points="52,50 54,57 56,50" fill="#ffffff" stroke="#f59e0b" stroke-width="0.8"/>
+    <polygon points="64,50 66,57 68,50" fill="#ffffff" stroke="#7c3aed" stroke-width="0.8"/>
   ` : (isAngel ? `
     <path d="M49,50 Q60,55 71,50" stroke="#d97706" stroke-width="2.4" fill="none" stroke-linecap="round"/>
   ` : (isUnicorn ? `
@@ -1012,7 +1496,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     <path d="M49,50 Q60,55 71,50" stroke="rgba(0,0,0,0.55)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
     <polygon points="52,50 54,55 56,50" fill="#ffffff" stroke="rgba(0,0,0,0.3)" stroke-width="0.7"/>
     <polygon points="64,50 66,55 68,50" fill="#ffffff" stroke="rgba(0,0,0,0.3)" stroke-width="0.7"/>
-  `))))}
+  `)))))))}
 </svg>`;
     return effectsHtml + svg;
   }
@@ -1021,10 +1505,10 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   const svg = `<svg viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-float ${isGold ? 'gold-skin-aura' : ''}">
   <defs>
     <radialGradient id="lk${id}" cx="42%" cy="24%" r="78%">
-      <stop offset="0%" stop-color="${isFrostFire ? '#fff7ed' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#fff0f6' : (isLava ? '#ff9f43' : (isFrost ? '#e0f7fa' : '#fff3a8')))))}"/>
-      <stop offset="${isAngel ? '35%' : '35%'}" stop-color="${isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#ff4757' : (isFrost ? '#38bdf8' : cA))))}"/>
-      <stop offset="${isAngel ? '75%' : '75%'}" stop-color="${isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#990000' : (isFrost ? '#0284c7' : c1))))}"/>
-      <stop offset="100%" stop-color="${isFrostFire ? '#082f49' : (isGold ? '#b45309' : (isAngel ? '#94a3b8' : (isLava ? '#590000' : (isFrost ? '#082f49' : c2))))}"/>
+      <stop offset="0%" stop-color="${isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#fff7ed' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#fff0f6' : (isLava ? '#ff9f43' : (isFrost ? '#e0f7fa' : '#fff3a8'))))))))}"/>
+      <stop offset="${isAngel ? '35%' : '35%'}" stop-color="${isChaos ? '#f1f5f9' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#ff4757' : (isFrost ? '#38bdf8' : cA)))))))}"/>
+      <stop offset="${isAngel ? '75%' : '75%'}" stop-color="${isChaos ? '#3b0764' : (isRainbow ? '#c7d2fe' : (isFallen ? '#2e1065' : (isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#990000' : (isFrost ? '#0284c7' : c1)))))))}"/>
+      <stop offset="100%" stop-color="${isChaos ? '#09090b' : (isRainbow ? '#fbcfe8' : (isFallen ? '#09090b' : (isFrostFire ? '#082f49' : (isGold ? '#b45309' : (isAngel ? '#94a3b8' : (isLava ? '#590000' : (isFrost ? '#082f49' : c2)))))))}"/>
     </radialGradient>
     <linearGradient id="lwg${id}" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="${isAngel ? '#ffffff' : (isGold ? '#fff9db' : '#ffe066')}"/>
@@ -1045,31 +1529,21 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   <!-- Radiant Aura Backdrop -->
   <circle cx="65" cy="65" r="56" fill="url(#lk${id})" opacity="0.28"/>
   <ellipse cx="65" cy="120" rx="44" ry="7" fill="rgba(0,0,0,0.3)"/>
-  <!-- Dragon / Pterodactyl Wings (Hidden if Angel Skin equipped to avoid double-wing overlap) -->
-  ${!isAngel ? `
-  <g class="dino-wing-left">
-    <path d="M35,74 L6,34 L-4,28 L6,38 L-2,54 L14,58 L4,72 L26,72 Z" fill="${isFrostFire ? 'url(#lwgLava' + id + ')' : 'url(#lwg' + id + ')'}" stroke="${isFrostFire ? '#ff4500' : '#ffd700'}" stroke-width="1.8"/>
-    <path d="M6,34 L-4,28 L6,38" stroke="${isFrostFire ? '#ffa502' : '#ffd700'}" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-    <path d="M35,74 L6,34 M20,62 L-2,54 M24,68 L4,72" stroke="rgba(255,255,255,0.35)" stroke-width="1.2" fill="none"/>
-  </g>
-  <g class="dino-wing-right">
-    <path d="M95,74 L124,34 L134,28 L124,38 L132,54 L116,58 L126,72 L104,72 Z" fill="${isFrostFire ? 'url(#lwgFrost' + id + ')' : 'url(#lwg' + id + ')'}" stroke="${isFrostFire ? '#00d2ff' : '#ffd700'}" stroke-width="1.8"/>
-    <path d="M124,34 L134,28 L124,38" stroke="${isFrostFire ? '#7dd3fc' : '#ffd700'}" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-    <path d="M95,74 L124,34 M110,62 L132,54 M106,68 L126,72" stroke="rgba(255,255,255,0.35)" stroke-width="1.2" fill="none"/>
-  </g>
-  ` : ''}
-  ${drawAngelWings(36, 94, 76, 1.2)}
+  <!-- Majestic Grand Dragon Wings (Angel-style 3-Tier Layered Feathers with Breathing Animation) -->
+  ${drawAngelWings(36, 94, 76, 1.2, true)}
   <!-- Symmetrical Body -->
-  <ellipse cx="65" cy="85" rx="35" ry="29" fill="url(#lk${id})" stroke="${isAngel ? '#94a3b8' : 'none'}" stroke-width="1.4"/>
-  <ellipse cx="65" cy="89" rx="21" ry="19" fill="${isFrostFire ? 'rgba(254,240,138,0.6)' : (isAngel ? 'rgba(254,240,138,0.9)' : (isUnicorn ? 'rgba(254,249,195,0.5)' : (isGold ? 'rgba(255,251,235,0.7)' : 'rgba(255,255,255,0.5)')))}" stroke="${isAngel ? '#f59e0b' : 'none'}" stroke-width="${isAngel ? '1.5' : '0'}"/>
-  <!-- Star Chest Gem -->
+  <ellipse cx="65" cy="85" rx="35" ry="29" fill="url(#lk${id})" stroke="${isAngel ? '#94a3b8' : (isRainbow ? '#818cf8' : (isFallen ? '#7c3aed' : (isChaos ? '#8b5cf6' : 'none')))}" stroke-width="1.4"/>
+  <ellipse cx="65" cy="89" rx="21" ry="19" fill="${isFrostFire ? 'rgba(254,240,138,0.6)' : (isChaos ? 'rgba(88,28,135,0.55)' : (isRainbow ? 'rgba(253,244,255,0.9)' : (isFallen ? 'rgba(46,16,101,0.75)' : (isAngel ? 'rgba(254,240,138,0.9)' : (isUnicorn ? 'rgba(254,249,195,0.5)' : (isGold ? 'rgba(255,251,235,0.7)' : 'rgba(255,255,255,0.5)'))))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isChaos ? '#ffd700' : 'none')))}" stroke-width="${isCelestial ? '1.5' : '0'}"/>
+  <!-- Star Chest Gem / Celestial Breastplate -->
+  ${isCelestial ? drawCelestialBreastplate(65, 84, 1.3) : `
   <polygon points="65,74 68,81 75,84 68,87 65,94 62,87 55,84 62,81" fill="#ffd700" stroke="#fff" stroke-width="1.2" filter="drop-shadow(0 0 8px ${isFrostFire ? '#ff9f43' : '#ffd700'})"/>
+  `}
   <!-- Arms & Legs -->
-  <ellipse cx="38" cy="82" rx="9" ry="6.5" fill="${isFrostFire ? '#ff4757' : (isAngel ? '#fef08a' : c1)}" stroke="${isAngel ? '#f59e0b' : 'none'}" stroke-width="${isAngel ? '0.8' : '0'}"/>
-  <ellipse cx="92" cy="82" rx="9" ry="6.5" fill="${isFrostFire ? '#00d2ff' : (isAngel ? '#fef08a' : c1)}" stroke="${isAngel ? '#f59e0b' : 'none'}" stroke-width="${isAngel ? '0.8' : '0'}"/>
-  <ellipse cx="48" cy="108" rx="11" ry="8" fill="${isFrostFire ? '#ff3300' : c2}"/>
-  <ellipse cx="82" cy="108" rx="11" ry="8" fill="${isFrostFire ? '#0284c7' : c2}"/>
-  <!-- Flowing Veins for Lava / Frost / FrostFire / Unicorn Skin -->
+  <ellipse cx="38" cy="82" rx="9" ry="6.5" fill="${isFrostFire ? '#ff4757' : (isChaos ? '#fef08a' : (isRainbow ? '#fce7f3' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : c1))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#a855f7' : (isChaos ? '#f59e0b' : 'none')))}" stroke-width="${isCelestial ? '0.8' : '0'}"/>
+  <ellipse cx="92" cy="82" rx="9" ry="6.5" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#3b0764' : (isRainbow ? '#e0f2fe' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : c1))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isChaos ? '#c084fc' : 'none')))}" stroke-width="${isCelestial ? '0.8' : '0'}"/>
+  <ellipse cx="48" cy="108" rx="11" ry="8" fill="${isFrostFire ? '#ff3300' : (isChaos ? '#fbbf24' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : c2)))}"/>
+  <ellipse cx="82" cy="108" rx="11" ry="8" fill="${isFrostFire ? '#0284c7' : (isChaos ? '#18181b' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : c2)))}"/>
+  <!-- Flowing Veins for Lava / Frost / FrostFire / Unicorn / Celestial -->
   ${isFrostFire ? `
     <g class="frostfire-flowing-vein" fill="none" stroke-width="2.4" stroke-linecap="round">
       <path d="M46,78 Q56,84 62,80 M50,96 Q58,100 62,97" stroke="#ff4500"/>
@@ -1093,40 +1567,58 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
       <path d="M46,78 Q65,90 84,78 M50,96 Q65,104 80,96" />
       <path d="M42,36 Q65,28 88,36" />
       <path d="M38,86 Q28,98 44,103 M92,86 Q102,98 86,103" />
-    </g>` : '')))}
+    </g>` : (isRainbow ? `
+    <g class="rainbow-flowing-vein" fill="none" stroke-width="2.4" stroke-linecap="round">
+      <path d="M46,78 Q65,90 84,78 M50,96 Q65,104 80,96" stroke="#f472b6" opacity="0.85"/>
+      <path d="M42,36 Q65,28 88,36" stroke="#38bdf8" opacity="0.85"/>
+      <path d="M38,86 Q28,98 44,103 M92,86 Q102,98 86,103" stroke="#fbbf24" opacity="0.85"/>
+    </g>` : (isFallen ? `
+    <g class="fallen-flowing-vein" fill="none" stroke-width="2.4" stroke-linecap="round">
+      <path d="M46,78 Q65,90 84,78 M50,96 Q65,104 80,96" stroke="#7c3aed" opacity="0.9"/>
+      <path d="M42,36 Q65,28 88,36" stroke="#c084fc" opacity="0.9"/>
+      <path d="M38,86 Q28,98 44,103 M92,86 Q102,98 86,103" stroke="#a855f7" opacity="0.9"/>
+    </g>` : (isChaos ? `
+    <g class="chaos-flowing-vein" fill="none" stroke-width="2.4" stroke-linecap="round">
+      <path d="M46,78 Q56,84 62,80 M50,96 Q58,100 62,97" stroke="#fbbf24" opacity="0.9"/>
+      <path d="M42,36 Q54,30 62,34" stroke="#ffd700" opacity="0.9"/>
+      <path d="M38,86 Q28,98 44,103" stroke="#fbbf24" opacity="0.9"/>
+      <path d="M84,78 Q74,84 68,80 M80,96 Q72,100 68,97" stroke="#a855f7" opacity="0.9"/>
+      <path d="M88,36 Q76,30 68,34" stroke="#c084fc" opacity="0.9"/>
+      <path d="M92,86 Q102,98 86,103" stroke="#a855f7" opacity="0.9"/>
+    </g>` : ''))))))}
   <!-- Head Cast Shadow on Body -->
-  ${isAngel ? `<ellipse cx="65" cy="67" rx="22" ry="5" fill="rgba(15,23,42,0.25)"/>` : ''}
+  ${isCelestial ? `<ellipse cx="65" cy="67" rx="22" ry="5" fill="rgba(15,23,42,0.25)"/>` : ''}
   <!-- Noble Head -->
-  <ellipse cx="65" cy="44" rx="35" ry="31" fill="url(#lk${id})" stroke="${isAngel ? '#cbd5e1' : 'none'}" stroke-width="1.4"/>
+  <ellipse cx="65" cy="44" rx="35" ry="31" fill="url(#lk${id})" stroke="${isAngel ? '#cbd5e1' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isChaos ? '#a855f7' : 'none')))}" stroke-width="1.4"/>
   <!-- Spinal Crest Spikes -->
-  <polygon points="40,24 22,8 46,14" fill="${isFrostFire ? '#ff4500' : '#ffd700'}" stroke="${isFrostFire ? '#ff3300' : '#d97706'}" stroke-width="1.5"/>
-  <polygon points="90,24 108,8 84,14" fill="${isFrostFire ? '#00d2ff' : '#ffd700'}" stroke="${isFrostFire ? '#0284c7' : '#d97706'}" stroke-width="1.5"/>
-  ${!isUnicorn ? `<polygon points="65,2 57,16 73,16" fill="#ffe066" stroke="#ffd700" stroke-width="1.5"/>` : ''}
-  <polygon points="52,10 45,20 58,18" fill="${isFrostFire ? '#ff4500' : (isAngel ? '#f59e0b' : cA)}"/>
-  <polygon points="78,10 85,20 72,18" fill="${isFrostFire ? '#00d2ff' : (isAngel ? '#f59e0b' : cA)}"/>
+  <polygon points="40,24 22,8 46,14" fill="${isFrostFire ? '#ff4500' : (isChaos ? '#ffd700' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : '#ffd700')))}" stroke="${isFrostFire ? '#ff3300' : (isChaos ? '#f59e0b' : (isRainbow ? '#f43f5e' : (isFallen ? '#6d28d9' : '#d97706')))}" stroke-width="1.5"/>
+  <polygon points="90,24 108,8 84,14" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#a855f7' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : '#ffd700')))}" stroke="${isFrostFire ? '#0284c7' : (isChaos ? '#7c3aed' : (isRainbow ? '#0284c7' : (isFallen ? '#6d28d9' : '#d97706')))}" stroke-width="1.5"/>
+  ${!isUnicorn ? `<polygon points="65,2 57,16 73,16" fill="${isChaos ? '#fbbf24' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : '#ffe066'))}" stroke="${isChaos ? '#ffd700' : (isRainbow ? '#f43f5e' : (isFallen ? '#7c3aed' : '#ffd700'))}" stroke-width="1.5"/>` : ''}
+  <polygon points="52,10 45,20 58,18" fill="${isFrostFire ? '#ff4500' : (isChaos ? '#ffd700' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isAngel ? '#f59e0b' : cA))))}"/>
+  <polygon points="78,10 85,20 72,18" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#a855f7' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isAngel ? '#f59e0b' : cA))))}"/>
   ${drawUnicornHorn(65, 4, 32, 9)}
   <!-- Soft Blushing Cheeks -->
-  <ellipse cx="38" cy="46" rx="7" ry="5" fill="${isFrostFire ? 'rgba(255,80,60,0.45)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : 'rgba(255,100,100,0.28)')))}"/>
-  <ellipse cx="92" cy="46" rx="7" ry="5" fill="${isFrostFire ? 'rgba(56,189,248,0.45)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : 'rgba(255,100,100,0.28)')))}"/>
-  <!-- Symmetrical Cute Glossy Eyes (Heterochromia on FrostFire) -->
+  <ellipse cx="38" cy="46" rx="7" ry="5" fill="${isFrostFire ? 'rgba(255,80,60,0.45)' : (isChaos ? 'rgba(251,191,36,0.35)' : (isRainbow ? 'rgba(244,114,182,0.45)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : 'rgba(255,100,100,0.28)'))))))}"/>
+  <ellipse cx="92" cy="46" rx="7" ry="5" fill="${isFrostFire ? 'rgba(56,189,248,0.45)' : (isChaos ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(56,189,248,0.4)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : 'rgba(255,100,100,0.28)'))))))}"/>
+  <!-- Symmetrical Cute Glossy Eyes (Heterochromia on FrostFire, Chaos, Rainbow) -->
   <g class="dino-part-eye">
     <ellipse cx="48" cy="38" rx="10" ry="11" fill="white"/>
-    <ellipse cx="48" cy="38" rx="7.5" ry="8" fill="${isFrostFire ? '#ff4500' : '#1a1a2e'}"/>
+    <ellipse cx="48" cy="38" rx="7.5" ry="8" fill="${isFrostFire ? '#ff4500' : (isChaos ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#9333ea' : '#1a1a2e')))}"/>
     <circle cx="50.5" cy="35.5" r="2.2" fill="white"/>
     <circle cx="46.5" cy="40" r="1.1" fill="rgba(255,255,255,0.4)"/>
 
     <ellipse cx="82" cy="38" rx="10" ry="11" fill="white"/>
-    <ellipse cx="82" cy="38" rx="7.5" ry="8" fill="${isFrostFire ? '#00d2ff' : '#1a1a2e'}"/>
+    <ellipse cx="82" cy="38" rx="7.5" ry="8" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#9333ea' : (isRainbow ? '#38bdf8' : (isFallen ? '#9333ea' : '#1a1a2e')))}"/>
     <circle cx="84.5" cy="35.5" r="2.2" fill="white"/>
     <circle cx="80.5" cy="40" r="1.1" fill="rgba(255,255,255,0.4)"/>
   </g>
   <!-- Subtle Mini Nostrils -->
-  <ellipse cx="62" cy="47.5" rx="1.3" ry="1.6" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.25)')}"/>
-  <ellipse cx="68" cy="47.5" rx="1.3" ry="1.6" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.25)')}"/>
+  <ellipse cx="62" cy="47.5" rx="1.3" ry="1.6" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.25)')))}"/>
+  <ellipse cx="68" cy="47.5" rx="1.3" ry="1.6" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.25)')))}"/>
   ${drawAngelHalo(65, -10, 26, 7)}
   ${drawSunglasses(65, 38, 50, 16)}
   ${drawGradCap(65, 24)}
-  <!-- Cute Regal Smile (NO FANGS on Angel) -->
+  <!-- Cute Regal Smile (NO FANGS on Angel & Rainbow) -->
   ${isFrostFire ? `
     <path d="M53,53 Q65,57.5 77,53" stroke="#fbbf24" stroke-width="2.8" fill="none" stroke-linecap="round"/>
     <polygon points="56,53 58,60 60,53" fill="#ffffff" stroke="#ff4500" stroke-width="0.9"/>
@@ -1139,6 +1631,16 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     <path d="M53,53 Q65,57.5 77,53" stroke="#00d2ff" stroke-width="2.8" fill="none" stroke-linecap="round"/>
     <polygon points="56,53 58,60 60,53" fill="#ffffff" stroke="#00d2ff" stroke-width="0.9"/>
     <polygon points="70,53 72,60 74,53" fill="#ffffff" stroke="#00d2ff" stroke-width="0.9"/>
+  ` : (isRainbow ? `
+    <path d="M53,53 Q65,58 77,53" stroke="#ec4899" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+  ` : (isFallen ? `
+    <path d="M53,53 Q65,57.5 77,53" stroke="#9333ea" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+    <polygon points="56,53 58,60 60,53" fill="#ffffff" stroke="#7c3aed" stroke-width="0.9"/>
+    <polygon points="70,53 72,60 74,53" fill="#ffffff" stroke="#7c3aed" stroke-width="0.9"/>
+  ` : (isChaos ? `
+    <path d="M53,53 Q65,57.5 77,53" stroke="#8b5cf6" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+    <polygon points="56,53 58,60 60,53" fill="#ffffff" stroke="#f59e0b" stroke-width="0.9"/>
+    <polygon points="70,53 72,60 74,53" fill="#ffffff" stroke="#7c3aed" stroke-width="0.9"/>
   ` : (isAngel ? `
     <path d="M53,53 Q65,58 77,53" stroke="#d97706" stroke-width="2.6" fill="none" stroke-linecap="round"/>
   ` : (isUnicorn ? `
@@ -1149,7 +1651,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     <path d="M53,53 Q65,58 77,53" stroke="rgba(0,0,0,0.55)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
     <polygon points="56,53 58,59 60,53" fill="#ffffff" stroke="rgba(0,0,0,0.3)" stroke-width="0.8"/>
     <polygon points="70,53 72,59 74,53" fill="#ffffff" stroke="rgba(0,0,0,0.3)" stroke-width="0.8"/>
-  `))))}
+  `)))))))}
 </svg>`;
     return effectsHtml + svg;
   } catch (err) {
