@@ -2450,10 +2450,20 @@ class DinoApp {
       if (file) {
         const reader = new FileReader();
         reader.onload = (evt) => {
-          const success = window.storageMgr.importJSON(evt.target.result);
-          if (success) {
-            alert('🎉 数据备份导入成功！');
+          const res = window.storageMgr.importJSON(evt.target.result);
+          if (res === true || (res && res.success)) {
+            if (res && res.isMultiClass && Array.isArray(res.classes)) {
+              const summary = res.classes.map(c => `• ${c.name} (${c.count}人)`).join('\n');
+              alert(`🎉 全量多班级总备份导入成功！\n\n已同时恢复以下班级（各归其位，无冲突）：\n${summary}`);
+              if (typeof this.renderClassSelector === 'function') {
+                this.renderClassSelector();
+              }
+            } else {
+              alert('🎉 数据备份导入成功！');
+            }
             this.renderAll();
+          } else if (res && res.cancelled) {
+            // 用户取消导入，安全退出，不提示错误
           } else {
             alert('❌ JSON 文件格式错误，无法导入。');
           }
