@@ -4549,7 +4549,9 @@ svg.gold-skin-aura {
 
   /* 平板页面内边距优化 */
   .app-content {
-    padding: 16px 16px !important;
+    padding: 16px 16px 36px !important;
+    padding-bottom: calc(30px + env(safe-area-inset-bottom, 20px)) !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   /* 控制台中枢工具栏：双层流式布局，拒绝右侧被裁切 */
@@ -4598,189 +4600,31 @@ svg.gold-skin-aura {
   }
 }
 
-/* ── 1.1 平板端极致视野优化 (769px - 1200px 平板横屏/竖屏) ── */
-@media (min-width: 769px) and (max-width: 1200px) {
-  /* 1. 紧凑精简顶部导航：高度从 115px 降至 ~54px，释放巨大可视高度 */
-  .app-header {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    padding: 6px 14px !important;
-    gap: 8px !important;
-    flex-wrap: nowrap !important;
-  }
-
-  .brand-container {
-    gap: 8px !important;
-  }
-
-  .brand-logo-img {
-    width: 36px !important;
-    height: 36px !important;
-    border-radius: 8px !important;
-  }
-
-  .brand-title {
-    font-size: 1.05rem !important;
-  }
-
-  .brand-tag {
-    display: none !important; /* 平板端隐藏冗余小标签 */
-  }
-
-  .class-selector-wrap {
-    margin-left: 2px !important;
-  }
-
-  .btn-class-selector {
-    padding: 3px 8px !important;
-    font-size: 0.78rem !important;
-  }
-
-  /* 导航 Tab 单行内嵌 */
-  .nav-tabs {
-    display: inline-flex !important;
-    width: auto !important;
-    gap: 4px !important;
-    padding: 0 !important;
-    border-top: none !important;
-    overflow-x: visible !important;
-  }
-
-  .nav-tab {
-    padding: 5px 10px !important;
-    font-size: 0.8rem !important;
-    border-radius: 8px !important;
-  }
-
-  .header-actions {
-    display: flex !important;
-    gap: 4px !important;
-    flex-wrap: nowrap !important;
-  }
-
-  .header-actions .btn {
-    padding: 4px 8px !important;
-    font-size: 0.75rem !important;
-    border-radius: 8px !important;
-  }
-
-  .btn-cloud-pill {
-    padding: 3px 7px !important;
-    font-size: 0.72rem !important;
-  }
-
-  /* 2. 紧凑扁平化工具栏：高度从 130px 降至 ~44px */
-  .app-content {
-    padding: 10px 14px 40px !important; /* 预留 40px 底部手势安全区 */
-    padding-bottom: calc(30px + env(safe-area-inset-bottom, 20px)) !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  .console-toolbar {
-    flex-direction: row !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    gap: 10px !important;
-    padding: 8px 14px !important;
-    margin-bottom: 12px !important;
-    border-radius: 12px !important;
-  }
-
-  .stats-group {
-    display: flex !important;
-    align-items: center !important;
-    gap: 14px !important;
-    border-bottom: none !important;
-    padding-bottom: 0 !important;
-  }
-
-  .stat-item {
-    flex-direction: row !important;
-    align-items: baseline !important;
-    gap: 4px !important;
-  }
-
-  .stat-value {
-    font-size: 0.98rem !important;
-  }
-
-  .stat-label {
-    font-size: 0.72rem !important;
-  }
-
-  .filter-group {
-    display: flex !important;
-    gap: 6px !important;
-    flex-wrap: nowrap !important;
-  }
-
-  .filter-group .search-input {
-    min-width: 110px !important;
-    max-width: 140px !important;
-    padding: 4px 8px !important;
-    font-size: 0.78rem !important;
-  }
-
-  .filter-group .select-input {
-    min-width: 100px !important;
-    padding: 4px 6px !important;
-    font-size: 0.78rem !important;
-  }
-
-  .filter-group .btn {
-    padding: 4px 8px !important;
-    font-size: 0.75rem !important;
-  }
-
-  /* 3. 恐龙卡片黄金网格：高度从 270px 压缩至 ~185px，让第二排恐龙完整浮现在黑条上方 */
+/* ── 1.1 小尺寸平板竖屏紧凑排版 (769px - 1050px，仅在超窄平板竖屏下轻度紧凑) ── */
+@media (min-width: 769px) and (max-width: 1050px) {
   .cards-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
-    gap: 10px !important;
-    row-gap: 12px !important;
+    grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)) !important;
+    gap: 12px !important;
+    row-gap: 20px !important;
   }
 
   .dino-card {
-    padding: 8px 6px !important;
-    border-radius: 14px !important;
+    padding: 12px 8px !important;
     contain: layout style;
   }
 
-  .stage-badge {
-    font-size: 0.68rem !important;
-    padding: 2px 6px !important;
-    margin-bottom: 2px !important;
-  }
-
   .dino-avatar-wrap {
-    width: 76px !important;
-    height: 76px !important;
-    margin: 2px 0 !important;
+    width: 96px !important;
+    height: 96px !important;
   }
 
   .student-name {
-    font-size: 0.88rem !important;
-    font-weight: 700 !important;
-  }
-
-  .species-name {
-    font-size: 0.68rem !important;
-  }
-
-  .level-row {
-    font-size: 0.72rem !important;
-    margin: 2px 0 !important;
-  }
-
-  .card-actions {
-    gap: 3px !important;
-    margin-top: 4px !important;
+    font-size: 0.98rem !important;
   }
 
   .score-btn {
-    padding: 4px 2px !important;
-    font-size: 0.78rem !important;
-    border-radius: 6px !important;
+    padding: 6px 4px !important;
+    font-size: 0.84rem !important;
   }
 }
 
