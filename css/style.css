@@ -4598,31 +4598,189 @@ svg.gold-skin-aura {
   }
 }
 
-/* ── 1.1 小尺寸平板竖屏紧凑排版 (769px - 1050px，仅在超窄平板竖屏下轻度紧凑) ── */
-@media (min-width: 769px) and (max-width: 1050px) {
-  .cards-grid {
-    grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)) !important;
-    gap: 12px !important;
-    row-gap: 20px !important;
+/* ── 1.1 平板端极致视野优化 (769px - 1200px 平板横屏/竖屏) ── */
+@media (min-width: 769px) and (max-width: 1200px) {
+  /* 1. 紧凑精简顶部导航：高度从 115px 降至 ~54px，释放巨大可视高度 */
+  .app-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 6px 14px !important;
+    gap: 8px !important;
+    flex-wrap: nowrap !important;
   }
 
-  .dino-card {
-    padding: 12px 8px !important;
-    contain: layout style;
+  .brand-container {
+    gap: 8px !important;
   }
 
-  .dino-avatar-wrap {
-    width: 96px !important;
-    height: 96px !important;
+  .brand-logo-img {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 8px !important;
   }
 
-  .student-name {
+  .brand-title {
+    font-size: 1.05rem !important;
+  }
+
+  .brand-tag {
+    display: none !important; /* 平板端隐藏冗余小标签 */
+  }
+
+  .class-selector-wrap {
+    margin-left: 2px !important;
+  }
+
+  .btn-class-selector {
+    padding: 3px 8px !important;
+    font-size: 0.78rem !important;
+  }
+
+  /* 导航 Tab 单行内嵌 */
+  .nav-tabs {
+    display: inline-flex !important;
+    width: auto !important;
+    gap: 4px !important;
+    padding: 0 !important;
+    border-top: none !important;
+    overflow-x: visible !important;
+  }
+
+  .nav-tab {
+    padding: 5px 10px !important;
+    font-size: 0.8rem !important;
+    border-radius: 8px !important;
+  }
+
+  .header-actions {
+    display: flex !important;
+    gap: 4px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .header-actions .btn {
+    padding: 4px 8px !important;
+    font-size: 0.75rem !important;
+    border-radius: 8px !important;
+  }
+
+  .btn-cloud-pill {
+    padding: 3px 7px !important;
+    font-size: 0.72rem !important;
+  }
+
+  /* 2. 紧凑扁平化工具栏：高度从 130px 降至 ~44px */
+  .app-content {
+    padding: 10px 14px 40px !important; /* 预留 40px 底部手势安全区 */
+    padding-bottom: calc(30px + env(safe-area-inset-bottom, 20px)) !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .console-toolbar {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 8px 14px !important;
+    margin-bottom: 12px !important;
+    border-radius: 12px !important;
+  }
+
+  .stats-group {
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+  }
+
+  .stat-item {
+    flex-direction: row !important;
+    align-items: baseline !important;
+    gap: 4px !important;
+  }
+
+  .stat-value {
     font-size: 0.98rem !important;
   }
 
+  .stat-label {
+    font-size: 0.72rem !important;
+  }
+
+  .filter-group {
+    display: flex !important;
+    gap: 6px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .filter-group .search-input {
+    min-width: 110px !important;
+    max-width: 140px !important;
+    padding: 4px 8px !important;
+    font-size: 0.78rem !important;
+  }
+
+  .filter-group .select-input {
+    min-width: 100px !important;
+    padding: 4px 6px !important;
+    font-size: 0.78rem !important;
+  }
+
+  .filter-group .btn {
+    padding: 4px 8px !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* 3. 恐龙卡片黄金网格：高度从 270px 压缩至 ~185px，让第二排恐龙完整浮现在黑条上方 */
+  .cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+    gap: 10px !important;
+    row-gap: 12px !important;
+  }
+
+  .dino-card {
+    padding: 8px 6px !important;
+    border-radius: 14px !important;
+    contain: layout style;
+  }
+
+  .stage-badge {
+    font-size: 0.68rem !important;
+    padding: 2px 6px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .dino-avatar-wrap {
+    width: 76px !important;
+    height: 76px !important;
+    margin: 2px 0 !important;
+  }
+
+  .student-name {
+    font-size: 0.88rem !important;
+    font-weight: 700 !important;
+  }
+
+  .species-name {
+    font-size: 0.68rem !important;
+  }
+
+  .level-row {
+    font-size: 0.72rem !important;
+    margin: 2px 0 !important;
+  }
+
+  .card-actions {
+    gap: 3px !important;
+    margin-top: 4px !important;
+  }
+
   .score-btn {
-    padding: 6px 4px !important;
-    font-size: 0.84rem !important;
+    padding: 4px 2px !important;
+    font-size: 0.78rem !important;
+    border-radius: 6px !important;
   }
 }
 
@@ -4868,60 +5026,39 @@ body.perf-mode-deluxe #btn-toggle-perf-mode {
   box-shadow: 0 0 10px rgba(236, 72, 153, 0.45);
 }
 
-/* ── ⚡ 极速流畅模式 (Performance Mode): 核心外观 100% 保留，精简重度高斯粒子，降载 75%+ ── */
-body.perf-mode-performance .angel-spark:nth-child(n+3),
-body.perf-mode-performance .frostfire-fire-particle:nth-child(n+3),
-body.perf-mode-performance .frostfire-ice-particle:nth-child(n+3),
-body.perf-mode-performance .lava-spark:nth-child(n+3),
-body.perf-mode-performance .frost-spark:nth-child(n+3),
-body.perf-mode-performance .unicorn-spark:nth-child(n+3),
-body.perf-mode-performance .gold-particle:nth-child(n+3),
-body.perf-mode-performance .wisdom-spark:nth-child(n+2),
-body.perf-mode-performance .sakura-float-particle:nth-child(n+3) {
-  display: none !important;
-}
-
-/* 极速模式：将保留的少量点缀粒子双重高斯模糊简化为单层轻量发光，彻底避免 GPU 显存重绘掉帧 */
-body.perf-mode-performance .angel-spark {
-  text-shadow: 0 0 4px #ffd700 !important;
-  font-size: 1.1rem !important;
-}
-
-body.perf-mode-performance .unicorn-spark {
-  text-shadow: 0 0 4px #f472b6 !important;
-  font-size: 1.05rem !important;
-}
-
+/* ── ⚡ 极速流畅模式 (Performance Mode): 100% 关闭所有恐龙粒子效果与飘浮特效，极致丝滑 60FPS ── */
+body.perf-mode-performance .chaos-skin-aura,
+body.perf-mode-performance .rainbow-skin-aura,
+body.perf-mode-performance .fallen-skin-aura,
+body.perf-mode-performance .frostfire-skin-aura,
+body.perf-mode-performance .lava-skin-aura,
+body.perf-mode-performance .frost-skin-aura,
+body.perf-mode-performance .angel-skin-aura,
+body.perf-mode-performance .unicorn-skin-aura,
+body.perf-mode-performance .grad-wisdom-aura,
+body.perf-mode-performance div.gold-skin-aura,
+body.perf-mode-performance .chaos-spark,
+body.perf-mode-performance .rainbow-spark,
+body.perf-mode-performance .fallen-spark,
+body.perf-mode-performance .angel-spark,
+body.perf-mode-performance .unicorn-spark,
 body.perf-mode-performance .lava-spark,
-body.perf-mode-performance .frostfire-fire-particle {
-  text-shadow: 0 0 4px #ff3300 !important;
-  font-size: 1.05rem !important;
-}
-
 body.perf-mode-performance .frost-spark,
-body.perf-mode-performance .frostfire-ice-particle {
-  text-shadow: 0 0 4px #00d2ff !important;
-  font-size: 1.05rem !important;
-}
-
-body.perf-mode-performance .gold-particle {
-  text-shadow: 0 0 4px #ffa502 !important;
-  font-size: 1rem !important;
-}
-
-/* 极速模式：大草原漫步中隐藏所有漂浮上升粒子（保留神兽翅膀、光环、龙身流光脉络与 2D 地面法阵），彻底释放平板 60 FPS 性能 */
-body.perf-mode-performance .park-dino-body .angel-spark,
-body.perf-mode-performance .park-dino-body .unicorn-spark,
-body.perf-mode-performance .park-dino-body .lava-spark,
-body.perf-mode-performance .park-dino-body .frost-spark,
-body.perf-mode-performance .park-dino-body .frostfire-fire-particle,
-body.perf-mode-performance .park-dino-body .frostfire-ice-particle,
-body.perf-mode-performance .park-dino-body .gold-particle,
-body.perf-mode-performance .park-dino-body .wisdom-spark,
-body.perf-mode-performance .park-dino-body .star-float-particle,
-body.perf-mode-performance .park-dino-body .lava-float-particle,
-body.perf-mode-performance .park-dino-body .cyber-float-particle,
-body.perf-mode-performance .park-dino-body .sakura-float-particle {
+body.perf-mode-performance .frostfire-fire-particle,
+body.perf-mode-performance .frostfire-ice-particle,
+body.perf-mode-performance .gold-particle,
+body.perf-mode-performance .wisdom-spark,
+body.perf-mode-performance .star-float-particle,
+body.perf-mode-performance .lava-float-particle,
+body.perf-mode-performance .cyber-float-particle,
+body.perf-mode-performance .sakura-float-particle,
+body.perf-mode-performance .fairy-dust-spark,
+body.perf-mode-performance .deluxe-cherry-wrap,
+body.perf-mode-performance .cherry-petal-deluxe,
+body.perf-mode-performance .fireworks-particles,
+body.perf-mode-performance .pet-heart-particle {
   display: none !important;
+  animation: none !important;
 }
+
 

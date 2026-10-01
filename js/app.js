@@ -180,6 +180,17 @@ class DinoApp {
 
     // Add Reward Item Modal
     document.getElementById('btn-add-reward')?.addEventListener('click', () => this.openAddRewardModal());
+
+    // Fullscreen Mode Change Listener
+    const updateFsBtn = () => {
+      const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+      const btn = document.getElementById('btn-toggle-fullscreen');
+      if (btn) {
+        btn.innerHTML = isFs ? '🗗 退出全屏' : '🖥️ 全屏模式';
+      }
+    };
+    document.addEventListener('fullscreenchange', updateFsBtn);
+    document.addEventListener('webkitfullscreenchange', updateFsBtn);
   }
 
   switchView(viewName) {
@@ -902,6 +913,23 @@ class DinoApp {
     if (modal) modal.classList.remove('active');
     const revealEl = document.getElementById('fullscreen-wheel-winner-reveal');
     if (revealEl) revealEl.style.display = 'none';
+  }
+
+  toggleFullscreen() {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen().catch(err => console.log('Fullscreen failed:', err));
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(err => console.log('Exit fullscreen failed:', err));
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+    }
   }
 
   // View 5: 🏞️ Dinosaur Safari Park (恐龙大草原乐园)
@@ -3006,13 +3034,13 @@ class DinoApp {
     if (btn) {
       btn.innerHTML = isPerf ? '⚡ 渲染: 极速' : '✨ 渲染: 华丽';
       btn.title = isPerf 
-        ? '当前为【极速流畅模式】（精简散发粒子、降载75%+、低发热60FPS）。点击切换为【华丽特效】'
-        : '当前为【华丽特效模式】（满载神兽散发粒子与双层发光光晕）。点击切换为【极速流畅】';
+        ? '当前为【极速流畅模式】（所有恐龙粒子已完全关闭、极致流畅60FPS）。点击切换为【华丽特效】'
+        : '当前为【华丽特效模式】（满额神兽粒子流光全开）。点击切换为【极速流畅】';
     }
 
     if (showNotice && typeof this.showToast === 'function') {
       if (isPerf) {
-        this.showToast('⚡ 已切换为【极速流畅模式】（降低负载75%，丝滑高帧）');
+        this.showToast('⚡ 已切换为【极速流畅模式】（所有恐龙粒子已完全关闭，极致丝滑）');
       } else {
         this.showToast('✨ 已开启【华丽特效模式】（满额粒子流光全开）');
       }
