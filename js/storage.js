@@ -765,6 +765,70 @@ class StorageManager {
     return newStudent;
   }
 
+  // ── Behavior Tags CRUD (自定义加扣分事由与分值管理) ──────────────────────
+  getBehaviorTags() {
+    // 1. 优先读取当前班级独立的加扣分事由
+    if (this.data && Array.isArray(this.data.behaviorTags) && this.data.behaviorTags.length > 0) {
+      return JSON.parse(JSON.stringify(this.data.behaviorTags));
+    }
+    // 2. 次级读取本地通用全局自定义事由
+    try {
+      const raw = localStorage.getItem('DINOCLASS_CUSTOM_BEHAVIOR_TAGS_V1');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          if (this.data) this.data.behaviorTags = parsed;
+          return JSON.parse(JSON.stringify(parsed));
+        }
+      }
+    } catch (e) {}
+    // 3. 兜底返回系统默认事由预设
+    return (typeof DINO_DATA !== 'undefined' && Array.isArray(DINO_DATA.BEHAVIOR_TAGS))
+      ? JSON.parse(JSON.stringify(DINO_DATA.BEHAVIOR_TAGS))
+      : [];
+  }
+
+  saveBehaviorTags(newTags) {
+    if (!Array.isArray(newTags)) return false;
+    // 严格清洗数据，杜绝注入并规范化分值
+    const sanitized = newTags.map((tag, idx) => {
+      const score = parseInt(tag.score, 10) || 0;
+      const cleanText = this.escapeHTML((tag.text || '').trim()) || `加扣分事项 ${idx + 1}`;
+      const cleanIcon = (tag.icon || '').trim() || (score >= 0 ? '⭐' : '⚠️');
+      return {
+        id: tag.id || ('b_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)),
+        text: cleanText,
+        score: score,
+        category: score >= 0 ? 'positive' : 'negative',
+        icon: cleanIcon
+      };
+    });
+
+    if (this.data) {
+      this.data.behaviorTags = sanitized;
+      this.save();
+    }
+    try {
+      localStorage.setItem('DINOCLASS_CUSTOM_BEHAVIOR_TAGS_V1', JSON.stringify(sanitized));
+    } catch (e) {}
+
+    return sanitized;
+  }
+
+  resetBehaviorTags() {
+    const defaults = (typeof DINO_DATA !== 'undefined' && Array.isArray(DINO_DATA.BEHAVIOR_TAGS))
+      ? JSON.parse(JSON.stringify(DINO_DATA.BEHAVIOR_TAGS))
+      : [];
+    if (this.data) {
+      this.data.behaviorTags = defaults;
+      this.save();
+    }
+    try {
+      localStorage.setItem('DINOCLASS_CUSTOM_BEHAVIOR_TAGS_V1', JSON.stringify(defaults));
+    } catch (e) {}
+    return defaults;
+  }
+
   updateStudentScore(studentId, delta, reasonTagText = '手动调整') {
     const student = this.getStudentById(studentId);
     if (!student) return null;

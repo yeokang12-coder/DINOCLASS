@@ -566,6 +566,20 @@ class DinoApp {
     const modal = document.getElementById('modal-batch-score');
     if (!modal) return;
 
+    this.isBehaviorEditMode = false;
+    const selectView = document.getElementById('batch-score-select-view');
+    const editView = document.getElementById('batch-score-edit-view');
+    const modalTitle = document.getElementById('batch-modal-title');
+    const toggleBtn = document.getElementById('btn-toggle-behavior-edit');
+
+    if (selectView) selectView.style.display = 'block';
+    if (editView) editView.style.display = 'none';
+    if (modalTitle) modalTitle.textContent = '⚡ 快速加扣分事由选择';
+    if (toggleBtn) {
+      toggleBtn.innerHTML = '✏️ 修改事项与分值';
+      toggleBtn.title = '老师可自定义修改加扣分事项与分值';
+    }
+
     const selectedCount = this.selectedStudentIds.size;
     const targetInfo = document.getElementById('batch-target-info');
     if (targetInfo) {
@@ -574,30 +588,70 @@ class DinoApp {
         : `未勾选学生（提交时将应用给全班 ${window.storageMgr.getStudents().length} 人）`;
     }
 
-    // Render Behavior Tags
-    const tagsContainer = document.getElementById('behavior-tags-list');
-    if (tagsContainer) {
-      tagsContainer.innerHTML = DINO_DATA.BEHAVIOR_TAGS.map(tag => `
-        <div class="tag-card" onclick="window.dinoApp.selectBehaviorTag('${tag.id}')" id="tag-${tag.id}">
-          <div>
-            <span style="font-size: 1.2rem;">${tag.icon}</span>
-            <strong style="margin-left: 6px;">${tag.text}</strong>
-          </div>
-          <span class="${tag.score > 0 ? 'score-highlight' : ''}" style="font-weight: 800; font-size: 1.1rem; color: ${tag.score > 0 ? '#34d399' : '#f87171'};">
-            ${tag.score > 0 ? '+' : ''}${tag.score}
-          </span>
-        </div>
-      `).join('');
+    this.renderBehaviorTagsSelectView();
+
+    // Reset submit button text if no tag selected
+    const submitBtn = document.getElementById('btn-submit-batch-score');
+    if (submitBtn) {
+      if (this.selectedTag) {
+        const sign = this.selectedTag.score > 0 ? `+${this.selectedTag.score}` : `${this.selectedTag.score}`;
+        submitBtn.textContent = `确认应用 (${sign}分)`;
+      } else {
+        submitBtn.textContent = '确认应用加分';
+      }
     }
 
     modal.classList.add('active');
+  }
+
+  // 渲染选择模式下的加扣分标签网格
+  renderBehaviorTagsSelectView() {
+    const tagsContainer = document.getElementById('behavior-tags-list');
+    if (!tagsContainer) return;
+
+    const tags = window.storageMgr ? window.storageMgr.getBehaviorTags() : (typeof DINO_DATA !== 'undefined' ? DINO_DATA.BEHAVIOR_TAGS : []);
+    
+    // 如果之前选中的 tag 已经不在列表中，重置选择
+    if (this.selectedTag && !tags.some(t => t.id === this.selectedTag.id)) {
+      this.selectedTag = null;
+    }
+
+    tagsContainer.innerHTML = tags.map(tag => {
+      const isSelected = this.selectedTag && this.selectedTag.id === tag.id;
+      const isPos = tag.score > 0;
+      const isNeg = tag.score < 0;
+      const scoreColor = isPos ? '#34d399' : (isNeg ? '#f87171' : '#94a3b8');
+      const scoreSign = isPos ? '+' : '';
+
+      return `
+        <div class="tag-card ${isSelected ? 'selected' : ''}" onclick="window.dinoApp.selectBehaviorTag('${tag.id}')" id="tag-${tag.id}">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.25rem;">${tag.icon}</span>
+            <strong style="font-size: 0.95rem;">${tag.text}</strong>
+          </div>
+          <div class="tag-card-actions">
+            <span class="${isPos ? 'score-highlight' : ''}" style="font-weight: 800; font-size: 1.1rem; color: ${scoreColor};">
+              ${scoreSign}${tag.score}
+            </span>
+            <button type="button" class="tag-card-edit-btn" onclick="event.stopPropagation(); window.dinoApp.editSingleBehaviorTag('${tag.id}')" title="修改此项与分值">✏️</button>
+          </div>
+        </div>
+      `;
+    }).join('');
   }
 
   selectBehaviorTag(tagId) {
     document.querySelectorAll('.tag-card').forEach(c => c.classList.remove('selected'));
     const card = document.getElementById(`tag-${tagId}`);
     if (card) card.classList.add('selected');
-    this.selectedTag = DINO_DATA.BEHAVIOR_TAGS.find(t => t.id === tagId);
+    const tags = window.storageMgr ? window.storageMgr.getBehaviorTags() : DINO_DATA.BEHAVIOR_TAGS;
+    this.selectedTag = tags.find(t => t.id === tagId);
+
+    const submitBtn = document.getElementById('btn-submit-batch-score');
+    if (submitBtn && this.selectedTag) {
+      const sign = this.selectedTag.score > 0 ? `+${this.selectedTag.score}` : `${this.selectedTag.score}`;
+      submitBtn.textContent = `确认应用 (${sign}分)`;
+    }
   }
 
   submitBatchScore() {
@@ -618,6 +672,254 @@ class DinoApp {
     document.getElementById('modal-batch-score')?.classList.remove('active');
     this.selectedStudentIds.clear();
     this.updateSelectedCount();
+  }
+
+  // ── Behavior Tags Customization Editor ─────────────────────────────────
+  toggleBehaviorEditMode() {
+    if (this.isBehaviorEditMode) {
+      this.cancelBehaviorEditMode();
+    } else {
+      this.enterBehaviorEditMode();
+    }
+  }
+
+  enterBehaviorEditMode(focusTagId = null) {
+    this.isBehaviorEditMode = true;
+    const selectView = document.getElementById('batch-score-select-view');
+    const editView = document.getElementById('batch-score-edit-view');
+    const modalTitle = document.getElementById('batch-modal-title');
+    const toggleBtn = document.getElementById('btn-toggle-behavior-edit');
+
+    if (selectView) selectView.style.display = 'none';
+    if (editView) editView.style.display = 'block';
+    if (modalTitle) modalTitle.textContent = '✏️ 自定义加扣分事项与分值';
+    if (toggleBtn) {
+      toggleBtn.innerHTML = '🔙 返回选择模式';
+      toggleBtn.title = '放弃未保存编辑并返回选择';
+    }
+
+    // Render Rows
+    const editList = document.getElementById('behavior-tags-edit-list');
+    if (editList) {
+      const tags = window.storageMgr ? window.storageMgr.getBehaviorTags() : DINO_DATA.BEHAVIOR_TAGS;
+      editList.innerHTML = tags.map(tag => this.createBehaviorTagRowHtml(tag)).join('');
+
+      if (focusTagId) {
+        setTimeout(() => {
+          const row = document.getElementById(`edit-row-${focusTagId}`);
+          if (row) {
+            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            row.classList.add('row-focused');
+            const textInput = row.querySelector('.tag-row-text');
+            if (textInput) {
+              textInput.focus();
+              textInput.select();
+            }
+          }
+        }, 50);
+      }
+    }
+  }
+
+  createBehaviorTagRowHtml(tag) {
+    const isPos = tag.score >= 0;
+    return `
+      <div class="behavior-edit-row" data-id="${tag.id}" id="edit-row-${tag.id}">
+        <input type="text" class="tag-row-icon" value="${tag.icon || '⭐'}" maxlength="4" title="点击或输入emoji图标" onfocus="window.dinoApp._lastFocusedIconInput = this">
+        <input type="text" class="tag-row-text" value="${tag.text || ''}" placeholder="事项名称（如：积极回答问题）" maxlength="30">
+        <div class="tag-score-wrap" style="display: flex; align-items: center; gap: 4px;">
+          <button type="button" class="btn-toggle-sign ${isPos ? 'is-positive' : 'is-negative'}" onclick="window.dinoApp.toggleRowSign('${tag.id}')" title="点击切换正负符号">
+            ${isPos ? '+' : '-'}
+          </button>
+          <input type="number" class="tag-row-score ${isPos ? 'is-positive' : 'is-negative'}" value="${tag.score}" oninput="window.dinoApp.onRowScoreInput('${tag.id}')" title="输入加减分数值">
+        </div>
+        <button type="button" class="btn-row-delete" onclick="window.dinoApp.deleteBehaviorRow('${tag.id}')" title="删除此事项">
+          🗑️
+        </button>
+      </div>
+    `;
+  }
+
+  addNewBehaviorTagRow() {
+    const editList = document.getElementById('behavior-tags-edit-list');
+    if (!editList) return;
+
+    const newId = 'b_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+    const newTag = {
+      id: newId,
+      icon: '⭐',
+      text: '新加分事项',
+      score: 2
+    };
+
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = this.createBehaviorTagRowHtml(newTag);
+    const rowEl = tempDiv.firstElementChild;
+    editList.appendChild(rowEl);
+
+    rowEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    const textInput = rowEl.querySelector('.tag-row-text');
+    if (textInput) {
+      textInput.focus();
+      textInput.select();
+    }
+  }
+
+  deleteBehaviorRow(tagId) {
+    const editList = document.getElementById('behavior-tags-edit-list');
+    if (!editList) return;
+    const row = editList.querySelector(`.behavior-edit-row[data-id="${tagId}"]`);
+    if (!row) return;
+
+    const rowsCount = editList.querySelectorAll('.behavior-edit-row').length;
+    if (rowsCount <= 1) {
+      alert('请至少保留一个加扣分事项！');
+      return;
+    }
+
+    row.style.opacity = '0';
+    row.style.transform = 'scale(0.9)';
+    setTimeout(() => {
+      row.remove();
+    }, 150);
+  }
+
+  toggleRowSign(tagId) {
+    const row = document.getElementById(`edit-row-${tagId}`);
+    if (!row) return;
+    const scoreInput = row.querySelector('.tag-row-score');
+    const signBtn = row.querySelector('.btn-toggle-sign');
+    if (!scoreInput || !signBtn) return;
+
+    let val = parseInt(scoreInput.value, 10) || 0;
+    val = -val;
+    scoreInput.value = val;
+
+    const isPos = val >= 0;
+    signBtn.textContent = isPos ? '+' : '-';
+    signBtn.className = `btn-toggle-sign ${isPos ? 'is-positive' : 'is-negative'}`;
+    scoreInput.className = `tag-row-score ${isPos ? 'is-positive' : 'is-negative'}`;
+  }
+
+  onRowScoreInput(tagId) {
+    const row = document.getElementById(`edit-row-${tagId}`);
+    if (!row) return;
+    const scoreInput = row.querySelector('.tag-row-score');
+    const signBtn = row.querySelector('.btn-toggle-sign');
+    if (!scoreInput || !signBtn) return;
+
+    const val = parseInt(scoreInput.value, 10);
+    const isPos = isNaN(val) ? true : val >= 0;
+
+    signBtn.textContent = isPos ? '+' : '-';
+    signBtn.className = `btn-toggle-sign ${isPos ? 'is-positive' : 'is-negative'}`;
+    scoreInput.className = `tag-row-score ${isPos ? 'is-positive' : 'is-negative'}`;
+  }
+
+  insertQuickEmoji(emoji) {
+    if (this._lastFocusedIconInput && document.body.contains(this._lastFocusedIconInput)) {
+      this._lastFocusedIconInput.value = emoji;
+      this._lastFocusedIconInput.focus();
+      return;
+    }
+    // Default to last row's icon
+    const editList = document.getElementById('behavior-tags-edit-list');
+    if (editList) {
+      const rows = editList.querySelectorAll('.behavior-edit-row');
+      if (rows.length > 0) {
+        const lastRow = rows[rows.length - 1];
+        const iconInput = lastRow.querySelector('.tag-row-icon');
+        if (iconInput) iconInput.value = emoji;
+      }
+    }
+  }
+
+  editSingleBehaviorTag(tagId) {
+    this.enterBehaviorEditMode(tagId);
+  }
+
+  saveCustomBehaviorTags() {
+    const editList = document.getElementById('behavior-tags-edit-list');
+    if (!editList) return;
+
+    const rows = Array.from(editList.querySelectorAll('.behavior-edit-row'));
+    if (rows.length === 0) {
+      alert('请至少保留一个加扣分事项！');
+      return;
+    }
+
+    const newTags = [];
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      const id = row.getAttribute('data-id') || ('b_' + i);
+      const iconInput = row.querySelector('.tag-row-icon');
+      const textInput = row.querySelector('.tag-row-text');
+      const scoreInput = row.querySelector('.tag-row-score');
+
+      const text = textInput ? textInput.value.trim() : '';
+      if (!text) {
+        alert(`第 ${i + 1} 项的事由名称不能为空！`);
+        textInput?.focus();
+        return;
+      }
+
+      const score = parseInt(scoreInput ? scoreInput.value : '0', 10);
+      const icon = iconInput ? (iconInput.value.trim() || (score >= 0 ? '⭐' : '⚠️')) : '⭐';
+
+      newTags.push({
+        id: id,
+        text: text,
+        score: isNaN(score) ? 0 : score,
+        category: score >= 0 ? 'positive' : 'negative',
+        icon: icon
+      });
+    }
+
+    if (window.storageMgr) {
+      window.storageMgr.saveBehaviorTags(newTags);
+    }
+
+    this.showToast('✅ 加扣分事项与分值已成功保存！');
+    this.cancelBehaviorEditMode();
+  }
+
+  resetDefaultBehaviorTags() {
+    if (!confirm('确定要恢复默认预设的 12 项加扣分事项吗？您自拟的修改将被重置。')) return;
+
+    if (window.storageMgr) {
+      window.storageMgr.resetBehaviorTags();
+    }
+
+    this.showToast('🔄 已恢复系统默认加扣分事项！');
+    
+    // Refresh edit view if active, else select view
+    if (this.isBehaviorEditMode) {
+      const editList = document.getElementById('behavior-tags-edit-list');
+      if (editList) {
+        const tags = window.storageMgr ? window.storageMgr.getBehaviorTags() : DINO_DATA.BEHAVIOR_TAGS;
+        editList.innerHTML = tags.map(tag => this.createBehaviorTagRowHtml(tag)).join('');
+      }
+    } else {
+      this.renderBehaviorTagsSelectView();
+    }
+  }
+
+  cancelBehaviorEditMode() {
+    this.isBehaviorEditMode = false;
+    const selectView = document.getElementById('batch-score-select-view');
+    const editView = document.getElementById('batch-score-edit-view');
+    const modalTitle = document.getElementById('batch-modal-title');
+    const toggleBtn = document.getElementById('btn-toggle-behavior-edit');
+
+    if (selectView) selectView.style.display = 'block';
+    if (editView) editView.style.display = 'none';
+    if (modalTitle) modalTitle.textContent = '⚡ 快速加扣分事由选择';
+    if (toggleBtn) {
+      toggleBtn.innerHTML = '✏️ 修改事项与分值';
+      toggleBtn.title = '老师可自定义修改加扣分事项与分值';
+    }
+
+    this.renderBehaviorTagsSelectView();
   }
 
   // Modal: Add Student
@@ -1517,6 +1819,15 @@ class DinoApp {
     if (itemId === 'item_rainbow_skin') return !!this.shopTryOnEquipped.rainbow_skin;
     if (itemId === 'item_fallen_skin') return !!this.shopTryOnEquipped.fallen_skin;
     if (itemId === 'item_grad_cap') return !!this.shopTryOnEquipped.grad_cap;
+    if (itemId === 'item_hw_side_bow') return !!this.shopTryOnEquipped.hw_side_bow;
+    if (itemId === 'item_hw_astronaut') return !!this.shopTryOnEquipped.hw_astronaut;
+    if (itemId === 'item_hw_cyber_visor') return !!this.shopTryOnEquipped.hw_cyber_visor;
+    if (itemId === 'item_hw_sprout') return !!this.shopTryOnEquipped.hw_sprout;
+    if (itemId === 'item_hw_magician') return !!this.shopTryOnEquipped.hw_magician;
+    if (itemId === 'item_hw_explorer') return !!this.shopTryOnEquipped.hw_explorer;
+    if (itemId === 'item_hw_cat_ears') return !!this.shopTryOnEquipped.hw_cat_ears;
+    if (itemId === 'item_hw_tiara') return !!this.shopTryOnEquipped.hw_tiara;
+    if (itemId === 'item_hw_chef') return !!this.shopTryOnEquipped.hw_chef;
     if (itemId === 'item_dialogue') return !!this.shopTryOnHasDialogue;
     if (itemId === 'item_fireworks') return !!this.shopTryOnHasFireworks;
     if (itemId === 'item_title') return !!this.shopTryOnTitle;
@@ -1650,6 +1961,9 @@ class DinoApp {
       }
     } else if (itemId === 'item_grad_cap') {
       this.shopTryOnEquipped.grad_cap = !this.shopTryOnEquipped.grad_cap;
+    } else if (itemId.startsWith('item_hw_')) {
+      const hwKey = itemId.replace('item_', '');
+      this.shopTryOnEquipped[hwKey] = !this.shopTryOnEquipped[hwKey];
     } else if (itemId === 'item_dialogue') {
       this.shopTryOnHasDialogue = !this.shopTryOnHasDialogue;
     } else if (itemId === 'item_fireworks') {
@@ -2128,7 +2442,14 @@ class DinoApp {
     }
 
     // ── OTHER VISUAL DINO REWARDS (Skins & Accessories) ──
-    const visualRewardIds = ['item_crown', 'item_sunglasses', 'item_cherry_blossom', 'item_magic_circle', 'item_lava_circle', 'item_cyber_circle', 'item_sakura_circle', 'item_companion_fairy', 'item_chroma_gold', 'item_lava_skin', 'item_frost_skin', 'item_angel_skin', 'item_unicorn_skin', 'item_rainbow_skin', 'item_fallen_skin', 'item_grad_cap'];
+    const visualRewardIds = [
+      'item_crown', 'item_sunglasses', 'item_cherry_blossom', 'item_magic_circle', 'item_lava_circle',
+      'item_cyber_circle', 'item_sakura_circle', 'item_companion_fairy', 'item_chroma_gold',
+      'item_lava_skin', 'item_frost_skin', 'item_angel_skin', 'item_unicorn_skin', 'item_rainbow_skin',
+      'item_fallen_skin', 'item_grad_cap',
+      'item_hw_side_bow', 'item_hw_astronaut', 'item_hw_cyber_visor', 'item_hw_sprout',
+      'item_hw_magician', 'item_hw_explorer', 'item_hw_cat_ears', 'item_hw_tiara', 'item_hw_chef'
+    ];
     if (visualRewardIds.includes(itemId)) {
       this.adjustScore(studentId, -item.cost, `兑换【${item.title}】`);
       if (itemId === 'item_crown') {
@@ -2292,6 +2613,15 @@ class DinoApp {
       }
       setupItem('chaos', student.earned.chaos_skin, student.equipped.chaos_skin);
       setupItem('grad', student.earned.grad_cap, student.equipped.grad_cap);
+      setupItem('hw_side_bow', student.earned.hw_side_bow, student.equipped.hw_side_bow);
+      setupItem('hw_astronaut', student.earned.hw_astronaut, student.equipped.hw_astronaut);
+      setupItem('hw_cyber_visor', student.earned.hw_cyber_visor, student.equipped.hw_cyber_visor);
+      setupItem('hw_sprout', student.earned.hw_sprout, student.equipped.hw_sprout);
+      setupItem('hw_magician', student.earned.hw_magician, student.equipped.hw_magician);
+      setupItem('hw_explorer', student.earned.hw_explorer, student.equipped.hw_explorer);
+      setupItem('hw_cat_ears', student.earned.hw_cat_ears, student.equipped.hw_cat_ears);
+      setupItem('hw_tiara', student.earned.hw_tiara, student.equipped.hw_tiara);
+      setupItem('hw_chef', student.earned.hw_chef, student.equipped.hw_chef);
       setupItem('fireworks', student.earned.fireworks, student.equipped.fireworks);
       setupItem('dialogue', !!student.customDialogue, !!student.customDialogue);
 
@@ -2400,6 +2730,15 @@ class DinoApp {
     const fallenCb = getCb('fallen');
     const chaosCb = getCb('chaos');
     const gradCb = getCb('grad');
+    const hwSideBowCb = getCb('hw_side_bow');
+    const hwAstronautCb = getCb('hw_astronaut');
+    const hwCyberVisorCb = getCb('hw_cyber_visor');
+    const hwSproutCb = getCb('hw_sprout');
+    const hwMagicianCb = getCb('hw_magician');
+    const hwExplorerCb = getCb('hw_explorer');
+    const hwCatEarsCb = getCb('hw_cat_ears');
+    const hwTiaraCb = getCb('hw_tiara');
+    const hwChefCb = getCb('hw_chef');
     const fireworksCb = getCb('fireworks');
     const dialogueCb = getCb('dialogue');
 
@@ -2433,6 +2772,15 @@ class DinoApp {
     student.equipped.chaos_skin = chaosCb && student.earned.chaos_skin ? chaosCb.checked : false;
 
     if (gradCb && student.earned.grad_cap) student.equipped.grad_cap = gradCb.checked;
+    if (hwSideBowCb && student.earned.hw_side_bow) student.equipped.hw_side_bow = hwSideBowCb.checked;
+    if (hwAstronautCb && student.earned.hw_astronaut) student.equipped.hw_astronaut = hwAstronautCb.checked;
+    if (hwCyberVisorCb && student.earned.hw_cyber_visor) student.equipped.hw_cyber_visor = hwCyberVisorCb.checked;
+    if (hwSproutCb && student.earned.hw_sprout) student.equipped.hw_sprout = hwSproutCb.checked;
+    if (hwMagicianCb && student.earned.hw_magician) student.equipped.hw_magician = hwMagicianCb.checked;
+    if (hwExplorerCb && student.earned.hw_explorer) student.equipped.hw_explorer = hwExplorerCb.checked;
+    if (hwCatEarsCb && student.earned.hw_cat_ears) student.equipped.hw_cat_ears = hwCatEarsCb.checked;
+    if (hwTiaraCb && student.earned.hw_tiara) student.equipped.hw_tiara = hwTiaraCb.checked;
+    if (hwChefCb && student.earned.hw_chef) student.equipped.hw_chef = hwChefCb.checked;
     if (fireworksCb && student.earned.fireworks) student.equipped.fireworks = fireworksCb.checked;
     if (dialogueCb && !dialogueCb.checked) student.customDialogue = '';
 

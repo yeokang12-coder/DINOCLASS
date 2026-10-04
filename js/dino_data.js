@@ -43,19 +43,28 @@ const DINO_DATA = {
     { id: 'item_wall',      title: '电子光荣榜置顶卡',     desc: '恐龙照片在班级大屏及主页置顶特写展示一日',           cost: 30,  category: 'fun',  subCategory: 'privilege', icon: '🌟', stock: 5,  durationDays: 1 },
 
     // 🐲 2. 神兽终极皮肤馆 (Mythical Dinosaur Skins)
-    { id: 'item_lava_skin',   title: '🌋 熔岩火龙皮肤',     desc: '基因重构为黑曜石暗红脉络皮肤，环绕动态上升爆发火山火花粒子', cost: 80, category: 'dino', subCategory: 'skin', icon: '🌋', stock: 99, durationDays: 0 },
-    { id: 'item_frost_skin',  title: '❄️ 极寒冰龙皮肤',     desc: '基因重构为千年玄冰幽蓝霜雪皮肤，环绕晶莹冰棱碎屑与极寒冰霜雪花粒子', cost: 80, category: 'dino', subCategory: 'skin', icon: '❄️', stock: 99, durationDays: 0 },
-    { id: 'item_angel_skin',  title: '👼 炽天大天使皮肤',   desc: '基因重构为纯白圣洁大天使皮肤，展开圣光羽翼并悬浮神圣天使光环', cost: 80, category: 'dino', subCategory: 'skin', icon: '👼', stock: 99, durationDays: 0 },
-    { id: 'item_fallen_skin', title: '🌌 幽冥堕天使皮肤',   desc: '基因重构为暗曜蚀光黑翼皮肤，展开幽黑紫曜神翼与月蚀神环，深邃霸气', cost: 80, category: 'dino', subCategory: 'skin', icon: '🌌', stock: 99, durationDays: 0 },
-    { id: 'item_rainbow_skin',title: '🌈 虹彩炽天龙皮肤',   desc: '基因重构为七彩虹光天神皮肤，展开七彩流光羽翼与天界旋转棱镜神环', cost: 80, category: 'dino', subCategory: 'skin', icon: '🌈', stock: 99, durationDays: 0 },
-    { id: 'item_unicorn_skin',title: '🦄 梦幻独角兽皮肤',   desc: '基因重构为极光彩虹梦幻皮肤，额前挺立螺旋星芒独角与梦幻星屑', cost: 80, category: 'dino', subCategory: 'skin', icon: '🦄', stock: 99, durationDays: 0 },
+    { id: 'item_lava_skin',   title: '🌋 熔岩火龙皮肤',     desc: '基因重构为黑曜石暗红脉络皮肤，环绕动态上升爆发火山火花粒子', cost: 90, category: 'dino', subCategory: 'skin', icon: '🌋', stock: 99, durationDays: 0 },
+    { id: 'item_frost_skin',  title: '❄️ 极寒冰龙皮肤',     desc: '基因重构为千年玄冰幽蓝霜雪皮肤，环绕晶莹冰棱碎屑与极寒冰霜雪花粒子', cost: 90, category: 'dino', subCategory: 'skin', icon: '❄️', stock: 99, durationDays: 0 },
+    { id: 'item_angel_skin',  title: '👼 炽天大天使皮肤',   desc: '基因重构为纯白圣洁大天使皮肤，展开圣光羽翼并悬浮神圣天使光环', cost: 90, category: 'dino', subCategory: 'skin', icon: '👼', stock: 99, durationDays: 0 },
+    { id: 'item_fallen_skin', title: '🌌 幽冥堕天使皮肤',   desc: '基因重构为暗曜蚀光黑翼皮肤，展开幽黑紫曜神翼与月蚀神环，深邃霸气', cost: 90, category: 'dino', subCategory: 'skin', icon: '🌌', stock: 99, durationDays: 0 },
+    { id: 'item_rainbow_skin',title: '🌈 虹彩炽天龙皮肤',   desc: '基因重构为七彩虹光天神皮肤，展开七彩流光羽翼与天界旋转棱镜神环', cost: 90, category: 'dino', subCategory: 'skin', icon: '🌈', stock: 99, durationDays: 0 },
+    { id: 'item_unicorn_skin',title: '🦄 梦幻独角兽皮肤',   desc: '基因重构为极光彩虹梦幻皮肤，额前挺立螺旋星芒独角与梦幻星屑', cost: 90, category: 'dino', subCategory: 'skin', icon: '🦄', stock: 99, durationDays: 0 },
     { id: 'item_chroma_gold', title: '🏆 耀世黄金龙皮肤',   desc: '改变恐龙基因，使其基础颜色变为璀璨的黄金色',         cost: 90, category: 'dino', subCategory: 'skin', icon: '🏆', stock: 99, durationDays: 0 },
 
     // 👑 3. 头饰与炫酷装扮区 (Headwear & Accessories)
     { id: 'item_crown',     title: '👑 超炫流光金冠框',     desc: '解锁并穿戴会闪烁流光粒子与炫酷光晕的金冠框',         cost: 50,  category: 'dino', subCategory: 'accessory', icon: '✨', stock: 99, durationDays: 0 },
-    { id: 'item_sunglasses',title: '🕶️ 酷炫ThugLife墨镜',  desc: '给恐龙戴上一副黑超墨镜，瞬间化身班级小霸王',         cost: 30,  category: 'dino', subCategory: 'accessory', icon: '🕶️', stock: 99, durationDays: 0 },
-    { id: 'item_grad_cap',    title: '🎓 学霸博士帽',       desc: '穿戴带金黄流苏的学术博士帽与圆框金丝眼镜，散发学霸智慧光晕', cost: 40, category: 'dino', subCategory: 'accessory', icon: '🎓', stock: 99, durationDays: 0 },
-    { id: 'item_title',     title: '🏷️ 炫酷专属称号',     desc: '在恐龙卡面上挂上专属荣耀勋章',                       cost: 35,  category: 'dino', subCategory: 'accessory', icon: '🏷️', stock: 99, durationDays: 0 },
+    { id: 'item_sunglasses',title: '🕶️ 酷炫ThugLife墨镜',  desc: '给恐龙戴上一副黑超墨镜，瞬间化身班级小霸王',         cost: 50,  category: 'dino', subCategory: 'accessory', icon: '🕶️', stock: 99, durationDays: 0 },
+    { id: 'item_grad_cap',    title: '🎓 学霸博士帽',       desc: '穿戴带金黄流苏的学术博士帽与圆框金丝眼镜，散发学霸智慧光晕', cost: 50, category: 'dino', subCategory: 'accessory', icon: '🎓', stock: 99, durationDays: 0 },
+    { id: 'item_hw_side_bow', title: '🎀 甜心侧戴大蝴蝶结', desc: '轻巧侧戴于右耳畔的萌系大蝴蝶结，双层波点缎带自然垂坠，散发温暖助人光采', cost: 50, category: 'dino', subCategory: 'accessory', icon: '🎀', stock: 99, durationDays: 0 },
+    { id: 'item_hw_astronaut', title: '🛰️ 萌趣全包覆太空头盔', desc: 'Q版球形全包覆航天宇航头盔，高透光防眩面罩与通讯天线，勇攀科学探索高峰', cost: 50, category: 'dino', subCategory: 'accessory', icon: '🛰️', stock: 99, durationDays: 0 },
+    { id: 'item_hw_cyber_visor', title: '🥽 赛博量子未来护目镜', desc: '钛合金流线极客护目镜，投射全息动态青蓝HUD网格与AI算力刻度，逻辑思维拉满', cost: 50, category: 'dino', subCategory: 'accessory', icon: '🥽', stock: 99, durationDays: 0 },
+    { id: 'item_hw_sprout', title: '🌱 萌趣小草发芽发夹', desc: '头顶冒出两片翠绿嫩芽与晶莹晨露，随呼吸微颤，象征每天向阳而生、茁壮成长', cost: 50, category: 'dino', subCategory: 'accessory', icon: '🌱', stock: 99, durationDays: 0 },
+    { id: 'item_hw_magician', title: '🎩 魔法星光高礼帽', desc: '深蓝丝绸魔术高礼帽，环绕酒红金扣丝带并斜插小魔杖，巧解难题、思维如魔法', cost: 50, category: 'dino', subCategory: 'accessory', icon: '🎩', stock: 99, durationDays: 0 },
+    { id: 'item_hw_explorer', title: '⛑️ 旷野探险家草帽', desc: '宽沿编织遮阳探险草帽，帽顶佩戴复古双筒防风护目镜，热爱大自然与科学实践', cost: 50, category: 'dino', subCategory: 'accessory', icon: '⛑️', stock: 99, durationDays: 0 },
+    { id: 'item_hw_cat_ears', title: '🐱 呆萌毛茸茸猫耳', desc: '粉白双色软萌小猫耳发箍，中间点缀金色小铃铛，小恐龙秒变治愈系元气猫猫龙', cost: 50, category: 'dino', subCategory: 'accessory', icon: '🐱', stock: 99, durationDays: 0 },
+    { id: 'item_hw_tiara', title: '👑 冰晶雪花公主冠', desc: '晶莹水蓝六角冰晶小王冠，镶嵌深蓝宝石与雪花尖塔，散发典雅高贵的标兵风采', cost: 50, category: 'dino', subCategory: 'accessory', icon: '👑', stock: 99, durationDays: 0 },
+    { id: 'item_hw_chef', title: '🍜 料理小当家厨师帽', desc: '挺拔纯白百褶大厨帽，正面印有金色小刀叉荣誉徽章，热爱班级集体劳动与惜粮公物', cost: 50, category: 'dino', subCategory: 'accessory', icon: '🍜', stock: 99, durationDays: 0 },
+    { id: 'item_title',     title: '🏷️ 炫酷专属称号',     desc: '在恐龙卡面上挂上专属荣耀勋章',                       cost: 50,  category: 'dino', subCategory: 'accessory', icon: '🏷️', stock: 99, durationDays: 0 },
 
     // ✨ 4. 魔法光环与灵动特效 (Auras, Companions & FX)
     { id: 'item_cherry_blossom', title: '🌸 唯美樱花飘落特效', desc: '在恐龙周围环绕飘落粉色樱花瓣的浪漫特效',           cost: 50,  category: 'dino', subCategory: 'fx', icon: '🌸', stock: 99, durationDays: 0 },
@@ -156,6 +165,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     const isLava = activeSkin === 'lava';
     const isGold = activeSkin === 'gold';
     const isCelestial = isAngel || isRainbow || isFallen || isChaos;
+    const hasSkinWings = isCelestial || isLava || isFrost || isUnicorn || isGold || isFrostFire;
 
     const c1 = isChaos ? '#ffffff' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isUnicorn ? '#ffffff' : (isAngel ? '#e2e8f0' : (isFrost ? '#38bdf8' : (isLava ? '#ea580c' : (isGold ? '#fec84d' : spec.color))))))));
     const c2 = isChaos ? '#18181b' : (isRainbow ? '#818cf8' : (isFallen ? '#7c3aed' : (isFrostFire ? '#00d2ff' : (isUnicorn ? '#f5d0fe' : (isAngel ? '#94a3b8' : (isFrost ? '#0284c7' : (isLava ? '#b91c1c' : (isGold ? '#e69500' : spec.secondaryColor))))))));
@@ -575,6 +585,8 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   // 👼 Celestial Halo (Angel Golden Ring, Rainbow Spectrum Ring, Fallen Eclipse Ring, Chaos Yin-Yang Ring)
   const drawAngelHalo = (cx, cy, rx = 18, ry = 5) => {
     if (!isCelestial) return '';
+    const hasTallHat = !!(equipped.hw_magician || equipped.hw_chef || equipped.grad_cap);
+    if (hasTallHat) cy -= 18;
     if (isChaos) {
       return `
       <g class="dino-chaos-halo">
@@ -650,7 +662,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
 
   // 🪽 Majestic Feathered Wings Engine (Angel, Rainbow, Fallen, Chaos, Lava, Frost, FrostFire, Unicorn, Gold, Species)
   const drawAngelWings = (leftX, rightX, y, scale = 1, forceRender = false) => {
-    if (!isCelestial && !forceRender) return '';
+    if (!hasSkinWings && !forceRender) return '';
 
     const getWingConfig = (isLeft) => {
       if (isChaos) return isLeft ? 'angel' : 'fallen';
@@ -1055,6 +1067,184 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
       <path d="M${10},${-h/2+6} L${w/2-9},${-h/2+6}" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.75"/>
     </g>` : '';
 
+  // 🎀 Sweetheart Side Bow (Tilted 22°, Hairpin Style on Right Side)
+  const drawSideBow = (cx, cy, scale = 1) => equipped.hw_side_bow ? `
+    <g transform="translate(${cx + 17 * scale}, ${cy - 2 * scale}) scale(${scale}) rotate(22)">
+      <!-- Left Wing -->
+      <path d="M0,0 C-14,-15 -17,11 0,0 Z" fill="#f43f5e" stroke="#be123c" stroke-width="1.2"/>
+      <!-- Right Wing -->
+      <path d="M0,0 C14,-15 17,11 0,0 Z" fill="#fb7185" stroke="#be123c" stroke-width="1.2"/>
+      <circle cx="-7" cy="-3" r="1.8" fill="#ffffff" opacity="0.95"/>
+      <circle cx="-11" cy="2" r="1.5" fill="#ffffff" opacity="0.95"/>
+      <circle cx="7" cy="-3" r="1.8" fill="#ffffff" opacity="0.95"/>
+      <circle cx="11" cy="2" r="1.5" fill="#ffffff" opacity="0.95"/>
+      <!-- Dangling Ribbons -->
+      <path d="M-2,2 L-6,14 L-2,13 L0,3 Z" fill="#e11d48"/>
+      <path d="M2,2 L8,14 L4,13 L1,3 Z" fill="#e11d48"/>
+      <!-- Center Gold Button -->
+      <circle cx="0" cy="0" r="4.2" fill="#ffd700" stroke="#f59e0b" stroke-width="1"/>
+      <circle cx="0" cy="0" r="2.2" fill="#ffffff" opacity="0.8"/>
+    </g>` : '';
+
+  // 🛰️ Cute Full-Coverage Astronaut Space Helmet (Crystal-Clear Transparent Bubble Dome)
+  const drawAstronautHelmet = (cx, faceY, scale = 1, isUnicorn = false, activeSkin = null) => equipped.hw_astronaut ? `
+    <g transform="translate(${cx}, ${faceY}) scale(${scale})">
+      <!-- 1. Transparent Glass Visor Window (High-transparency so dinosaur face & eyes show 100% clearly) -->
+      <defs>
+        <radialGradient id="helmetGlassGrad${id}" cx="35%" cy="30%" r="75%">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.22)"/>
+          <stop offset="65%" stop-color="${activeSkin === 'lava' ? 'rgba(249,115,22,0.10)' : (activeSkin === 'frost' ? 'rgba(56,189,248,0.12)' : 'rgba(14,165,233,0.08)')}"/>
+          <stop offset="100%" stop-color="${activeSkin === 'lava' ? 'rgba(185,28,28,0.20)' : (activeSkin === 'frost' ? 'rgba(2,132,199,0.18)' : 'rgba(3,105,161,0.16)')}"/>
+        </radialGradient>
+      </defs>
+      <ellipse cx="0" cy="0" rx="28" ry="24" fill="url(#helmetGlassGrad${id})"/>
+      
+      <!-- 2. Visor Outer Protective Ring & Shell Frame (Hollowed center - NO solid opaque fill) -->
+      <ellipse cx="0" cy="-2" rx="33" ry="29" fill="none" stroke="${activeSkin === 'gold' ? '#ffd700' : '#f8fafc'}" stroke-width="4.5" filter="drop-shadow(0 2px 6px rgba(0,0,0,0.25))"/>
+      <ellipse cx="0" cy="-2" rx="35" ry="31" fill="none" stroke="#94a3b8" stroke-width="1.2"/>
+      
+      <!-- Visor Metallic Seal Bezel Ring -->
+      <ellipse cx="0" cy="0" rx="29" ry="25" fill="none" stroke="${activeSkin === 'lava' ? '#f97316' : (activeSkin === 'frost' ? '#38bdf8' : (activeSkin === 'gold' ? '#fde047' : '#0284c7'))}" stroke-width="2.5"/>
+      <ellipse cx="0" cy="0" rx="30" ry="26" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="0.8"/>
+
+      <!-- 3. Specular Curved Glass Reflections -->
+      <path d="M-19,-12 C-10,-21 10,-21 19,-12" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+      <circle cx="17" cy="-9" r="1.5" fill="#ffffff" opacity="0.9"/>
+      <path d="M-21,-3 C-23,5 -20,12 -16,16" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
+
+      <!-- 4. Lower Space Collar Seal Ring -->
+      <ellipse cx="0" cy="26" rx="24" ry="5.5" fill="#1e293b" stroke="${activeSkin === 'lava' ? '#f97316' : (activeSkin === 'gold' ? '#ffd700' : '#0ea5e9')}" stroke-width="1.8"/>
+      <ellipse cx="0" cy="26" rx="20" ry="3.2" fill="#e2e8f0"/>
+
+      <!-- 5. Side Communications Ear Pods -->
+      <ellipse cx="-33" cy="0" rx="4.5" ry="7" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+      <circle cx="-33" cy="0" r="2.2" fill="${activeSkin === 'lava' ? '#ea580c' : '#0284c7'}"/>
+      <ellipse cx="33" cy="0" rx="4.5" ry="7" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+      <circle cx="33" cy="0" r="2.2" fill="${activeSkin === 'lava' ? '#ea580c' : '#0284c7'}"/>
+
+      <!-- 6. Communication Antenna with Red Signal Light -->
+      <line x1="33" y1="-5" x2="42" y2="-22" stroke="#64748b" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="42" cy="-22" r="3" fill="#ef4444" stroke="#ffffff" stroke-width="0.8"/>
+
+      <!-- 7. Space Unicorn: Golden Star-Ring Horn Aperture -->
+      ${isUnicorn ? `
+      <g transform="translate(0, -30)">
+        <ellipse cx="0" cy="0" rx="8" ry="3.5" fill="#ffd700" stroke="#f59e0b" stroke-width="1.5"/>
+        <ellipse cx="0" cy="0" rx="5" ry="2" fill="#fffbeb"/>
+        <polygon points="0,-4 1.5,-1 4,-1 2,1 3,4 0,2 -3,4 -2,1 -4,-1 -1.5,-1" fill="#ffffff" opacity="0.95"/>
+      </g>` : ''}
+    </g>` : '';
+
+  // 🥽 Cyber Quantum Future Visor (Tech Neon HUD Eyewear)
+  const drawCyberVisor = (cx, eyeY, scale = 1, activeSkin = null) => equipped.hw_cyber_visor ? `
+    <g transform="translate(${cx}, ${eyeY}) scale(${scale})">
+      <!-- Headband -->
+      <path d="M-28,6 C-28,-14 28,-14 28,6" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M-28,6 C-28,-14 28,-14 28,6" fill="none" stroke="${activeSkin === 'lava' ? '#f97316' : (activeSkin === 'frost' ? '#38bdf8' : (activeSkin === 'gold' ? '#ffd700' : '#06b6d4'))}" stroke-width="1.5" stroke-linecap="round"/>
+
+      <!-- Visor Frame -->
+      <polygon points="-26,-4 26,-4 23,12 -23,12" fill="#0f172a" stroke="${activeSkin === 'lava' ? '#f97316' : (activeSkin === 'frost' ? '#38bdf8' : (activeSkin === 'gold' ? '#ffd700' : (activeSkin === 'chaos' ? '#c084fc' : '#06b6d4')))}" stroke-width="1.8" filter="drop-shadow(0 0 6px ${activeSkin === 'lava' ? 'rgba(249,115,22,0.6)' : (activeSkin === 'frost' ? 'rgba(56,189,248,0.6)' : 'rgba(6,182,212,0.6)')})"/>
+      
+      <!-- Neon Screen -->
+      <polygon points="-24,-2 24,-2 21,10 -21,10" fill="${activeSkin === 'lava' ? 'rgba(249,115,22,0.45)' : (activeSkin === 'frost' ? 'rgba(56,189,248,0.45)' : (activeSkin === 'gold' ? 'rgba(255,215,0,0.45)' : (activeSkin === 'chaos' ? 'rgba(192,132,252,0.45)' : 'rgba(6,182,212,0.45)')))}"/>
+      <line x1="-20" y1="4" x2="20" y2="4" stroke="${activeSkin === 'lava' ? '#fdba74' : (activeSkin === 'frost' ? '#bae6fd' : '#67e8f9')}" stroke-width="1.2" opacity="0.8"/>
+      
+      <!-- Tech HUD Grid and text -->
+      <text x="-16" y="8" font-size="5" fill="${activeSkin === 'lava' ? '#ffedd5' : (activeSkin === 'frost' ? '#e0f2fe' : (activeSkin === 'gold' ? '#fef08a' : '#a5f3fc'))}" font-family="monospace" font-weight="bold">${activeSkin === 'lava' ? 'HEAT 100%' : (activeSkin === 'frost' ? 'CRYO 100%' : (activeSkin === 'gold' ? 'GOLD 100%' : (activeSkin === 'chaos' ? 'CHAOS 100%' : 'AI 100%')))}</text>
+      <circle cx="15" cy="5" r="2" fill="${activeSkin === 'lava' ? '#ea580c' : (activeSkin === 'frost' ? '#0284c7' : '#22c55e')}"/>
+
+      <!-- Side Tech Nodes -->
+      <rect x="-30" y="-2" width="5" height="12" rx="2" fill="#334155" stroke="${activeSkin === 'lava' ? '#f97316' : '#06b6d4'}" stroke-width="1"/>
+      <rect x="25" y="-2" width="5" height="12" rx="2" fill="#334155" stroke="${activeSkin === 'lava' ? '#f97316' : '#06b6d4'}" stroke-width="1"/>
+    </g>` : '';
+
+  // 🌱 Cute Sprout Hairpin (Budding Leaf Hairpin)
+  const drawSprout = (cx, cy, scale = 1, isUnicorn = false, activeSkin = null) => equipped.hw_sprout ? `
+    <g transform="translate(${cx + (isUnicorn ? 14 * scale : 0)}, ${cy - 2 * scale}) scale(${scale})">
+      <path d="M0,0 Q-2,-8 0,-15" stroke="${activeSkin === 'lava' ? '#ea580c' : (activeSkin === 'frost' ? '#0284c7' : '#16a34a')}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M0,-15 C-12,-22 -14,-10 0,-13 Z" fill="${activeSkin === 'lava' ? '#f97316' : (activeSkin === 'frost' ? '#38bdf8' : '#22c55e')}" stroke="${activeSkin === 'lava' ? '#c2410c' : (activeSkin === 'frost' ? '#0369a1' : '#15803d')}" stroke-width="1"/>
+      <path d="M0,-15 C12,-24 16,-12 0,-14 Z" fill="${activeSkin === 'lava' ? '#fbbf24' : (activeSkin === 'frost' ? '#7dd3fc' : '#4ade80')}" stroke="${activeSkin === 'lava' ? '#c2410c' : (activeSkin === 'frost' ? '#0369a1' : '#15803d')}" stroke-width="1"/>
+      <circle cx="2" cy="-17" r="1.5" fill="#ffffff" opacity="0.85"/>
+    </g>` : '';
+
+  // 🎩 Magic Starlight Top Hat
+  const drawMagicianHat = (cx, cy, scale = 1, isUnicorn = false, activeSkin = null) => equipped.hw_magician ? `
+    <g transform="translate(${cx + (isUnicorn ? 6 * scale : 0)}, ${cy - 2 * scale}) scale(${scale}) ${isUnicorn ? 'rotate(10)' : ''}">
+      <ellipse cx="0" cy="0" rx="20" ry="5" fill="#0f172a" stroke="#334155" stroke-width="1.2"/>
+      <path d="M-13,0 L-11,-22 Q0,-25 11,-22 L13,0 Z" fill="#1e293b" stroke="#0f172a" stroke-width="1.2"/>
+      <path d="M-13,-2 L-13,-6 Q0,-4 13,-6 L13,-2 Q0,0 -13,-2 Z" fill="${activeSkin === 'lava' ? '#ea580c' : (activeSkin === 'frost' ? '#0284c7' : '#e11d48')}"/>
+      <circle cx="0" cy="-4" r="2" fill="#ffd700"/>
+      <line x1="8" y1="-2" x2="16" y2="-18" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/>
+      <polygon points="16,-18 17,-22 20,-19 16,-19" fill="#ffd700"/>
+      <text x="-16" y="-16" font-size="9" fill="#ffd700">✦</text>
+    </g>` : '';
+
+  // ⛑️ Wild Explorer Safari Hat (Goggles Hat)
+  const drawExplorerHat = (cx, cy, scale = 1, isUnicorn = false) => equipped.hw_explorer ? `
+    <g transform="translate(${cx + (isUnicorn ? 4 * scale : 0)}, ${cy - 2 * scale}) scale(${scale}) ${isUnicorn ? 'rotate(6)' : ''}">
+      <ellipse cx="0" cy="0" rx="24" ry="7" fill="#d97706" stroke="#b45309" stroke-width="1.2"/>
+      <path d="M-14,0 C-14,-18 14,-18 14,0 Z" fill="#f59e0b" stroke="#b45309" stroke-width="1.2"/>
+      <path d="M-14,-1 Q0,2 14,-1 L14,-4 Q0,-2 -14,-4 Z" fill="#78350f"/>
+      <ellipse cx="-6" cy="-8" rx="5.5" ry="4.2" fill="#38bdf8" stroke="#78350f" stroke-width="1.5" opacity="0.95"/>
+      <ellipse cx="6" cy="-8" rx="5.5" ry="4.2" fill="#38bdf8" stroke="#78350f" stroke-width="1.5" opacity="0.95"/>
+      <line x1="-1" y1="-8" x2="1" y2="-8" stroke="#78350f" stroke-width="2"/>
+      <line x1="-9" y1="-7" x2="-4" y2="-7" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="3" y1="-7" x2="8" y2="-7" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+    </g>` : '';
+
+  // 🐱 Fluffy Kitten Ears (Headband with Bell)
+  const drawCatEars = (cx, cy, scale = 1, activeSkin = null) => equipped.hw_cat_ears ? `
+    <g transform="translate(${cx}, ${cy + 2 * scale}) scale(${scale})">
+      <path d="M-18,6 C-18,-8 18,-8 18,6" fill="none" stroke="${activeSkin === 'gold' ? '#ffd700' : '#e2e8f0'}" stroke-width="2.5" stroke-linecap="round"/>
+      <polygon points="-17,-4 -21,-21 -7,-12" fill="${activeSkin === 'fallen' ? '#27272a' : '#ffffff'}" stroke="#cbd5e1" stroke-width="1.2"/>
+      <polygon points="-16,-6 -19,-18 -9,-12" fill="${activeSkin === 'lava' ? '#f97316' : (activeSkin === 'frost' ? '#38bdf8' : '#f472b6')}"/>
+      <polygon points="17,-4 21,-21 7,-12" fill="${activeSkin === 'fallen' ? '#27272a' : '#ffffff'}" stroke="#cbd5e1" stroke-width="1.2"/>
+      <polygon points="16,-6 19,-18 9,-12" fill="${activeSkin === 'lava' ? '#f97316' : (activeSkin === 'frost' ? '#38bdf8' : '#f472b6')}"/>
+      <circle cx="0" cy="-6" r="3.5" fill="#f59e0b" stroke="#d97706" stroke-width="0.8"/>
+      <line x1="-1.5" y1="-5" x2="1.5" y2="-5" stroke="#78350f" stroke-width="0.8"/>
+    </g>` : '';
+
+  // 👑 Ice Crystal Princess Tiara
+  const drawTiara = (cx, cy, scale = 1, isUnicorn = false, activeSkin = null) => equipped.hw_tiara ? `
+    <g transform="translate(${cx}, ${cy - 2 * scale}) scale(${scale})">
+      <path d="M-16,2 Q0,-2 16,2" fill="none" stroke="${activeSkin === 'lava' ? '#f97316' : (activeSkin === 'gold' ? '#ffd700' : '#7dd3fc')}" stroke-width="2" stroke-linecap="round"/>
+      <polygon points="0,-18 3,-8 0,-4 -3,-8" fill="${activeSkin === 'lava' ? '#ffedd5' : (activeSkin === 'gold' ? '#fffbeb' : '#e0f2fe')}" stroke="${activeSkin === 'lava' ? '#ea580c' : (activeSkin === 'gold' ? '#d97706' : '#0284c7')}" stroke-width="0.8"/>
+      <circle cx="0" cy="-18" r="2.5" fill="${activeSkin === 'lava' ? '#ef4444' : (activeSkin === 'gold' ? '#ffd700' : (activeSkin === 'fallen' ? '#a855f7' : '#38bdf8'))}"/>
+      <polygon points="-10,-12 -7,-5 -10,-2 -13,-5" fill="${activeSkin === 'lava' ? '#fed7aa' : (activeSkin === 'gold' ? '#fef08a' : '#bae6fd')}" stroke="${activeSkin === 'lava' ? '#ea580c' : '#0284c7'}" stroke-width="0.8"/>
+      <circle cx="-10" cy="-12" r="1.8" fill="${activeSkin === 'lava' ? '#f97316' : (activeSkin === 'gold' ? '#fbbf24' : (activeSkin === 'fallen' ? '#a855f7' : '#38bdf8'))}"/>
+      <polygon points="10,-12 13,-5 10,-2 7,-5" fill="${activeSkin === 'lava' ? '#fed7aa' : (activeSkin === 'gold' ? '#fef08a' : '#bae6fd')}" stroke="${activeSkin === 'lava' ? '#ea580c' : '#0284c7'}" stroke-width="0.8"/>
+      <circle cx="10" cy="-12" r="1.8" fill="${activeSkin === 'lava' ? '#f97316' : (activeSkin === 'gold' ? '#fbbf24' : (activeSkin === 'fallen' ? '#a855f7' : '#38bdf8'))}"/>
+      <text x="-2" y="-5" font-size="7" fill="#ffffff">✦</text>
+    </g>` : '';
+
+  // 🍜 Culinary Chef Hat
+  const drawChefHat = (cx, cy, scale = 1, isUnicorn = false) => equipped.hw_chef ? `
+    <g transform="translate(${cx + (isUnicorn ? 6 * scale : 0)}, ${cy - 2 * scale}) scale(${scale}) ${isUnicorn ? 'rotate(8)' : ''}">
+      <path d="M-12,-8 C-20,-16 -16,-26 -8,-24 C-4,-30 4,-30 8,-24 C16,-26 20,-16 12,-8 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+      <path d="M-6,-22 Q-4,-14 -5,-8" stroke="#e2e8f0" stroke-width="1" fill="none"/>
+      <path d="M0,-24 Q0,-14 0,-8" stroke="#e2e8f0" stroke-width="1" fill="none"/>
+      <path d="M6,-22 Q4,-14 5,-8" stroke="#e2e8f0" stroke-width="1" fill="none"/>
+      <rect x="-12" y="-8" width="24" height="8" rx="2" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/>
+      <text x="0" y="-2" font-size="6" text-anchor="middle" fill="#d97706">🍴</text>
+    </g>` : '';
+
+  // 👑 All Headwears Mount Manager
+  const drawAllHeadwears = (cx, cy, eyeY, scale = 1, faceY = null, helmetScale = null) => {
+    let out = '';
+    const hY = faceY !== null ? faceY : (eyeY !== null ? eyeY + 2 : cy);
+    const hScale = helmetScale !== null ? helmetScale : scale;
+    if (equipped.hw_cyber_visor) out += drawCyberVisor(cx, eyeY, scale, activeSkin);
+    if (equipped.hw_side_bow)    out += drawSideBow(cx, cy, scale);
+    if (equipped.hw_astronaut)   out += drawAstronautHelmet(cx, hY, hScale, isUnicorn, activeSkin);
+    if (equipped.hw_sprout)      out += drawSprout(cx, cy, scale, isUnicorn, activeSkin);
+    if (equipped.hw_magician)    out += drawMagicianHat(cx, cy, scale, isUnicorn, activeSkin);
+    if (equipped.hw_explorer)    out += drawExplorerHat(cx, cy, scale, isUnicorn);
+    if (equipped.hw_cat_ears)    out += drawCatEars(cx, cy, scale, activeSkin);
+    if (equipped.hw_tiara)       out += drawTiara(cx, cy, scale, isUnicorn, activeSkin);
+    if (equipped.hw_chef)        out += drawChefHat(cx, cy, scale, isUnicorn);
+    return out;
+  };
+
   // ── EGG (Front Facing) ──────────────────────────────────────────────────
   if (stageKey === 'egg') {
     const svg = `<svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-wobble ${isGold ? 'gold-skin-aura' : ''}">
@@ -1099,6 +1289,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   ${drawAngelHalo(50, 10, 16, 4.5)}
   ${drawSunglasses(50, 48, 36, 10)}
   ${drawGradCap(50, 32)}
+  ${drawAllHeadwears(50, 28, 48, 0.78, 48, 0.90)}
   <text x="50" y="106" font-size="8" text-anchor="middle" fill="${isFrostFire ? '#ff4757' : (isChaos ? '#8b5cf6' : (isRainbow ? '#db2777' : (isFallen ? '#9333ea' : (isAngel ? '#d97706' : (isUnicorn ? '#ec4899' : c1)))))}" font-weight="bold">30分破壳!</text>
 </svg>`;
     return effectsHtml + svg;
@@ -1192,6 +1383,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   ${drawAngelHalo(50, 6, 17, 5)}
   ${drawSunglasses(50, 38, 42, 14)}
   ${drawGradCap(50, 24)}
+  ${drawAllHeadwears(50, 24, 38, 1.0, 40, 0.96)}
   <!-- Front Smile (NO FANGS on Angel & Rainbow) -->
   ${isFrostFire ? `
     <path d="M43,51 Q50,54 57,51" stroke="#fbbf24" stroke-width="2.2" fill="none" stroke-linecap="round"/>
@@ -1334,6 +1526,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   ${drawAngelHalo(55, 0, 19, 5.5)}
   ${drawSunglasses(55, 34, 46, 15)}
   ${drawGradCap(55, 20)}
+  ${drawAllHeadwears(55, 18, 34, 1.08, 34, 1.05)}
   <!-- Confident Teen Smirk (NO FANGS on Angel, Rainbow, Unicorn) -->
   ${isFrostFire ? `
     <path d="M46,49 Q55,53.5 64,49" stroke="#fbbf24" stroke-width="2.4" fill="none" stroke-linecap="round"/>
@@ -1466,6 +1659,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   ${drawAngelHalo(60, 0, 21, 6)}
   ${drawSunglasses(60, 32, 48, 16)}
   ${drawGradCap(60, 20)}
+  ${drawAllHeadwears(60, 18, 32, 1.18, 34, 1.15)}
   <!-- Warrior Mouth & Smile (NO FANGS on Angel, Rainbow, Unicorn) -->
   ${isFrostFire ? `
     <path d="M49,50 Q60,54.5 71,50" stroke="#fbbf24" stroke-width="2.6" fill="none" stroke-linecap="round"/>
@@ -1620,6 +1814,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   ${drawAngelHalo(65, -10, 26, 7)}
   ${drawSunglasses(65, 38, 50, 16)}
   ${drawGradCap(65, 24)}
+  ${drawAllHeadwears(65, 22, 38, 1.28, 40, 1.25)}
   <!-- Cute Regal Smile (NO FANGS on Angel, Rainbow, Unicorn) -->
   ${isFrostFire ? `
     <path d="M53,53 Q65,57.5 77,53" stroke="#fbbf24" stroke-width="2.8" fill="none" stroke-linecap="round"/>

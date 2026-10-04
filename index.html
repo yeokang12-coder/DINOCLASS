@@ -1123,22 +1123,86 @@
 
   <!-- Modal 1: 批量加扣分弹窗 -->
   <div class="modal-overlay" id="modal-batch-score">
-    <div class="modal-card">
+    <div class="modal-card modal-batch-score-card">
       <div class="modal-header">
-        <div class="modal-title">⚡ 快速加扣分事由选择</div>
-        <button class="modal-close">&times;</button>
-      </div>
-      <div style="margin-bottom: 14px; font-size: 0.9rem; color: var(--accent-gold);" id="batch-target-info">
-        已选中 0 名学生
-      </div>
-
-      <div class="behavior-tags-grid" id="behavior-tags-list">
-        <!-- Rendered by app.js -->
+        <div class="modal-title" id="batch-modal-title">⚡ 快速加扣分事由选择</div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button type="button" class="btn btn-sm btn-batch-header-action" id="btn-toggle-behavior-edit" onclick="window.dinoApp.toggleBehaviorEditMode()" title="老师可自定义修改加扣分事项与分值">
+            ✏️ 修改事项与分值
+          </button>
+          <button class="modal-close">&times;</button>
+        </div>
       </div>
 
-      <div style="display: flex; gap: 10px; justify-content: flex-end;">
-        <button class="btn btn-secondary btn-modal-cancel">取消</button>
-        <button class="btn btn-primary" onclick="window.dinoApp.submitBatchScore()">确认应用加分</button>
+      <!-- 视图 1：选择加扣分事由 (Select Mode) -->
+      <div id="batch-score-select-view">
+        <div style="margin-bottom: 14px; font-size: 0.9rem; color: var(--accent-gold); display: flex; justify-content: space-between; align-items: center;" id="batch-target-info-wrap">
+          <span id="batch-target-info">已选中 0 名学生</span>
+          <span style="font-size: 0.82rem; color: var(--text-muted); cursor: pointer; text-decoration: underline;" onclick="window.dinoApp.toggleBehaviorEditMode()">⚙️ 管理事由与分值</span>
+        </div>
+
+        <div class="behavior-tags-grid" id="behavior-tags-list">
+          <!-- Rendered by app.js -->
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: space-between; align-items: center; margin-top: 12px; flex-wrap: wrap;">
+          <div style="font-size: 0.8rem; color: var(--text-muted);">
+            💡 提示：点击右上角【修改事项与分值】可自由定制加减分
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-secondary btn-modal-cancel">取消</button>
+            <button class="btn btn-primary" id="btn-submit-batch-score" onclick="window.dinoApp.submitBatchScore()">确认应用加分</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 视图 2：编辑加扣分事由 (Edit Mode) -->
+      <div id="batch-score-edit-view" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; flex-wrap: wrap;">
+          <span style="font-size: 0.85rem; color: var(--text-muted);">
+            📝 老师可直接修改事项名称、图标和分值（正数为加分，负数为扣分）：
+          </span>
+          <button type="button" class="btn btn-sm" onclick="window.dinoApp.resetDefaultBehaviorTags()" style="font-size: 0.8rem; padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(248,113,113,0.4); color: #f87171; background: rgba(248,113,113,0.1); cursor: pointer;">
+            🔄 恢复默认
+          </button>
+        </div>
+
+        <!-- 常用表情图标快速点选栏 -->
+        <div class="quick-emoji-bar" style="display: flex; gap: 6px; overflow-x: auto; padding: 6px 8px; margin-bottom: 10px; background: rgba(0,0,0,0.25); border-radius: 6px; align-items: center; font-size: 1.15rem; scrollbar-width: thin;">
+          <span style="font-size: 0.75rem; color: var(--text-muted); white-space: nowrap;">推荐图标:</span>
+          <span class="emoji-chip" onclick="window.dinoApp.insertQuickEmoji('🙋‍♂️')">🙋‍♂️</span>
+          <span class="emoji-chip" onclick="window.dinoApp.insertQuickEmoji('📝')">📝</span>
+          <span class="emoji-chip" onclick="window.dinoApp.insertQuickEmoji('🤝')">🤝</span>
+          <span class="emoji-chip" onclick="window.dinoApp.insertQuickEmoji('🥚')">🥚</span>
+          <span class="emoji-chip" onclick="window.dinoApp.insertQuickEmoji('🍱')">🍱</span>
+          <span class="emoji-chip" onclick="window.dinoApp.insertQuickEmoji('🧹')">🧹</span>
+          <span class="emoji-chip" onclick="window.dinoApp.insertQuickEmoji('💯')">💯</span>
+          <span class="emoji-chip" onclick="window.dinoApp.insertQuickEmoji('⏰')">⏰</span>
+          <span class="emoji-chip" onclick="window.dinoApp.insertQuickEmoji('⭐')">⭐</span>
+          <span class="emoji-chip" onclick="window.dinoApp.insertQuickEmoji('🌟')">🌟</span>
+          <span class="emoji-chip" onclick="window.dinoApp.insertQuickEmoji('🎨')">🎨</span>
+          <span class="emoji-chip" onclick="window.dinoApp.insertQuickEmoji('📖')">📖</span>
+          <span class="emoji-chip" onclick="window.dinoApp.insertQuickEmoji('🏆')">🏆</span>
+          <span class="emoji-chip" onclick="window.dinoApp.insertQuickEmoji('😴')">😴</span>
+          <span class="emoji-chip" onclick="window.dinoApp.insertQuickEmoji('⚠️')">⚠️</span>
+          <span class="emoji-chip" onclick="window.dinoApp.insertQuickEmoji('🚫')">🚫</span>
+          <span class="emoji-chip" onclick="window.dinoApp.insertQuickEmoji('🎒')">🎒</span>
+        </div>
+
+        <div id="behavior-tags-edit-list" style="max-height: 290px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding-right: 4px;">
+          <!-- Rendered by app.js -->
+        </div>
+
+        <button type="button" class="btn btn-sm" onclick="window.dinoApp.addNewBehaviorTagRow()" style="width: 100%; padding: 8px; border: 1px dashed rgba(52,211,153,0.5); color: #34d399; background: rgba(52,211,153,0.08); border-radius: var(--radius-md); font-weight: 600; cursor: pointer; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;">
+          ➕ 添加新加扣分事项
+        </button>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button type="button" class="btn btn-secondary" onclick="window.dinoApp.cancelBehaviorEditMode()">返回选择</button>
+          <button type="button" class="btn btn-success" onclick="window.dinoApp.saveCustomBehaviorTags()" style="background: linear-gradient(135deg, #10b981, #059669); border: none; font-weight: 700; padding: 8px 20px;">
+            💾 保存并生效
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -1312,6 +1376,42 @@
             <label id="wardrobe-grad" style="display:none; align-items:center; gap:8px; font-weight:700; color:#f1c40f; cursor:pointer;">
               <input type="checkbox" id="detail-grad-checkbox" style="accent-color:#f1c40f; width:18px; height:18px;">
               🎓 穿戴/脱下 学霸博士帽
+            </label>
+            <label id="wardrobe-hw_side_bow" style="display:none; align-items:center; gap:8px; font-weight:700; color:#f43f5e; cursor:pointer;">
+              <input type="checkbox" id="detail-hw_side_bow-checkbox" style="accent-color:#f43f5e; width:18px; height:18px;">
+              🎀 穿戴/脱下 甜心侧戴大蝴蝶结
+            </label>
+            <label id="wardrobe-hw_astronaut" style="display:none; align-items:center; gap:8px; font-weight:700; color:#0284c7; cursor:pointer;">
+              <input type="checkbox" id="detail-hw_astronaut-checkbox" style="accent-color:#0284c7; width:18px; height:18px;">
+              🛰️ 穿戴/脱下 萌趣全包覆太空头盔
+            </label>
+            <label id="wardrobe-hw_cyber_visor" style="display:none; align-items:center; gap:8px; font-weight:700; color:#06b6d4; cursor:pointer;">
+              <input type="checkbox" id="detail-hw_cyber_visor-checkbox" style="accent-color:#06b6d4; width:18px; height:18px;">
+              🥽 穿戴/脱下 赛博量子未来护目镜
+            </label>
+            <label id="wardrobe-hw_sprout" style="display:none; align-items:center; gap:8px; font-weight:700; color:#10b981; cursor:pointer;">
+              <input type="checkbox" id="detail-hw_sprout-checkbox" style="accent-color:#10b981; width:18px; height:18px;">
+              🌱 穿戴/脱下 萌趣小草发芽发夹
+            </label>
+            <label id="wardrobe-hw_magician" style="display:none; align-items:center; gap:8px; font-weight:700; color:#6366f1; cursor:pointer;">
+              <input type="checkbox" id="detail-hw_magician-checkbox" style="accent-color:#6366f1; width:18px; height:18px;">
+              🎩 穿戴/脱下 魔法星光高礼帽
+            </label>
+            <label id="wardrobe-hw_explorer" style="display:none; align-items:center; gap:8px; font-weight:700; color:#d97706; cursor:pointer;">
+              <input type="checkbox" id="detail-hw_explorer-checkbox" style="accent-color:#d97706; width:18px; height:18px;">
+              ⛑️ 穿戴/脱下 旷野探险家草帽
+            </label>
+            <label id="wardrobe-hw_cat_ears" style="display:none; align-items:center; gap:8px; font-weight:700; color:#ec4899; cursor:pointer;">
+              <input type="checkbox" id="detail-hw_cat_ears-checkbox" style="accent-color:#ec4899; width:18px; height:18px;">
+              🐱 穿戴/脱下 呆萌毛茸茸猫耳
+            </label>
+            <label id="wardrobe-hw_tiara" style="display:none; align-items:center; gap:8px; font-weight:700; color:#0ea5e9; cursor:pointer;">
+              <input type="checkbox" id="detail-hw_tiara-checkbox" style="accent-color:#0ea5e9; width:18px; height:18px;">
+              👑 穿戴/脱下 冰晶雪花公主冠
+            </label>
+            <label id="wardrobe-hw_chef" style="display:none; align-items:center; gap:8px; font-weight:700; color:#f97316; cursor:pointer;">
+              <input type="checkbox" id="detail-hw_chef-checkbox" style="accent-color:#f97316; width:18px; height:18px;">
+              🍜 穿戴/脱下 料理小当家厨师帽
             </label>
             <label id="wardrobe-fireworks" style="display:none; align-items:center; gap:8px; font-weight:700; color:#a855f7; cursor:pointer;">
               <input type="checkbox" id="detail-fireworks-checkbox" style="accent-color:#a855f7; width:18px; height:18px;">
