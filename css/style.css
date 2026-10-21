@@ -1886,6 +1886,105 @@ body {
   border-radius: 50px;
 }
 
+.shop-badge-skin.badge-series-beast {
+  color: #fef08a;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(236, 72, 153, 0.25));
+  border-color: rgba(251, 191, 36, 0.6);
+}
+
+.shop-badge-skin.badge-series-elemental {
+  color: #bae6fd;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(14, 165, 233, 0.3));
+  border-color: rgba(56, 189, 248, 0.6);
+}
+
+.shop-badge-skin.badge-series-celestial {
+  color: #f3e8ff;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.35), rgba(245, 158, 11, 0.3));
+  border-color: rgba(192, 132, 252, 0.65);
+}
+
+.shop-badge-skin.badge-series-mecha {
+  color: #67e8f9;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.3), rgba(244, 63, 94, 0.28));
+  border-color: rgba(34, 211, 238, 0.7);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.25);
+}
+
+/* 🐲 Skin Series Sub-Blocks in Shop */
+.skin-series-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skin-series-block {
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-md);
+  padding: 12px 14px 14px 14px;
+}
+
+.skin-series-block.skin-series-beast {
+  border-left: 3px solid #fbbf24;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.06), rgba(236, 72, 153, 0.04));
+}
+
+.skin-series-block.skin-series-elemental {
+  border-left: 3px solid #38bdf8;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.06), rgba(14, 165, 233, 0.06));
+}
+
+.skin-series-block.skin-series-celestial {
+  border-left: 3px solid #c084fc;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.07), rgba(245, 158, 11, 0.05));
+}
+
+.skin-series-block.skin-series-mecha {
+  border-left: 3px solid #00f5ff;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.08), rgba(244, 63, 94, 0.05));
+}
+
+.skin-series-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.skin-series-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.skin-series-title {
+  font-size: 0.94rem;
+  font-weight: 800;
+  color: #f8fafc;
+}
+
+.skin-series-tier-pill {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #fde047;
+  background: rgba(245, 158, 11, 0.18);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  padding: 2px 9px;
+  border-radius: 50px;
+}
+
+.skin-series-desc {
+  font-size: 0.76rem;
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
 .shop-badge-accessory {
   font-size: 0.68rem;
   font-weight: 700;
@@ -3291,6 +3390,156 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   🤖 4c. CYBER MECHA SERIES AURAS & PARTICLES (未来纪元 · 超能机甲光环与战刃浮游炮)
+   ═══════════════════════════════════════════════════════════════ */
+.mecha-zero-skin-aura,
+.crimson-drone-skin-aura,
+.titan-katana-skin-aura {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible !important;
+  z-index: 25;
+}
+
+.mecha-spark {
+  position: absolute;
+  font-size: 1.25rem;
+  animation: mechaSparkFloat 2.8s ease-in-out infinite;
+  opacity: 0;
+  text-shadow: 0 0 10px #00f5ff, 0 0 20px #0284c7;
+  pointer-events: none;
+}
+
+@keyframes mechaSparkFloat {
+  0%   { transform: translateY(0) scale(0.6) rotate(0deg); opacity: 0; }
+  25%  { opacity: 0.95; }
+  75%  { opacity: 0.9; }
+  100% { transform: translateY(-46px) scale(1.15) rotate(16deg); opacity: 0; }
+}
+
+.crimson-spark {
+  position: absolute;
+  font-size: 1.25rem;
+  animation: crimsonSparkFloat 2.6s ease-in-out infinite;
+  opacity: 0;
+  text-shadow: 0 0 10px #ef4444, 0 0 20px #991b1b;
+  pointer-events: none;
+}
+
+@keyframes crimsonSparkFloat {
+  0%   { transform: translateY(0) scale(0.6) rotate(0deg); opacity: 0; }
+  25%  { opacity: 0.95; }
+  75%  { opacity: 0.9; }
+  100% { transform: translateY(-44px) scale(1.2) rotate(-16deg); opacity: 0; }
+}
+
+.katana-spark {
+  position: absolute;
+  font-size: 1.25rem;
+  animation: katanaSparkFloat 2.9s ease-in-out infinite;
+  opacity: 0;
+  text-shadow: 0 0 10px #ffd700, 0 0 22px #b45309;
+  pointer-events: none;
+}
+
+@keyframes katanaSparkFloat {
+  0%   { transform: translateY(0) scale(0.6) rotate(0deg); opacity: 0; }
+  25%  { opacity: 0.95; }
+  75%  { opacity: 0.9; }
+  100% { transform: translateY(-48px) scale(1.2) rotate(20deg); opacity: 0; }
+}
+
+/* Mecha Drone and Wing Animations */
+.drone-anim {
+  animation: droneFloat 3.2s ease-in-out infinite;
+}
+
+@keyframes droneFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-4px) rotate(1.5deg); }
+}
+
+.wing-glow {
+  animation: wingGlowPulse 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes wingGlowPulse {
+  0%   { filter: drop-shadow(0 0 4px #00f5ff); }
+  100% { filter: drop-shadow(0 0 12px #38bdf8); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   🪽 BESPOKE WINGS AMBIENT GLOW ANIMATIONS (各皮肤专属翅膀动态光效)
+   ═══════════════════════════════════════════════════════════════ */
+.dino-lava-wings {
+  animation: lavaWingGlow 2.6s ease-in-out infinite alternate;
+}
+@keyframes lavaWingGlow {
+  0%   { filter: drop-shadow(0 0 4px rgba(255, 69, 0, 0.45)); }
+  100% { filter: drop-shadow(0 0 12px rgba(255, 107, 0, 0.8)) drop-shadow(0 0 20px rgba(245, 158, 11, 0.4)); }
+}
+
+.dino-frost-wings {
+  animation: frostWingGlow 2.8s ease-in-out infinite alternate;
+}
+@keyframes frostWingGlow {
+  0%   { filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.45)); }
+  100% { filter: drop-shadow(0 0 14px rgba(14, 165, 233, 0.8)) drop-shadow(0 0 20px rgba(186, 230, 253, 0.45)); }
+}
+
+.dino-unicorn-wings {
+  animation: unicornWingGlow 3.0s ease-in-out infinite alternate;
+}
+@keyframes unicornWingGlow {
+  0%   { filter: drop-shadow(0 0 4px rgba(244, 114, 182, 0.45)); }
+  100% { filter: drop-shadow(0 0 13px rgba(236, 72, 153, 0.75)) drop-shadow(0 0 18px rgba(192, 132, 252, 0.45)); }
+}
+
+.dino-gold-wings {
+  animation: goldWingGlow 2.5s ease-in-out infinite alternate;
+}
+@keyframes goldWingGlow {
+  0%   { filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.5)); }
+  100% { filter: drop-shadow(0 0 14px rgba(251, 191, 36, 0.85)) drop-shadow(0 0 22px rgba(254, 240, 138, 0.5)); }
+}
+
+.dino-angel-seraph-wings {
+  animation: angelSeraphWingGlow 2.8s ease-in-out infinite alternate;
+}
+@keyframes angelSeraphWingGlow {
+  0%   { filter: drop-shadow(0 0 4px rgba(254, 240, 138, 0.5)); }
+  100% { filter: drop-shadow(0 0 14px rgba(253, 224, 71, 0.8)) drop-shadow(0 0 20px rgba(255, 255, 255, 0.6)); }
+}
+
+.dino-fallen-wings {
+  animation: fallenWingGlow 2.7s ease-in-out infinite alternate;
+}
+@keyframes fallenWingGlow {
+  0%   { filter: drop-shadow(0 0 4px rgba(124, 58, 237, 0.45)); }
+  100% { filter: drop-shadow(0 0 14px rgba(147, 51, 234, 0.85)) drop-shadow(0 0 22px rgba(88, 28, 135, 0.6)); }
+}
+
+.dino-rainbow-wings {
+  animation: rainbowWingGlow 3.2s ease-in-out infinite alternate;
+}
+@keyframes rainbowWingGlow {
+  0%   { filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.5)); }
+  50%  { filter: drop-shadow(0 0 12px rgba(236, 72, 153, 0.75)); }
+  100% { filter: drop-shadow(0 0 14px rgba(251, 191, 36, 0.75)); }
+}
+
+.dino-chaos-wings {
+  animation: chaosWingGlow 2.9s ease-in-out infinite alternate;
+}
+@keyframes chaosWingGlow {
+  0%   { filter: drop-shadow(-4px 0 8px rgba(253, 224, 71, 0.5)) drop-shadow(4px 0 8px rgba(147, 51, 234, 0.5)); }
+  100% { filter: drop-shadow(-8px 0 16px rgba(255, 255, 255, 0.75)) drop-shadow(8px 0 16px rgba(126, 34, 206, 0.75)); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
    🎓 5. GRADUATION CAP WISDOM AURA (学霸博士帽智慧光晕)
    ═══════════════════════════════════════════════════════════════ */
 .grad-wisdom-aura {
@@ -3962,6 +4211,10 @@ svg.gold-skin-aura {
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
   overflow: hidden;
   user-select: none;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
   /* 5-minute continuous seamless sky background animation */
   animation: skySeamlessGradient 300s linear infinite;
 }
@@ -4351,6 +4604,10 @@ svg.gold-skin-aura {
   overflow: visible;
   z-index: 999 !important; /* Absolute top z-index above grass, river, trees, rocks! */
   pointer-events: none;    /* container transparent; sprites have their own pointer-events */
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .park-dino-sprite {
@@ -4361,14 +4618,18 @@ svg.gold-skin-aura {
   width: 70px;
   height: 70px;
   will-change: left, top, transform;
-  transform: translateZ(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
   transition: left 3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
               top  3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   cursor: pointer;
   overflow: visible;
   pointer-events: auto;           /* sprites are clickable even though layer is none */
   background: transparent !important;
-  contain: layout style;
 }
 .park-dino-sprite:hover { z-index: 9999 !important; }
 
@@ -5070,11 +5331,17 @@ body.perf-mode-performance .lava-skin-aura,
 body.perf-mode-performance .frost-skin-aura,
 body.perf-mode-performance .angel-skin-aura,
 body.perf-mode-performance .unicorn-skin-aura,
+body.perf-mode-performance .mecha-zero-skin-aura,
+body.perf-mode-performance .crimson-drone-skin-aura,
+body.perf-mode-performance .titan-katana-skin-aura,
 body.perf-mode-performance .grad-wisdom-aura,
 body.perf-mode-performance div.gold-skin-aura,
 body.perf-mode-performance .chaos-spark,
 body.perf-mode-performance .rainbow-spark,
 body.perf-mode-performance .fallen-spark,
+body.perf-mode-performance .mecha-spark,
+body.perf-mode-performance .crimson-spark,
+body.perf-mode-performance .katana-spark,
 body.perf-mode-performance .angel-spark,
 body.perf-mode-performance .unicorn-spark,
 body.perf-mode-performance .lava-spark,
@@ -5095,5 +5362,32 @@ body.perf-mode-performance .pet-heart-particle {
   display: none !important;
   animation: none !important;
 }
+
+/* ── ⚡ Safari Park Lightweight Rendering in Performance Mode (Zero Blur / Zero Heavy Spin) ── */
+body.perf-mode-performance .park-sun-rays,
+body.perf-mode-performance .park-moon-rays,
+body.perf-mode-performance .hut-fireflies,
+body.perf-mode-performance .hut-smoke-wrap {
+  display: none !important;
+  animation: none !important;
+}
+
+body.perf-mode-performance .park-sun-svg,
+body.perf-mode-performance .park-moon-svg,
+body.perf-mode-performance .park-star {
+  filter: none !important;
+}
+
+body.perf-mode-performance .hut-night-glow {
+  animation: none !important;
+  filter: none !important;
+  opacity: 0.85 !important;
+}
+
+body.perf-mode-performance .park-night-overlay {
+  filter: none !important;
+  backdrop-filter: none !important;
+}
+
 
 

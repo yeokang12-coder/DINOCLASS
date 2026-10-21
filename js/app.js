@@ -1329,8 +1329,15 @@ class DinoApp {
       if (!sprites || sprites.length === 0) return;
 
       sprites.forEach(sprite => {
+        const sid = sprite.dataset.id;
+        const isOccupant = (this.hut && this.hut.occupants.has(sid)) || (this.skyHut && this.skyHut.occupants.has(sid));
+        // Auto-heal: If a dinosaur became stuck invisible but is not inside any hut, restore it immediately
+        if (!isOccupant && sprite.style.opacity === '0' && sprite.dataset.isEntering !== 'true') {
+          sprite.style.opacity = '1';
+          sprite.classList.remove('dino-squeeze-in');
+        }
         // Skip if dino is currently executing entrance animation or inside hut
-        if (sprite.dataset.isEntering === 'true' || sprite.style.opacity === '0') return;
+        if (sprite.dataset.isEntering === 'true' || isOccupant) return;
 
         if (Math.random() < 0.5) {
           const isFlying = sprite.dataset.isFlying === 'true';
@@ -1396,11 +1403,21 @@ class DinoApp {
   // ═══════════════════════════════════════════════════════════
 
   initHutSystem() {
-    // Single large 3D Villa: max 8 dino occupants
-    this.hut = { id: 'single', name: '🏰 恐龙豪华庄园', maxOccupants: 8, occupants: new Set() };
-    // Sky Castle for Legend Flying Dragons: max 4 occupants
-    this.skyHut = { id: 'sky', name: '☁️ 天空之城', maxOccupants: 4, occupants: new Set() };
+    // Single large 3D Villa: max 3 dino occupants (ensures >= 7 dinos always outside on grass)
+    this.hut = { id: 'single', name: '🏰 恐龙豪华庄园', maxOccupants: 3, occupants: new Set() };
+    // Sky Castle for Legend Flying Dragons: max 2 occupants
+    this.skyHut = { id: 'sky', name: '☁️ 天空之城', maxOccupants: 2, occupants: new Set() };
     this.startHutLoop();
+
+    // Tablet Wakeup & Visibility Recovery Listener (prevents dinosaurs getting stuck when tablet sleeps)
+    if (!this._visibilityBound) {
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && this.currentView === 'park') {
+          this.recoverParkSprites();
+        }
+      });
+      this._visibilityBound = true;
+    }
   }
 
   // Returns current cycle phase: 'day' | 'dusk' | 'night'
@@ -1415,22 +1432,22 @@ class DinoApp {
     return 'dawn';
   }
 
-  // Probability that a wandering dino enters hut this tick
+  // Probability that a wandering dino enters hut this tick (balanced so park remains lively)
   getEnterProbability() {
     const phase = this.getDayNightPhase();
-    if (phase === 'day')   return 0.15;
-    if (phase === 'dusk')  return 0.35;
-    if (phase === 'night') return 0.60;
-    return 0.25; // dawn
+    if (phase === 'day')   return 0.10;
+    if (phase === 'dusk')  return 0.20;
+    if (phase === 'night') return 0.28; // moderate probability, avoids empty park
+    return 0.15; // dawn
   }
 
-  // Duration dino stays inside hut (ms)
+  // Duration dino stays inside hut (ms) (shortened so dinos quickly re-emerge)
   getStayDuration() {
     const phase = this.getDayNightPhase();
-    if (phase === 'day')   return 20000 + Math.random() * 20000; // 20-40s
-    if (phase === 'dusk')  return 30000 + Math.random() * 20000; // 30-50s
-    if (phase === 'night') return 40000 + Math.random() * 40000; // 40-80s
-    return 25000 + Math.random() * 20000;
+    if (phase === 'day')   return 12000 + Math.random() * 8000;  // 12-20s
+    if (phase === 'dusk')  return 15000 + Math.random() * 10000; // 15-25s
+    if (phase === 'night') return 18000 + Math.random() * 12000; // 18-30s
+    return 15000 + Math.random() * 8000;
   }
 
   startHutLoop() {
@@ -1579,6 +1596,7 @@ class DinoApp {
 
     setTimeout(() => {
       sprite.style.transition = '';
+      sprite.style.opacity = '1';
       delete sprite.dataset.isEntering;
     }, 2000);
   }
@@ -1695,6 +1713,7 @@ class DinoApp {
     setTimeout(() => {
       sprite.style.transition = '';
       sprite.style.zIndex = `${Math.floor(parseFloat(exitTop) * 10) + 1000}`;
+      sprite.style.opacity = '1';
       delete sprite.dataset.isEntering;
     }, 1600);
   }
@@ -1728,7 +1747,12 @@ class DinoApp {
       listEl.innerHTML = residents.map(s => {
         const stage = getStageByScore(s.score);
         return `<div class="hut-resident-row">${stage.icon} <span style="font-weight:700">${s.name}</span> <span style="color:var(--text-muted);font-size:0.72rem;">${stage.name} · ${s.score}分</span></div>`;
-      }).join('');
+      }).join('') + `
+        <div style="margin-top:10px; text-align:center;">
+          <button class="btn btn-sm btn-gold" style="font-size:0.75rem; padding:4px 12px; border-radius:20px;" onclick="window.dinoApp.callAllDinosOut('${hutId}')">
+            🔔 呼唤所有恐龙出来散步
+          </button>
+        </div>`;
     }
 
     // Position popup above target hut
@@ -1746,6 +1770,42 @@ class DinoApp {
     // Auto-close after 6s
     clearTimeout(this._hutPopupTimer);
     this._hutPopupTimer = setTimeout(() => { popup.style.display = 'none'; }, 6000);
+  }
+
+  callAllDinosOut(hutId) {
+    const isSky = hutId === 'sky';
+    const hut = isSky ? this.skyHut : this.hut;
+    if (!hut || hut.occupants.size === 0) return;
+    const ids = Array.from(hut.occupants);
+    ids.forEach(sid => {
+      if (isSky) {
+        this.legendExitSkyHut(sid);
+      } else {
+        this.dinoExitHut(sid);
+      }
+    });
+    const popup = document.getElementById('hut-popup');
+    if (popup) popup.style.display = 'none';
+    if (typeof this.showToast === 'function') {
+      this.showToast('🔔 恐龙们全部出来草地上散步啦！');
+    }
+  }
+
+  recoverParkSprites() {
+    const sprites = document.querySelectorAll('.park-dino-sprite');
+    sprites.forEach(sprite => {
+      const sid = sprite.dataset.id;
+      const isInsideVilla = this.hut && this.hut.occupants.has(sid);
+      const isInsideSky = this.skyHut && this.skyHut.occupants.has(sid);
+      if (!isInsideVilla && !isInsideSky) {
+        if (sprite.style.opacity === '0' || sprite.classList.contains('dino-squeeze-in')) {
+          sprite.classList.remove('dino-squeeze-in');
+          sprite.style.opacity = '1';
+          sprite.style.transition = '';
+          delete sprite.dataset.isEntering;
+        }
+      }
+    });
   }
 
   triggerRandomPeek() {
@@ -1818,6 +1878,9 @@ class DinoApp {
     if (itemId === 'item_unicorn_skin') return !!this.shopTryOnEquipped.unicorn_skin;
     if (itemId === 'item_rainbow_skin') return !!this.shopTryOnEquipped.rainbow_skin;
     if (itemId === 'item_fallen_skin') return !!this.shopTryOnEquipped.fallen_skin;
+    if (itemId === 'item_mecha_zero_skin') return !!this.shopTryOnEquipped.mecha_zero_skin;
+    if (itemId === 'item_crimson_drone_skin') return !!this.shopTryOnEquipped.crimson_drone_skin;
+    if (itemId === 'item_titan_katana_skin') return !!this.shopTryOnEquipped.titan_katana_skin;
     if (itemId === 'item_grad_cap') return !!this.shopTryOnEquipped.grad_cap;
     if (itemId === 'item_hw_side_bow') return !!this.shopTryOnEquipped.hw_side_bow;
     if (itemId === 'item_hw_astronaut') return !!this.shopTryOnEquipped.hw_astronaut;
@@ -1867,6 +1930,9 @@ class DinoApp {
         this.shopTryOnEquipped.rainbow_skin = false;
         this.shopTryOnEquipped.fallen_skin = false;
         this.shopTryOnEquipped.chaos_skin = false;
+        this.shopTryOnEquipped.mecha_zero_skin = false;
+        this.shopTryOnEquipped.crimson_drone_skin = false;
+        this.shopTryOnEquipped.titan_katana_skin = false;
       }
       this.shopTryOnEquipped.chroma_gold = willEnable;
     } else if (itemId === 'item_lava_skin') {
@@ -1879,6 +1945,9 @@ class DinoApp {
         this.shopTryOnEquipped.rainbow_skin = false;
         this.shopTryOnEquipped.fallen_skin = false;
         this.shopTryOnEquipped.chaos_skin = false;
+        this.shopTryOnEquipped.mecha_zero_skin = false;
+        this.shopTryOnEquipped.crimson_drone_skin = false;
+        this.shopTryOnEquipped.titan_katana_skin = false;
       }
       if (this.shopTryOnEquipped.lava_skin && this.shopTryOnEquipped.frost_skin) {
         this.shopTryOnEquipped.frostfire_skin = true;
@@ -1895,6 +1964,9 @@ class DinoApp {
         this.shopTryOnEquipped.rainbow_skin = false;
         this.shopTryOnEquipped.fallen_skin = false;
         this.shopTryOnEquipped.chaos_skin = false;
+        this.shopTryOnEquipped.mecha_zero_skin = false;
+        this.shopTryOnEquipped.crimson_drone_skin = false;
+        this.shopTryOnEquipped.titan_katana_skin = false;
       }
       if (this.shopTryOnEquipped.lava_skin && this.shopTryOnEquipped.frost_skin) {
         this.shopTryOnEquipped.frostfire_skin = true;
@@ -1910,6 +1982,9 @@ class DinoApp {
         this.shopTryOnEquipped.frostfire_skin = false;
         this.shopTryOnEquipped.unicorn_skin = false;
         this.shopTryOnEquipped.rainbow_skin = false;
+        this.shopTryOnEquipped.mecha_zero_skin = false;
+        this.shopTryOnEquipped.crimson_drone_skin = false;
+        this.shopTryOnEquipped.titan_katana_skin = false;
       }
       this.shopTryOnEquipped.angel_skin = willEnable;
       if (this.shopTryOnEquipped.angel_skin && this.shopTryOnEquipped.fallen_skin) {
@@ -1928,6 +2003,9 @@ class DinoApp {
         this.shopTryOnEquipped.rainbow_skin = false;
         this.shopTryOnEquipped.fallen_skin = false;
         this.shopTryOnEquipped.chaos_skin = false;
+        this.shopTryOnEquipped.mecha_zero_skin = false;
+        this.shopTryOnEquipped.crimson_drone_skin = false;
+        this.shopTryOnEquipped.titan_katana_skin = false;
       }
       this.shopTryOnEquipped.unicorn_skin = willEnable;
     } else if (itemId === 'item_rainbow_skin') {
@@ -1941,6 +2019,9 @@ class DinoApp {
         this.shopTryOnEquipped.unicorn_skin = false;
         this.shopTryOnEquipped.fallen_skin = false;
         this.shopTryOnEquipped.chaos_skin = false;
+        this.shopTryOnEquipped.mecha_zero_skin = false;
+        this.shopTryOnEquipped.crimson_drone_skin = false;
+        this.shopTryOnEquipped.titan_katana_skin = false;
       }
       this.shopTryOnEquipped.rainbow_skin = willEnable;
     } else if (itemId === 'item_fallen_skin') {
@@ -1953,12 +2034,63 @@ class DinoApp {
         this.shopTryOnEquipped.frostfire_skin = false;
         this.shopTryOnEquipped.unicorn_skin = false;
         this.shopTryOnEquipped.rainbow_skin = false;
+        this.shopTryOnEquipped.mecha_zero_skin = false;
+        this.shopTryOnEquipped.crimson_drone_skin = false;
+        this.shopTryOnEquipped.titan_katana_skin = false;
       }
       if (this.shopTryOnEquipped.angel_skin && this.shopTryOnEquipped.fallen_skin) {
         this.shopTryOnEquipped.chaos_skin = true;
       } else {
         this.shopTryOnEquipped.chaos_skin = false;
       }
+    } else if (itemId === 'item_mecha_zero_skin') {
+      const willEnable = !this.shopTryOnEquipped.mecha_zero_skin;
+      if (willEnable) {
+        this.shopTryOnEquipped.chroma_gold = false;
+        this.shopTryOnEquipped.lava_skin = false;
+        this.shopTryOnEquipped.frost_skin = false;
+        this.shopTryOnEquipped.frostfire_skin = false;
+        this.shopTryOnEquipped.angel_skin = false;
+        this.shopTryOnEquipped.unicorn_skin = false;
+        this.shopTryOnEquipped.rainbow_skin = false;
+        this.shopTryOnEquipped.fallen_skin = false;
+        this.shopTryOnEquipped.chaos_skin = false;
+        this.shopTryOnEquipped.crimson_drone_skin = false;
+        this.shopTryOnEquipped.titan_katana_skin = false;
+      }
+      this.shopTryOnEquipped.mecha_zero_skin = willEnable;
+    } else if (itemId === 'item_crimson_drone_skin') {
+      const willEnable = !this.shopTryOnEquipped.crimson_drone_skin;
+      if (willEnable) {
+        this.shopTryOnEquipped.chroma_gold = false;
+        this.shopTryOnEquipped.lava_skin = false;
+        this.shopTryOnEquipped.frost_skin = false;
+        this.shopTryOnEquipped.frostfire_skin = false;
+        this.shopTryOnEquipped.angel_skin = false;
+        this.shopTryOnEquipped.unicorn_skin = false;
+        this.shopTryOnEquipped.rainbow_skin = false;
+        this.shopTryOnEquipped.fallen_skin = false;
+        this.shopTryOnEquipped.chaos_skin = false;
+        this.shopTryOnEquipped.mecha_zero_skin = false;
+        this.shopTryOnEquipped.titan_katana_skin = false;
+      }
+      this.shopTryOnEquipped.crimson_drone_skin = willEnable;
+    } else if (itemId === 'item_titan_katana_skin') {
+      const willEnable = !this.shopTryOnEquipped.titan_katana_skin;
+      if (willEnable) {
+        this.shopTryOnEquipped.chroma_gold = false;
+        this.shopTryOnEquipped.lava_skin = false;
+        this.shopTryOnEquipped.frost_skin = false;
+        this.shopTryOnEquipped.frostfire_skin = false;
+        this.shopTryOnEquipped.angel_skin = false;
+        this.shopTryOnEquipped.unicorn_skin = false;
+        this.shopTryOnEquipped.rainbow_skin = false;
+        this.shopTryOnEquipped.fallen_skin = false;
+        this.shopTryOnEquipped.chaos_skin = false;
+        this.shopTryOnEquipped.mecha_zero_skin = false;
+        this.shopTryOnEquipped.crimson_drone_skin = false;
+      }
+      this.shopTryOnEquipped.titan_katana_skin = willEnable;
     } else if (itemId === 'item_grad_cap') {
       this.shopTryOnEquipped.grad_cap = !this.shopTryOnEquipped.grad_cap;
     } else if (itemId.startsWith('item_hw_')) {
@@ -2123,6 +2255,9 @@ class DinoApp {
     }
     if (this.shopTryOnEquipped.unicorn_skin) activeNames.push('🦄 梦幻独角兽');
     if (this.shopTryOnEquipped.rainbow_skin) activeNames.push('🌈 虹彩炽天龙');
+    if (this.shopTryOnEquipped.mecha_zero_skin) activeNames.push('🪽 零式 · 量子光之翼');
+    if (this.shopTryOnEquipped.crimson_drone_skin) activeNames.push('🛰️ 绯红 · 浮游刃矩阵');
+    if (this.shopTryOnEquipped.titan_katana_skin) activeNames.push('⚔️ 黑金 · 合金可变战刃');
     if (this.shopTryOnEquipped.grad_cap) activeNames.push('🎓 博士帽');
     if (this.shopTryOnHasFireworks) activeNames.push('🎇 璀璨烟火');
     if (this.shopTryOnHasDialogue) activeNames.push('💬 专属台词');
@@ -2151,9 +2286,40 @@ class DinoApp {
 
     const SECTIONS = [
       { key: 'privilege', title: '🎟️ 班级荣耀特权区', subtitle: '实用课堂特权与荣誉置顶', icon: '🎟️', class: 'sec-privilege' },
-      { key: 'skin',      title: '🐲 神兽终极皮肤馆', subtitle: '全形态恐龙基因幻化，自带专属流光特效', icon: '🐲', class: 'sec-skin' },
+      { key: 'skin',      title: '🐲 神兽终极皮肤馆', subtitle: '四大主题系列 · 90~120分阶梯解锁，集齐双生系列觉醒隐藏神兽', icon: '🐲', class: 'sec-skin' },
       { key: 'accessory', title: '👑 头饰与炫酷装扮区', subtitle: '金冠、黑超墨镜、学霸博士帽与称号勋章', icon: '👑', class: 'sec-accessory' },
       { key: 'fx',        title: '✨ 魔法光环与灵动特效', subtitle: '唯美樱花、星芒魔法阵、小仙子随从与烟火', icon: '✨', class: 'sec-fx' }
+    ];
+
+    const SKIN_SERIES = [
+      {
+        key: 'beast',
+        title: '🌟 第一档：幻彩瑞兽系列',
+        tierTag: '🪙 90 分 · 史诗级',
+        desc: '璀璨金龙与极光独角兽，自带皇室金翼与精灵蝶翼',
+        class: 'skin-series-beast'
+      },
+      {
+        key: 'elemental',
+        title: '🔥 第二档：自然元素系列',
+        tierTag: '🪙 100 分 · 传说级',
+        desc: '🎁 双生羁绊：集齐【熔岩火龙 + 极寒冰龙】自动免费觉醒隐藏神兽【☯️ 冰火双生·极境神龙】',
+        class: 'skin-series-elemental'
+      },
+      {
+        key: 'celestial',
+        title: '👼 第三档：天界神域系列',
+        tierTag: '🪙 110 分 · 神话级',
+        desc: '🎁 双生羁绊：集齐【炽天大天使 + 幽冥堕天使】自动免费觉醒隐藏神兽【☯️ 光暗双生·混沌天神】',
+        class: 'skin-series-celestial'
+      },
+      {
+        key: 'mecha',
+        title: '🚀 第四档：超维机甲系列',
+        tierTag: '🪙 120 分 · 殿堂至尊',
+        desc: '未来纪元纳米装甲与独立科技武装翼，班级最高荣耀象征',
+        class: 'skin-series-mecha'
+      }
     ];
 
     const renderCard = (item) => {
@@ -2163,7 +2329,8 @@ class DinoApp {
 
       let badgeHtml = '';
       if (item.subCategory === 'skin') {
-        badgeHtml = `<span class="shop-badge-skin">🐲 神兽皮肤</span>`;
+        const seriesCls = item.skinSeries ? `badge-series-${item.skinSeries}` : '';
+        badgeHtml = `<span class="shop-badge-skin ${seriesCls}">${item.tierBadge || '🐲 神兽皮肤'}</span>`;
       } else if (item.subCategory === 'accessory') {
         badgeHtml = `<span class="shop-badge-accessory">👑 永久配饰</span>`;
       } else if (item.subCategory === 'fx') {
@@ -2178,9 +2345,10 @@ class DinoApp {
       }
 
       const iconClass = item.subCategory ? `icon-${item.subCategory}` : (isPrivilege ? 'privilege-icon-box' : 'dino-icon-box');
+      const cardSeriesClass = item.skinSeries ? `card-series-${item.skinSeries}` : '';
 
       return `
-        <div class="shop-item-card card-${item.subCategory || 'item'} ${isTriedOn ? 'tried-on-active' : ''}">
+        <div class="shop-item-card card-${item.subCategory || 'item'} ${cardSeriesClass} ${isTriedOn ? 'tried-on-active' : ''}">
           <div class="shop-item-top">
             <div class="shop-item-icon-box ${iconClass}">
               <span class="shop-icon-symbol">${item.icon}</span>
@@ -2207,6 +2375,30 @@ class DinoApp {
       `;
     };
 
+    const renderSectionBody = (secKey, secItems) => {
+      if (secKey !== 'skin') {
+        return `<div class="shop-section-grid">${secItems.map(renderCard).join('')}</div>`;
+      }
+      return `<div class="skin-series-stack">` + SKIN_SERIES.map(sr => {
+        const srItems = secItems.filter(i => (i.skinSeries || 'beast') === sr.key);
+        if (srItems.length === 0) return '';
+        return `
+          <div class="skin-series-block ${sr.class}">
+            <div class="skin-series-header">
+              <div class="skin-series-title-group">
+                <span class="skin-series-title">${sr.title}</span>
+                <span class="skin-series-tier-pill">${sr.tierTag}</span>
+              </div>
+              <span class="skin-series-desc">${sr.desc}</span>
+            </div>
+            <div class="shop-section-grid">
+              ${srItems.map(renderCard).join('')}
+            </div>
+          </div>
+        `;
+      }).join('') + `</div>`;
+    };
+
     if (this.currentShopCategory === 'all') {
       // Group by 4 sections cleanly
       let fullHtml = '';
@@ -2222,9 +2414,7 @@ class DinoApp {
                 </div>
                 <span class="shop-section-sub">${sec.subtitle}</span>
               </div>
-              <div class="shop-section-grid">
-                ${secItems.map(renderCard).join('')}
-              </div>
+              ${renderSectionBody(sec.key, secItems)}
             </div>
           `;
         }
@@ -2250,9 +2440,7 @@ class DinoApp {
               </div>
               <span class="shop-section-sub">${currentSec ? currentSec.subtitle : ''}</span>
             </div>
-            <div class="shop-section-grid">
-              ${filtered.map(renderCard).join('')}
-            </div>
+            ${renderSectionBody(this.currentShopCategory, filtered)}
           </div>
         `;
       }
@@ -2355,7 +2543,7 @@ class DinoApp {
     student.earned = student.earned || {};
 
     const stateKey = itemId.replace('item_', '').replace('companion_fairy', 'fairy');
-    const fullBodySkinKeys = ['chroma_gold', 'lava_skin', 'frost_skin', 'angel_skin', 'unicorn_skin', 'frostfire_skin', 'rainbow_skin', 'fallen_skin', 'chaos_skin'];
+    const fullBodySkinKeys = ['chroma_gold', 'lava_skin', 'frost_skin', 'angel_skin', 'unicorn_skin', 'frostfire_skin', 'rainbow_skin', 'fallen_skin', 'chaos_skin', 'mecha_zero_skin', 'crimson_drone_skin', 'titan_katana_skin'];
 
     // ── CHECK IF PERMANENT ITEM IS ALREADY OWNED (Direct Free Re-equip) ──
     if (item.durationDays === 0) {
@@ -2446,7 +2634,8 @@ class DinoApp {
       'item_crown', 'item_sunglasses', 'item_cherry_blossom', 'item_magic_circle', 'item_lava_circle',
       'item_cyber_circle', 'item_sakura_circle', 'item_companion_fairy', 'item_chroma_gold',
       'item_lava_skin', 'item_frost_skin', 'item_angel_skin', 'item_unicorn_skin', 'item_rainbow_skin',
-      'item_fallen_skin', 'item_grad_cap',
+      'item_fallen_skin', 'item_mecha_zero_skin', 'item_crimson_drone_skin', 'item_titan_katana_skin',
+      'item_grad_cap',
       'item_hw_side_bow', 'item_hw_astronaut', 'item_hw_cyber_visor', 'item_hw_sprout',
       'item_hw_magician', 'item_hw_explorer', 'item_hw_cat_ears', 'item_hw_tiara', 'item_hw_chef'
     ];
@@ -2612,6 +2801,9 @@ class DinoApp {
         student.earned.chaos_skin = true;
       }
       setupItem('chaos', student.earned.chaos_skin, student.equipped.chaos_skin);
+      setupItem('mecha_zero', student.earned.mecha_zero_skin, student.equipped.mecha_zero_skin);
+      setupItem('crimson_drone', student.earned.crimson_drone_skin, student.equipped.crimson_drone_skin);
+      setupItem('titan_katana', student.earned.titan_katana_skin, student.equipped.titan_katana_skin);
       setupItem('grad', student.earned.grad_cap, student.equipped.grad_cap);
       setupItem('hw_side_bow', student.earned.hw_side_bow, student.equipped.hw_side_bow);
       setupItem('hw_astronaut', student.earned.hw_astronaut, student.equipped.hw_astronaut);
@@ -2626,7 +2818,7 @@ class DinoApp {
       setupItem('dialogue', !!student.customDialogue, !!student.customDialogue);
 
       // Attach mutual exclusion handler on full-body skin checkboxes
-      const skinCheckboxIds = ['detail-chroma-checkbox', 'detail-lava-checkbox', 'detail-frost-checkbox', 'detail-frostfire-checkbox', 'detail-angel-checkbox', 'detail-unicorn-checkbox', 'detail-rainbow-checkbox', 'detail-fallen-checkbox', 'detail-chaos-checkbox'];
+      const skinCheckboxIds = ['detail-chroma-checkbox', 'detail-lava-checkbox', 'detail-frost-checkbox', 'detail-frostfire-checkbox', 'detail-angel-checkbox', 'detail-unicorn-checkbox', 'detail-rainbow-checkbox', 'detail-fallen-checkbox', 'detail-chaos-checkbox', 'detail-mecha_zero-checkbox', 'detail-crimson_drone-checkbox', 'detail-titan_katana-checkbox'];
       skinCheckboxIds.forEach(id => {
         const cb = document.getElementById(id);
         if (cb) {
@@ -2729,6 +2921,9 @@ class DinoApp {
     const rainbowCb = getCb('rainbow');
     const fallenCb = getCb('fallen');
     const chaosCb = getCb('chaos');
+    const mechaZeroCb = getCb('mecha_zero');
+    const crimsonDroneCb = getCb('crimson_drone');
+    const titanKatanaCb = getCb('titan_katana');
     const gradCb = getCb('grad');
     const hwSideBowCb = getCb('hw_side_bow');
     const hwAstronautCb = getCb('hw_astronaut');
@@ -2770,6 +2965,9 @@ class DinoApp {
     student.equipped.rainbow_skin = rainbowCb && student.earned.rainbow_skin ? rainbowCb.checked : false;
     student.equipped.fallen_skin = fallenCb && student.earned.fallen_skin ? fallenCb.checked : false;
     student.equipped.chaos_skin = chaosCb && student.earned.chaos_skin ? chaosCb.checked : false;
+    student.equipped.mecha_zero_skin = mechaZeroCb && student.earned.mecha_zero_skin ? mechaZeroCb.checked : false;
+    student.equipped.crimson_drone_skin = crimsonDroneCb && student.earned.crimson_drone_skin ? crimsonDroneCb.checked : false;
+    student.equipped.titan_katana_skin = titanKatanaCb && student.earned.titan_katana_skin ? titanKatanaCb.checked : false;
 
     if (gradCb && student.earned.grad_cap) student.equipped.grad_cap = gradCb.checked;
     if (hwSideBowCb && student.earned.hw_side_bow) student.equipped.hw_side_bow = hwSideBowCb.checked;

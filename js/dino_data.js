@@ -42,14 +42,24 @@ const DINO_DATA = {
     { id: 'item_helper',    title: '老师贴身小助手',       desc: '全天协助老师收发作业本与整理讲台',                   cost: 20,  category: 'role', subCategory: 'privilege', icon: '👩‍🏫', stock: 8, durationDays: 1 },
     { id: 'item_wall',      title: '电子光荣榜置顶卡',     desc: '恐龙照片在班级大屏及主页置顶特写展示一日',           cost: 30,  category: 'fun',  subCategory: 'privilege', icon: '🌟', stock: 5,  durationDays: 1 },
 
-    // 🐲 2. 神兽终极皮肤馆 (Mythical Dinosaur Skins)
-    { id: 'item_lava_skin',   title: '🌋 熔岩火龙皮肤',     desc: '基因重构为黑曜石暗红脉络皮肤，环绕动态上升爆发火山火花粒子', cost: 90, category: 'dino', subCategory: 'skin', icon: '🌋', stock: 99, durationDays: 0 },
-    { id: 'item_frost_skin',  title: '❄️ 极寒冰龙皮肤',     desc: '基因重构为千年玄冰幽蓝霜雪皮肤，环绕晶莹冰棱碎屑与极寒冰霜雪花粒子', cost: 90, category: 'dino', subCategory: 'skin', icon: '❄️', stock: 99, durationDays: 0 },
-    { id: 'item_angel_skin',  title: '👼 炽天大天使皮肤',   desc: '基因重构为纯白圣洁大天使皮肤，展开圣光羽翼并悬浮神圣天使光环', cost: 90, category: 'dino', subCategory: 'skin', icon: '👼', stock: 99, durationDays: 0 },
-    { id: 'item_fallen_skin', title: '🌌 幽冥堕天使皮肤',   desc: '基因重构为暗曜蚀光黑翼皮肤，展开幽黑紫曜神翼与月蚀神环，深邃霸气', cost: 90, category: 'dino', subCategory: 'skin', icon: '🌌', stock: 99, durationDays: 0 },
-    { id: 'item_rainbow_skin',title: '🌈 虹彩炽天龙皮肤',   desc: '基因重构为七彩虹光天神皮肤，展开七彩流光羽翼与天界旋转棱镜神环', cost: 90, category: 'dino', subCategory: 'skin', icon: '🌈', stock: 99, durationDays: 0 },
-    { id: 'item_unicorn_skin',title: '🦄 梦幻独角兽皮肤',   desc: '基因重构为极光彩虹梦幻皮肤，额前挺立螺旋星芒独角与梦幻星屑', cost: 90, category: 'dino', subCategory: 'skin', icon: '🦄', stock: 99, durationDays: 0 },
-    { id: 'item_chroma_gold', title: '🏆 耀世黄金龙皮肤',   desc: '改变恐龙基因，使其基础颜色变为璀璨的黄金色',         cost: 90, category: 'dino', subCategory: 'skin', icon: '🏆', stock: 99, durationDays: 0 },
+    // 🐲 2. 神兽终极皮肤馆 (Mythical Dinosaur Skins - 四大主题系列 · 90~120分阶梯)
+    // 🌟 第一档：幻彩瑞兽系列 (90分 · 史诗级)
+    { id: 'item_chroma_gold', title: '🏆 耀世黄金龙皮肤',   desc: '改变恐龙基因，化为璀璨纯金圣龙，展开皇室金羽圣翼',         cost: 90,  category: 'dino', subCategory: 'skin', skinSeries: 'beast',     tierBadge: '🌟 瑞兽·史诗', icon: '🏆', stock: 99, durationDays: 0 },
+    { id: 'item_unicorn_skin',title: '🦄 梦幻独角兽皮肤',   desc: '基因重构为极光彩虹梦幻皮肤，额前挺立星芒独角并展开精灵蝶翼', cost: 90,  category: 'dino', subCategory: 'skin', skinSeries: 'beast',     tierBadge: '🌟 瑞兽·史诗', icon: '🦄', stock: 99, durationDays: 0 },
+
+    // 🔥 第二档：自然元素系列 (100分 · 传说级 · 集齐觉醒冰火双生)
+    { id: 'item_lava_skin',   title: '🌋 熔岩火龙皮肤',     desc: '基因重构为黑曜石暗红脉络皮肤，展开熔岩恶魔翼并环绕火山粒子', cost: 100, category: 'dino', subCategory: 'skin', skinSeries: 'elemental', tierBadge: '🔥 元素·传说', icon: '🌋', stock: 99, durationDays: 0 },
+    { id: 'item_frost_skin',  title: '❄️ 极寒冰龙皮肤',     desc: '基因重构为千年玄冰幽蓝霜雪皮肤，展开冰晶棱镜翼与冰霜雪花',   cost: 100, category: 'dino', subCategory: 'skin', skinSeries: 'elemental', tierBadge: '❄️ 元素·传说', icon: '❄️', stock: 99, durationDays: 0 },
+
+    // 👼 第三档：天界神域系列 (110分 · 神话级 · 集齐天使与堕天使觉醒光暗双生)
+    { id: 'item_angel_skin',  title: '👼 炽天大天使皮肤',   desc: '基因重构为纯白圣洁大天使皮肤，展开圣光三层羽翼并悬浮神圣光环', cost: 110, category: 'dino', subCategory: 'skin', skinSeries: 'celestial', tierBadge: '👼 天界·神话', icon: '👼', stock: 99, durationDays: 0 },
+    { id: 'item_fallen_skin', title: '🌌 幽冥堕天使皮肤',   desc: '基因重构为暗曜蚀光黑翼皮肤，展开幽黑紫曜神翼与月蚀神环',       cost: 110, category: 'dino', subCategory: 'skin', skinSeries: 'celestial', tierBadge: '🌌 天界·神话', icon: '🌌', stock: 99, durationDays: 0 },
+    { id: 'item_rainbow_skin',title: '🌈 虹彩炽天龙皮肤',   desc: '基因重构为七彩虹光天神皮肤，展开七彩流光羽翼与天界旋转棱镜神环', cost: 110, category: 'dino', subCategory: 'skin', skinSeries: 'celestial', tierBadge: '🌈 天界·神话', icon: '🌈', stock: 99, durationDays: 0 },
+
+    // 🚀 第四档：超维机甲系列 (120分 · 殿堂至尊级)
+    { id: 'item_mecha_zero_skin',    title: '🪽 零式 · 量子光之翼', desc: '未来纪元机甲皮肤：珍珠钛白与深空藏青战甲，展开巨幅量子等离子光之翼', cost: 120, category: 'dino', subCategory: 'skin', skinSeries: 'mecha', tierBadge: '🚀 超维·至尊', icon: '🪽', stock: 99, durationDays: 0 },
+    { id: 'item_crimson_drone_skin', title: '🛰️ 绯红 · 浮游刃矩阵', desc: '未来纪元机甲皮肤：绯红炽焰与黑曜合金战甲，环绕6枚悬浮激光脉冲浮游刃', cost: 120, category: 'dino', subCategory: 'skin', skinSeries: 'mecha', tierBadge: '🚀 超维·至尊', icon: '🛰️', stock: 99, durationDays: 0 },
+    { id: 'item_titan_katana_skin',  title: '⚔️ 白金 · 镜面合金战刃', desc: '未来纪元机甲皮肤：极光白金与镜面黄金战甲，装配多段机械折叠战刃翼与能量护胸', cost: 120, category: 'dino', subCategory: 'skin', skinSeries: 'mecha', tierBadge: '🚀 超维·至尊', icon: '⚔️', stock: 99, durationDays: 0 },
 
     // 👑 3. 头饰与炫酷装扮区 (Headwear & Accessories)
     { id: 'item_crown',     title: '👑 超炫流光金冠框',     desc: '解锁并穿戴会闪烁流光粒子与炫酷光晕的金冠框',         cost: 50,  category: 'dino', subCategory: 'accessory', icon: '✨', stock: 99, durationDays: 0 },
@@ -145,7 +155,10 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     const spec = DINO_DATA.SPECIES[speciesKey] || DINO_DATA.SPECIES.rex;
 
     let activeSkin = null;
-    if (equipped.chaos_skin) activeSkin = 'chaos';
+    if (equipped.mecha_zero_skin) activeSkin = 'mecha_zero';
+    else if (equipped.crimson_drone_skin) activeSkin = 'crimson_drone';
+    else if (equipped.titan_katana_skin) activeSkin = 'titan_katana';
+    else if (equipped.chaos_skin) activeSkin = 'chaos';
     else if (equipped.frostfire_skin) activeSkin = 'frostfire';
     else if (equipped.rainbow_skin) activeSkin = 'rainbow';
     else if (equipped.fallen_skin) activeSkin = 'fallen';
@@ -155,6 +168,10 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     else if (equipped.lava_skin) activeSkin = 'lava';
     else if (equipped.chroma_gold) activeSkin = 'gold';
 
+    const isMechaZero = activeSkin === 'mecha_zero';
+    const isCrimsonDrone = activeSkin === 'crimson_drone';
+    const isTitanKatana = activeSkin === 'titan_katana';
+    const isMecha = isMechaZero || isCrimsonDrone || isTitanKatana;
     const isChaos = activeSkin === 'chaos';
     const isRainbow = activeSkin === 'rainbow';
     const isFallen = activeSkin === 'fallen';
@@ -164,15 +181,48 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     const isFrost = activeSkin === 'frost';
     const isLava = activeSkin === 'lava';
     const isGold = activeSkin === 'gold';
-    const isCelestial = isAngel || isRainbow || isFallen || isChaos;
+    const isCelestial = isAngel || isRainbow || isFallen || isChaos || isMecha;
     const hasSkinWings = isCelestial || isLava || isFrost || isUnicorn || isGold || isFrostFire;
 
-    const c1 = isChaos ? '#ffffff' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isUnicorn ? '#ffffff' : (isAngel ? '#e2e8f0' : (isFrost ? '#38bdf8' : (isLava ? '#ea580c' : (isGold ? '#fec84d' : spec.color))))))));
-    const c2 = isChaos ? '#18181b' : (isRainbow ? '#818cf8' : (isFallen ? '#7c3aed' : (isFrostFire ? '#00d2ff' : (isUnicorn ? '#f5d0fe' : (isAngel ? '#94a3b8' : (isFrost ? '#0284c7' : (isLava ? '#b91c1c' : (isGold ? '#e69500' : spec.secondaryColor))))))));
-    const cA = isChaos ? '#fbbf24' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isFrostFire ? '#fbbf24' : (isUnicorn ? '#f472b6' : (isAngel ? '#f59e0b' : (isFrost ? '#e0f2fe' : (isLava ? '#fbbf24' : (isGold ? '#fffbeb' : spec.accent))))))));
+    const c1 = isMechaZero ? '#f8fafc' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#fef9c3' : (isChaos ? '#ffffff' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isUnicorn ? '#ffffff' : (isAngel ? '#e2e8f0' : (isFrost ? '#38bdf8' : (isLava ? '#ea580c' : (isGold ? '#fec84d' : spec.color)))))))))));
+    const c2 = isMechaZero ? '#0f172a' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? '#ca8a04' : (isChaos ? '#18181b' : (isRainbow ? '#818cf8' : (isFallen ? '#7c3aed' : (isFrostFire ? '#00d2ff' : (isUnicorn ? '#f5d0fe' : (isAngel ? '#94a3b8' : (isFrost ? '#0284c7' : (isLava ? '#b91c1c' : (isGold ? '#e69500' : spec.secondaryColor)))))))))));
+    const cA = isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#ef4444' : (isTitanKatana ? '#ffd700' : (isChaos ? '#fbbf24' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isFrostFire ? '#fbbf24' : (isUnicorn ? '#f472b6' : (isAngel ? '#f59e0b' : (isFrost ? '#e0f2fe' : (isLava ? '#fbbf24' : (isGold ? '#fffbeb' : spec.accent)))))))))));
     const id = `d${speciesKey}${stageKey}${Math.floor(Math.random()*9999)}`;
 
     let effectsHtml = '';
+    if (isMechaZero) {
+      effectsHtml += `
+        <div class="mecha-zero-skin-aura">
+          <span class="mecha-spark" style="left:10%; bottom:14%; animation-delay:0s;">🪽</span>
+          <span class="mecha-spark" style="right:10%; bottom:18%; animation-delay:0.7s;">⚡</span>
+          <span class="mecha-spark" style="left:48%; bottom:8%; animation-delay:1.4s;">💠</span>
+          <span class="mecha-spark" style="right:32%; bottom:26%; animation-delay:0.3s;">✨</span>
+          <span class="mecha-spark" style="left:24%; bottom:28%; animation-delay:1.1s;">🔹</span>
+          <span class="mecha-spark" style="right:20%; bottom:10%; animation-delay:1.8s;">💫</span>
+        </div>`;
+    }
+    if (isCrimsonDrone) {
+      effectsHtml += `
+        <div class="crimson-drone-skin-aura">
+          <span class="crimson-spark" style="left:10%; bottom:14%; animation-delay:0s;">🛰️</span>
+          <span class="crimson-spark" style="right:10%; bottom:18%; animation-delay:0.7s;">🔴</span>
+          <span class="crimson-spark" style="left:48%; bottom:8%; animation-delay:1.4s;">🔺</span>
+          <span class="crimson-spark" style="right:32%; bottom:26%; animation-delay:0.3s;">⚡</span>
+          <span class="crimson-spark" style="left:24%; bottom:28%; animation-delay:1.1s;">💥</span>
+          <span class="crimson-spark" style="right:20%; bottom:10%; animation-delay:1.8s;">✨</span>
+        </div>`;
+    }
+    if (isTitanKatana) {
+      effectsHtml += `
+        <div class="titan-katana-skin-aura">
+          <span class="katana-spark" style="left:10%; bottom:14%; animation-delay:0s;">⚔️</span>
+          <span class="katana-spark" style="right:10%; bottom:18%; animation-delay:0.7s;">✨</span>
+          <span class="katana-spark" style="left:48%; bottom:8%; animation-delay:1.4s;">🟡</span>
+          <span class="katana-spark" style="right:32%; bottom:26%; animation-delay:0.3s;">⭐</span>
+          <span class="katana-spark" style="left:24%; bottom:28%; animation-delay:1.1s;">🗡️</span>
+          <span class="katana-spark" style="right:20%; bottom:10%; animation-delay:1.8s;">💫</span>
+        </div>`;
+    }
     if (isChaos) {
       effectsHtml += `
         <div class="chaos-skin-aura">
@@ -587,7 +637,34 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     if (!isCelestial) return '';
     const hasTallHat = !!(equipped.hw_magician || equipped.hw_chef || equipped.grad_cap);
     if (hasTallHat) cy -= 18;
-    if (isChaos) {
+    if (isMechaZero) {
+      return `
+      <g class="dino-mecha-zero-halo" transform="translate(${cx}, ${cy})">
+        <ellipse cx="0" cy="0" rx="${rx+4}" ry="${ry+1}" fill="none" stroke="#00f5ff" stroke-width="2.2" stroke-dasharray="6,4" filter="drop-shadow(0 0 6px #00f5ff)"/>
+        <ellipse cx="0" cy="0" rx="${rx-2}" ry="${ry-1}" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="3,2" opacity="0.8"/>
+        <path d="M-18,-3 L-22,-3 L-22,3 L-18,3" fill="none" stroke="#38bdf8" stroke-width="1.8"/>
+        <path d="M18,-3 L22,-3 L22,3 L18,3" fill="none" stroke="#38bdf8" stroke-width="1.8"/>
+        <circle cx="0" cy="-6" r="2" fill="#00f5ff" filter="drop-shadow(0 0 4px #00f5ff)"/>
+        <circle cx="0" cy="6" r="2" fill="#00f5ff"/>
+      </g>`;
+    } else if (isCrimsonDrone) {
+      return `
+      <g class="dino-crimson-drone-halo" transform="translate(${cx}, ${cy})">
+        <polygon points="0,-7 18,-3 18,3 0,7 -18,3 -18,-3" fill="none" stroke="#ef4444" stroke-width="2.2" filter="drop-shadow(0 0 6px #ef4444)"/>
+        <ellipse cx="0" cy="0" rx="14" ry="4" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="4,2"/>
+        <circle cx="-18" cy="0" r="2.2" fill="#ef4444" filter="drop-shadow(0 0 4px #ef4444)"/>
+        <circle cx="18" cy="0" r="2.2" fill="#ef4444" filter="drop-shadow(0 0 4px #ef4444)"/>
+      </g>`;
+    } else if (isTitanKatana) {
+      return `
+      <g class="dino-titan-katana-halo" transform="translate(${cx}, ${cy})">
+        <ellipse cx="0" cy="0" rx="${rx+4}" ry="${ry+1}" fill="none" stroke="#ffd700" stroke-width="2.8" filter="drop-shadow(0 0 8px #ffd700)"/>
+        <ellipse cx="0" cy="0" rx="${rx+4}" ry="${ry+1}" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="6,3"/>
+        <circle cx="-20" cy="0" r="2.8" fill="#09090b" stroke="#ffd700" stroke-width="1.2"/>
+        <circle cx="20" cy="0" r="2.8" fill="#09090b" stroke="#ffd700" stroke-width="1.2"/>
+        <circle cx="0" cy="-6" r="2.2" fill="#ffd700" filter="drop-shadow(0 0 4px #ffd700)"/>
+      </g>`;
+    } else if (isChaos) {
       return `
       <g class="dino-chaos-halo">
         <defs>
@@ -665,6 +742,9 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     if (!hasSkinWings && !forceRender) return '';
 
     const getWingConfig = (isLeft) => {
+      if (isMechaZero) return 'mecha_zero';
+      if (isCrimsonDrone) return 'crimson_drone';
+      if (isTitanKatana) return 'titan_katana';
       if (isChaos) return isLeft ? 'angel' : 'fallen';
       if (isFrostFire) return isLeft ? 'lava' : 'frost';
       if (isRainbow) return 'rainbow';
@@ -678,214 +758,260 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     };
 
     const renderWingFeathers = (cfg, idSuffix) => {
-      if (cfg === 'rainbow') {
+      if (cfg === 'mecha_zero') {
         return `
           <defs>
-            <linearGradient id="rbw1${idSuffix}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#fdf4ff"/>
-              <stop offset="100%" stop-color="#fce7f3"/>
+            <linearGradient id="mzw1${idSuffix}" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="rgba(0,245,255,0.95)"/>
+              <stop offset="45%" stop-color="rgba(56,189,248,0.85)"/>
+              <stop offset="85%" stop-color="rgba(255,255,255,0.9)"/>
+              <stop offset="100%" stop-color="rgba(255,255,255,0.2)"/>
             </linearGradient>
-            <linearGradient id="rbw2${idSuffix}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#e0f2fe"/>
-              <stop offset="100%" stop-color="#bae6fd"/>
+            <linearGradient id="mzw2${idSuffix}" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="rgba(2,132,199,0.9)"/>
+              <stop offset="60%" stop-color="rgba(56,189,248,0.8)"/>
+              <stop offset="100%" stop-color="rgba(224,242,254,0.3)"/>
             </linearGradient>
-            <linearGradient id="rbw3${idSuffix}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#fef9c3"/>
-              <stop offset="100%" stop-color="#fde047"/>
-            </linearGradient>
-            <linearGradient id="rbsp${idSuffix}" x1="0" y1="1" x2="1" y2="0">
-              <stop offset="0%" stop-color="#f43f5e"/>
-              <stop offset="50%" stop-color="#38bdf8"/>
-              <stop offset="100%" stop-color="#a855f7"/>
+            <linearGradient id="mzw3${idSuffix}" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="rgba(30,64,175,0.8)"/>
+              <stop offset="70%" stop-color="rgba(2,132,199,0.7)"/>
+              <stop offset="100%" stop-color="rgba(255,255,255,0.1)"/>
             </linearGradient>
           </defs>
-          <!-- Soft Depth Shadow Silhouette -->
-          <path d="M0,4 C-8,-20 -20,-50 -32,-62 C-38,-56 -30,-32 -18,-18 C-28,-28 -38,-24 -36,-14 C-32,0 -20,6 0,4 Z" fill="#c084fc" opacity="0.45"/>
-          <!-- Tier 1: Long Primary Flight Feather (Pastel Pink/Violet) -->
-          <path d="M0,0 C-6,-24 -18,-52 -30,-60 C-34,-54 -24,-32 -14,-16 C-8,-8 -3,-2 0,0 Z" fill="url(#rbw1${idSuffix})" stroke="#f472b6" stroke-width="1.3"/>
-          <!-- Tier 2: Middle Secondary Feather (Sky Shimmer) -->
-          <path d="M-8,-10 C-18,-28 -30,-36 -34,-34 C-36,-26 -26,-14 -12,-4 Z" fill="url(#rbw2${idSuffix})" stroke="#38bdf8" stroke-width="1.3"/>
-          <!-- Tier 3: Lower Base Covert Feather (Warm Sun Shimmer) -->
-          <path d="M-8,-2 C-18,-14 -28,-14 -28,-8 C-26,4 -14,6 0,2 Z" fill="url(#rbw3${idSuffix})" stroke="#fbbf24" stroke-width="1.3"/>
-          <!-- Flowing Prismatic Wing Spine Along Upper Curve -->
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="url(#rbsp${idSuffix})" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#ffffff" stroke-width="1" stroke-linecap="round" fill="none"/>
-          <!-- Rainbow Prism Star Tip -->
-          <circle cx="-28" cy="-56" r="2.2" fill="#ffffff" filter="drop-shadow(0 0 5px #f472b6) drop-shadow(0 0 8px #38bdf8)"/>
+          <path d="M0,0 L-14,-22 L-22,-26 L-16,-12 Z" fill="#1e293b" stroke="#00f5ff" stroke-width="1.5"/>
+          <circle cx="-18" cy="-24" r="3" fill="#00f5ff" filter="drop-shadow(0 0 6px #00f5ff)"/>
+          <path d="M-18,-24 C-28,-55 -48,-85 -68,-100 C-65,-75 -50,-50 -32,-26 Z" fill="url(#mzw1${idSuffix})" opacity="0.9" filter="drop-shadow(0 0 10px #00f5ff)"/>
+          <path d="M-18,-24 C-35,-45 -55,-62 -72,-68 C-60,-50 -44,-32 -26,-14 Z" fill="url(#mzw2${idSuffix})" opacity="0.85" filter="drop-shadow(0 0 8px #38bdf8)"/>
+          <path d="M-14,-14 C-28,-28 -48,-36 -58,-32 C-45,-20 -30,-8 -10,2 Z" fill="url(#mzw3${idSuffix})" opacity="0.8"/>
+          <path d="M-18,-24 C-35,-52 -50,-76 -64,-94" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.95"/>
+          <circle cx="-64" cy="-94" r="2.5" fill="#ffffff" filter="drop-shadow(0 0 5px #ffffff)"/>
+        `;
+      } else if (cfg === 'crimson_drone') {
+        return `
+          <g transform="translate(-10, -10)">
+            <path d="M-22,-45 L-38,-15 L-24,15" fill="none" stroke="#ef4444" stroke-width="1.2" stroke-dasharray="3,2" class="laser-glow"/>
+            <g transform="translate(-22, -45) rotate(-28)">
+              <polygon points="0,-16 6,8 0,5 -6,8" fill="#e11d48" stroke="#fda4af" stroke-width="1.2"/>
+              <polygon points="0,-10 2,4 0,2 -2,4" fill="#ffffff"/>
+              <path d="M-3,8 L3,8 L0,18 Z" fill="#ef4444" filter="drop-shadow(0 0 6px #ef4444)"/>
+            </g>
+            <g transform="translate(-38, -15) rotate(-10)">
+              <polygon points="0,-22 9,10 0,6 -9,10" fill="#be123c" stroke="#f43f5e" stroke-width="1.5" filter="drop-shadow(0 0 5px rgba(239,68,68,0.5))"/>
+              <polygon points="0,-14 3,6 0,4 -3,6" fill="#ffffff"/>
+              <path d="M-4,10 L4,10 L0,24 Z" fill="#ef4444" filter="drop-shadow(0 0 8px #ef4444)"/>
+            </g>
+            <g transform="translate(-24, 15) rotate(15)">
+              <polygon points="0,-14 5,7 0,4 -5,7" fill="#e11d48" stroke="#fda4af" stroke-width="1.2"/>
+              <polygon points="0,-8 2,3 0,2 -2,3" fill="#ffffff"/>
+              <path d="M-2,7 L2,7 L0,15 Z" fill="#ef4444" filter="drop-shadow(0 0 5px #ef4444)"/>
+            </g>
+          </g>
+        `;
+      } else if (cfg === 'titan_katana') {
+        return `
+          <defs>
+            <linearGradient id="tkBlade${idSuffix}" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#78350f"/>
+              <stop offset="30%" stop-color="#d97706"/>
+              <stop offset="70%" stop-color="#fde047"/>
+              <stop offset="100%" stop-color="#ffffff"/>
+            </linearGradient>
+          </defs>
+          <!-- Apex Katana Blade (Long, heavy, broad gold blade) -->
+          <path d="M0,0 L-14,-26 L-48,-84 L-34,-76 L-8,-18 Z" fill="url(#tkBlade${idSuffix})" stroke="#ffffff" stroke-width="1.2" filter="drop-shadow(0 0 6px rgba(251,191,36,0.6))"/>
+          <!-- Blade Facet Shimmer -->
+          <path d="M-14,-26 L-48,-84 L-34,-76 Z" fill="rgba(255,255,255,0.4)"/>
+          <!-- Middle Blade -->
+          <path d="M-8,-14 L-26,-40 L-68,-58 L-52,-50 L-14,-10 Z" fill="url(#tkBlade${idSuffix})" stroke="#fbbf24" stroke-width="1.2"/>
+          <!-- Lower Blade -->
+          <path d="M-10,-4 L-26,-22 L-66,-28 L-48,-20 L-12,0 Z" fill="url(#tkBlade${idSuffix})" stroke="#f59e0b" stroke-width="1.2"/>
+          <!-- Mechanical Pivot with Core -->
+          <circle cx="-14" cy="-22" r="5.5" fill="#18181b" stroke="#ffd700" stroke-width="1.8"/>
+          <circle cx="-14" cy="-22" r="3" fill="#f59e0b"/>
+          <circle cx="-13" cy="-23" r="1.2" fill="#fff"/>
+          <text x="-58" y="-88" font-size="14" fill="#ffffff" filter="drop-shadow(0 0 6px #ffd700)">✦</text>
+        `;
+      } else if (cfg === 'rainbow') {
+        return `
+          <defs>
+            <linearGradient id="rbp1${idSuffix}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ffedd5"/><stop offset="100%" stop-color="#f43f5e"/></linearGradient>
+            <linearGradient id="rbp2${idSuffix}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fef08a"/><stop offset="100%" stop-color="#eab308"/></linearGradient>
+            <linearGradient id="rbp3${idSuffix}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#bbf7d0"/><stop offset="100%" stop-color="#10b981"/></linearGradient>
+            <linearGradient id="rbp4${idSuffix}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#bae6fd"/><stop offset="100%" stop-color="#0284c7"/></linearGradient>
+            <linearGradient id="rbp5${idSuffix}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f5d0fe"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+          </defs>
+          <!-- 5 Prismatic Crystal Feather Panes -->
+          <path d="M0,0 L-14,-22 L-38,-78 L-26,-66 L-8,-18 Z" fill="url(#rbp1${idSuffix})" stroke="#ffffff" stroke-width="1.4" filter="drop-shadow(0 0 6px #f43f5e)"/>
+          <path d="M-8,-14 L-22,-32 L-56,-62 L-42,-50 L-14,-14 Z" fill="url(#rbp2${idSuffix})" stroke="#ffffff" stroke-width="1.3" filter="drop-shadow(0 0 5px #eab308)"/>
+          <path d="M-12,-10 L-26,-24 L-64,-42 L-48,-32 L-14,-6 Z" fill="url(#rbp3${idSuffix})" stroke="#ffffff" stroke-width="1.3" filter="drop-shadow(0 0 5px #10b981)"/>
+          <path d="M-12,-4 L-24,-14 L-62,-22 L-44,-14 L-8,0 Z" fill="url(#rbp4${idSuffix})" stroke="#ffffff" stroke-width="1.2" filter="drop-shadow(0 0 5px #0284c7)"/>
+          <path d="M-8,0 L-18,-6 L-48,-6 L-32,2 L-2,4 Z" fill="url(#rbp5${idSuffix})" stroke="#ffffff" stroke-width="1.2" filter="drop-shadow(0 0 5px #a855f7)"/>
+          <!-- Iridescent Spine -->
+          <path d="M0,0 C-8,-22 -18,-52 -38,-78" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <circle cx="-38" cy="-78" r="3.2" fill="#ffffff" filter="drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 14px #38bdf8)"/>
         `;
       } else if (cfg === 'fallen') {
         return `
           <defs>
-            <linearGradient id="flw1${idSuffix}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#18181b"/>
-              <stop offset="100%" stop-color="#2e1065"/>
-            </linearGradient>
-            <linearGradient id="flw2${idSuffix}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#2e1065"/>
-              <stop offset="100%" stop-color="#3b0764"/>
-            </linearGradient>
-            <linearGradient id="flw3${idSuffix}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#3b0764"/>
-              <stop offset="100%" stop-color="#4c1d95"/>
-            </linearGradient>
+            <linearGradient id="abm${idSuffix}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#09090b"/><stop offset="50%" stop-color="#2e1065"/><stop offset="100%" stop-color="#581c87"/></linearGradient>
+            <linearGradient id="abc${idSuffix}" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#18181b"/><stop offset="60%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
           </defs>
-          <!-- Soft Depth Shadow Silhouette -->
-          <path d="M0,4 C-8,-20 -20,-50 -32,-62 C-38,-56 -30,-32 -18,-18 C-28,-28 -38,-24 -36,-14 C-32,0 -20,6 0,4 Z" fill="#09090b" opacity="0.8"/>
-          <!-- Tier 1: Long Primary Flight Feather (Obsidian / Dark Midnight) -->
-          <path d="M0,0 C-6,-24 -18,-52 -30,-60 C-34,-54 -24,-32 -14,-16 C-8,-8 -3,-2 0,0 Z" fill="url(#flw1${idSuffix})" stroke="#7c3aed" stroke-width="1.3"/>
-          <!-- Tier 2: Middle Secondary Feather (Deep Purple) -->
-          <path d="M-8,-10 C-18,-28 -30,-36 -34,-34 C-36,-26 -26,-14 -12,-4 Z" fill="url(#flw2${idSuffix})" stroke="#9333ea" stroke-width="1.3"/>
-          <!-- Tier 3: Lower Base Covert Feather (Shadow Violet) -->
-          <path d="M-8,-2 C-18,-14 -28,-14 -28,-8 C-26,4 -14,6 0,2 Z" fill="url(#flw3${idSuffix})" stroke="#c084fc" stroke-width="1.3"/>
-          <!-- Flowing Dark Violet Eclipse Wing Spine Along Upper Curve -->
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#c084fc" stroke-width="1" stroke-linecap="round" fill="none"/>
-          <!-- Eclipse Amethyst Star Tip -->
-          <circle cx="-28" cy="-56" r="2.2" fill="#c084fc" filter="drop-shadow(0 0 6px #a855f7)"/>
+          <!-- Dark Void Shadow Mist -->
+          <path d="M0,4 C-10,-20 -25,-55 -45,-75 C-42,-50 -35,-30 -20,-16 C-35,-25 -52,-20 -50,-6 C-42,10 -25,10 0,4 Z" fill="#3b0764" opacity="0.6" filter="drop-shadow(0 0 10px #7c3aed)"/>
+          <!-- Ragged Void Membranes -->
+          <path d="M0,0 C-10,-20 -22,-45 -42,-70 C-36,-50 -32,-30 -22,-16 Z" fill="url(#abm${idSuffix})" stroke="#7c3aed" stroke-width="1.4"/>
+          <path d="M-22,-16 C-38,-35 -56,-50 -70,-52 C-60,-36 -46,-20 -28,-6 Z" fill="url(#abm${idSuffix})" stroke="#a855f7" stroke-width="1.3"/>
+          <path d="M-28,-6 C-42,-16 -58,-18 -66,-10 C-50,-2 -30,4 -10,2 Z" fill="url(#abm${idSuffix})" stroke="#c084fc" stroke-width="1.2"/>
+          <!-- Skeletal Twisted Shadow Claws -->
+          <path d="M0,0 L-18,-24 L-42,-70" stroke="url(#abc${idSuffix})" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <path d="M-18,-24 L-70,-52" stroke="url(#abc${idSuffix})" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M-18,-24 L-66,-10" stroke="url(#abc${idSuffix})" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <!-- Void Moon Crest & Glowing Sharp Rune Tip -->
+          <circle cx="-42" cy="-70" r="3.2" fill="#c084fc" filter="drop-shadow(0 0 8px #9333ea)"/>
+          <path d="M-40,-74 A4,4 0 1,0 -34,-66 A3,3 0 1,1 -40,-74 Z" fill="#ffffff" filter="drop-shadow(0 0 4px #c084fc)"/>
+          <polygon points="-70,-52 -78,-56 -71,-48" fill="#a855f7"/>
         `;
       } else if (cfg === 'lava') {
         return `
           <defs>
-            <linearGradient id="lvw1${idSuffix}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#ffa502"/>
-              <stop offset="50%" stop-color="#ff4757"/>
-              <stop offset="100%" stop-color="#b91c1c"/>
-            </linearGradient>
-            <linearGradient id="lvw2${idSuffix}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#ffd000"/>
-              <stop offset="100%" stop-color="#ff6b81"/>
-            </linearGradient>
-            <linearGradient id="lvw3${idSuffix}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#ff4757"/>
+            <linearGradient id="lvb${idSuffix}" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#1c1917"/>
+              <stop offset="50%" stop-color="#450a0a"/>
               <stop offset="100%" stop-color="#7f1d1d"/>
             </linearGradient>
-            <linearGradient id="lvsp${idSuffix}" x1="0" y1="1" x2="1" y2="0">
-              <stop offset="0%" stop-color="#ffd000"/>
-              <stop offset="50%" stop-color="#ff4500"/>
-              <stop offset="100%" stop-color="#b91c1c"/>
+            <linearGradient id="lvm1${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#ff4500" stop-opacity="0.95"/>
+              <stop offset="45%" stop-color="#ea580c" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#7f1d1d" stop-opacity="0.85"/>
+            </linearGradient>
+            <linearGradient id="lvm2${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.95"/>
+              <stop offset="60%" stop-color="#f97316" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#991b1b" stop-opacity="0.85"/>
             </linearGradient>
           </defs>
-          <!-- Soft Depth Shadow Silhouette -->
-          <path d="M0,4 C-8,-20 -20,-50 -32,-62 C-38,-56 -30,-32 -18,-18 C-28,-28 -38,-24 -36,-14 C-32,0 -20,6 0,4 Z" fill="#450a0a" opacity="0.8"/>
-          <!-- Tier 1: Long Primary Flight Feather (Molten Crimson Flame) -->
-          <path d="M0,0 C-6,-24 -18,-52 -30,-60 C-34,-54 -24,-32 -14,-16 C-8,-8 -3,-2 0,0 Z" fill="url(#lvw1${idSuffix})" stroke="#ff4500" stroke-width="1.3"/>
-          <!-- Tier 2: Middle Secondary Feather (Core Magma Gold) -->
-          <path d="M-8,-10 C-18,-28 -30,-36 -34,-34 C-36,-26 -26,-14 -12,-4 Z" fill="url(#lvw2${idSuffix})" stroke="#ff7b00" stroke-width="1.3"/>
-          <!-- Tier 3: Lower Base Covert Feather (Dark Obsidian Red) -->
-          <path d="M-8,-2 C-18,-14 -28,-14 -28,-8 C-26,4 -14,6 0,2 Z" fill="url(#lvw3${idSuffix})" stroke="#b91c1c" stroke-width="1.3"/>
-          <!-- Flowing Molten Wing Spine Along Upper Curve -->
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="url(#lvsp${idSuffix})" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#fff3bf" stroke-width="1" stroke-linecap="round" fill="none"/>
-          <!-- Magma Flame Crystal Star Tip -->
-          <circle cx="-28" cy="-56" r="2.4" fill="#ffffff" filter="drop-shadow(0 0 5px #ff4500) drop-shadow(0 0 9px #ffa502)"/>
+          <!-- Webbed Scalloped Membranes -->
+          <path d="M0,0 C-12,-18 -26,-42 -42,-68 C-36,-48 -32,-30 -25,-16 C-18,-8 -8,-2 0,0 Z" fill="url(#lvm1${idSuffix})" stroke="#f97316" stroke-width="1.2"/>
+          <path d="M-25,-16 C-40,-35 -58,-52 -72,-56 C-62,-40 -48,-24 -30,-8 Z" fill="url(#lvm2${idSuffix})" stroke="#fbbf24" stroke-width="1.2"/>
+          <path d="M-30,-8 C-44,-18 -60,-22 -68,-16 C-52,-8 -32,-2 -10,2 Z" fill="url(#lvm1${idSuffix})" stroke="#ea580c" stroke-width="1.2"/>
+          <!-- Molten Lava Flowing Veins -->
+          <path d="M-12,-8 C-25,-26 -40,-45 -55,-54" stroke="#fef08a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+          <path d="M-22,-14 C-36,-26 -48,-36 -60,-40" stroke="#ffedd5" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+          <!-- Heavy Obsidian Dragon Bone Struts -->
+          <path d="M0,0 L-18,-24 L-42,-68" stroke="url(#lvb${idSuffix})" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+          <path d="M-18,-24 L-72,-56" stroke="url(#lvb${idSuffix})" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+          <path d="M-18,-24 L-68,-16" stroke="url(#lvb${idSuffix})" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+          <!-- Sharp Claws / Horn Spurs -->
+          <polygon points="-42,-68 -48,-78 -38,-72" fill="#fde047" stroke="#b45309" stroke-width="1" filter="drop-shadow(0 0 6px #ff4500)"/>
+          <polygon points="-72,-56 -80,-62 -72,-52" fill="#fde047" stroke="#b45309" stroke-width="1" filter="drop-shadow(0 0 5px #ff4500)"/>
+          <polygon points="-68,-16 -76,-18 -68,-12" fill="#fde047" stroke="#b45309" stroke-width="1"/>
+          <!-- Main Joint Core Flame -->
+          <circle cx="-18" cy="-24" r="4.5" fill="#fde047" stroke="#ea580c" stroke-width="1.5" filter="drop-shadow(0 0 8px #ff4500)"/>
+          <circle cx="-18" cy="-24" r="2" fill="#ffffff"/>
         `;
       } else if (cfg === 'frost') {
         return `
           <defs>
-            <linearGradient id="frw1${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+            <linearGradient id="frs1${idSuffix}" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="40%" stop-color="#7dd3fc"/>
+              <stop offset="100%" stop-color="#0284c7"/>
+            </linearGradient>
+            <linearGradient id="frs2${idSuffix}" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#38bdf8"/>
+              <stop offset="60%" stop-color="#0369a1"/>
+              <stop offset="100%" stop-color="#082f49"/>
+            </linearGradient>
+            <linearGradient id="frs3${idSuffix}" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stop-color="#f0fdfa"/>
               <stop offset="50%" stop-color="#38bdf8"/>
-              <stop offset="100%" stop-color="#0284c7"/>
-            </linearGradient>
-            <linearGradient id="frw2${idSuffix}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#e0f2fe"/>
-              <stop offset="100%" stop-color="#0369a1"/>
-            </linearGradient>
-            <linearGradient id="frw3${idSuffix}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#38bdf8"/>
               <stop offset="100%" stop-color="#0c4a6e"/>
             </linearGradient>
-            <linearGradient id="frsp${idSuffix}" x1="0" y1="1" x2="1" y2="0">
-              <stop offset="0%" stop-color="#ffffff"/>
-              <stop offset="50%" stop-color="#7dd3fc"/>
-              <stop offset="100%" stop-color="#0284c7"/>
-            </linearGradient>
           </defs>
-          <!-- Soft Depth Shadow Silhouette -->
-          <path d="M0,4 C-8,-20 -20,-50 -32,-62 C-38,-56 -30,-32 -18,-18 C-28,-28 -38,-24 -36,-14 C-32,0 -20,6 0,4 Z" fill="#082f49" opacity="0.7"/>
-          <!-- Tier 1: Long Primary Flight Feather (Glacial Crystal White/Blue) -->
-          <path d="M0,0 C-6,-24 -18,-52 -30,-60 C-34,-54 -24,-32 -14,-16 C-8,-8 -3,-2 0,0 Z" fill="url(#frw1${idSuffix})" stroke="#38bdf8" stroke-width="1.3"/>
-          <!-- Tier 2: Middle Secondary Feather (Deep Arctic Blue) -->
-          <path d="M-8,-10 C-18,-28 -30,-36 -34,-34 C-36,-26 -26,-14 -12,-4 Z" fill="url(#frw2${idSuffix})" stroke="#0284c7" stroke-width="1.3"/>
-          <!-- Tier 3: Lower Base Covert Feather (Permafrost Ice Violet) -->
-          <path d="M-8,-2 C-18,-14 -28,-14 -28,-8 C-26,4 -14,6 0,2 Z" fill="url(#frw3${idSuffix})" stroke="#0369a1" stroke-width="1.3"/>
-          <!-- Flowing Frostwing Spine Along Upper Curve -->
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="url(#frsp${idSuffix})" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#ffffff" stroke-width="1" stroke-linecap="round" fill="none"/>
-          <!-- Glacial Ice Crystal Star Tip -->
-          <circle cx="-28" cy="-56" r="2.4" fill="#ffffff" filter="drop-shadow(0 0 5px #38bdf8) drop-shadow(0 0 9px #00d2ff)"/>
+          <!-- Faceted Ice Shard 1 (Tall Main Blade) -->
+          <polygon points="0,0 -22,-36 -58,-92 -42,-50" fill="url(#frs1${idSuffix})" stroke="#e0f2fe" stroke-width="1.4" filter="drop-shadow(0 0 8px #38bdf8)"/>
+          <polygon points="-22,-36 -58,-92 -36,-80 -14,-30" fill="url(#frs2${idSuffix})" stroke="#38bdf8" stroke-width="1.2"/>
+          <!-- Faceted Ice Shard 2 (Secondary Mid Blade) -->
+          <polygon points="-12,-16 -32,-42 -74,-62 -48,-36" fill="url(#frs1${idSuffix})" stroke="#e0f2fe" stroke-width="1.3" filter="drop-shadow(0 0 6px #0284c7)"/>
+          <polygon points="-32,-42 -74,-62 -56,-56 -24,-34" fill="url(#frs2${idSuffix})" stroke="#0284c7" stroke-width="1"/>
+          <!-- Faceted Ice Shard 3 (Lower Base Blade) -->
+          <polygon points="-10,-4 -28,-22 -58,-32 -34,-14" fill="url(#frs3${idSuffix})" stroke="#7dd3fc" stroke-width="1.2"/>
+          <polygon points="-28,-22 -58,-32 -44,-28 -20,-16" fill="url(#frs2${idSuffix})" stroke="#0284c7" stroke-width="1"/>
+          <!-- Center Crystal Spine Lines -->
+          <line x1="-22" y1="-36" x2="-58" y2="-92" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+          <line x1="-32" y1="-42" x2="-74" y2="-62" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/>
+          <!-- Ice Crystal Tip Glow Points -->
+          <circle cx="-58" cy="-92" r="3.2" fill="#ffffff" filter="drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 12px #00f5ff)"/>
+          <circle cx="-74" cy="-62" r="2.5" fill="#ffffff" filter="drop-shadow(0 0 5px #00f5ff)"/>
         `;
       } else if (cfg === 'unicorn') {
         return `
           <defs>
-            <linearGradient id="unw1${idSuffix}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#fff0f5"/>
-              <stop offset="60%" stop-color="#fbcfe8"/>
-              <stop offset="100%" stop-color="#f472b6"/>
+            <linearGradient id="un1${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fff0f5" stop-opacity="0.95"/>
+              <stop offset="40%" stop-color="#fbcfe8" stop-opacity="0.9"/>
+              <stop offset="80%" stop-color="#f472b6" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#c084fc" stop-opacity="0.8"/>
             </linearGradient>
-            <linearGradient id="unw2${idSuffix}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#fdf4ff"/>
-              <stop offset="100%" stop-color="#e879f9"/>
+            <linearGradient id="un2${idSuffix}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fdf4ff" stop-opacity="0.95"/>
+              <stop offset="50%" stop-color="#e879f9" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#818cf8" stop-opacity="0.8"/>
             </linearGradient>
-            <linearGradient id="unw3${idSuffix}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#f5d0fe"/>
-              <stop offset="100%" stop-color="#c084fc"/>
-            </linearGradient>
-            <linearGradient id="unsp${idSuffix}" x1="0" y1="1" x2="1" y2="0">
+            <linearGradient id="unr${idSuffix}" x1="0" y1="1" x2="1" y2="0">
               <stop offset="0%" stop-color="#f43f5e"/>
-              <stop offset="50%" stop-color="#e879f9"/>
-              <stop offset="100%" stop-color="#fef08a"/>
+              <stop offset="50%" stop-color="#f472b6"/>
+              <stop offset="100%" stop-color="#ffd700"/>
             </linearGradient>
           </defs>
-          <!-- Soft Depth Shadow Silhouette -->
-          <path d="M0,4 C-8,-20 -20,-50 -32,-62 C-38,-56 -30,-32 -18,-18 C-28,-28 -38,-24 -36,-14 C-32,0 -20,6 0,4 Z" fill="#701a75" opacity="0.45"/>
-          <!-- Tier 1: Long Primary Flight Feather (Dreamy Sakura Pink) -->
-          <path d="M0,0 C-6,-24 -18,-52 -30,-60 C-34,-54 -24,-32 -14,-16 C-8,-8 -3,-2 0,0 Z" fill="url(#unw1${idSuffix})" stroke="#f472b6" stroke-width="1.3"/>
-          <!-- Tier 2: Middle Secondary Feather (Lavender Mist Violet) -->
-          <path d="M-8,-10 C-18,-28 -30,-36 -34,-34 C-36,-26 -26,-14 -12,-4 Z" fill="url(#unw2${idSuffix})" stroke="#e879f9" stroke-width="1.3"/>
-          <!-- Tier 3: Lower Base Covert Feather (Pastel Fairy Lilac) -->
-          <path d="M-8,-2 C-18,-14 -28,-14 -28,-8 C-26,4 -14,6 0,2 Z" fill="url(#unw3${idSuffix})" stroke="#c084fc" stroke-width="1.3"/>
-          <!-- Flowing Starlight Wing Spine Along Upper Curve -->
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="url(#unsp${idSuffix})" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#ffffff" stroke-width="1" stroke-linecap="round" fill="none"/>
-          <!-- Unicorn Stardust Diamond Tip -->
-          <circle cx="-28" cy="-56" r="2.3" fill="#ffffff" filter="drop-shadow(0 0 5px #ec4899) drop-shadow(0 0 8px #f472b6)"/>
+          <!-- Upper Fairy Butterfly Lobe -->
+          <path d="M0,0 C-10,-24 -18,-54 -40,-74 C-58,-84 -74,-66 -64,-44 C-56,-26 -34,-18 -16,-10 Z" fill="url(#un1${idSuffix})" stroke="url(#unr${idSuffix})" stroke-width="1.8" filter="drop-shadow(0 0 8px rgba(244,114,182,0.6))"/>
+          <!-- Lower Fairy Butterfly Lobe -->
+          <path d="M-10,-6 C-24,-16 -44,-24 -60,-22 C-70,-14 -64,10 -42,16 C-24,18 -10,10 0,0 Z" fill="url(#un2${idSuffix})" stroke="#c084fc" stroke-width="1.5" filter="drop-shadow(0 0 6px rgba(192,132,252,0.5))"/>
+          <!-- Magical Starlight Wing Venation -->
+          <path d="M0,0 C-15,-20 -28,-40 -48,-58" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <path d="M-22,-24 C-36,-38 -52,-48 -58,-46" stroke="#fbcfe8" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+          <!-- Sparkling Stardust Diamonds -->
+          <text x="-52" y="-76" font-size="14" fill="#ffd700" filter="drop-shadow(0 0 4px #fff)">✦</text>
+          <text x="-70" y="-46" font-size="11" fill="#ffffff">✨</text>
+          <text x="-66" y="2" font-size="10" fill="#ffd700">✦</text>
+          <circle cx="-40" cy="-74" r="2.8" fill="#ffffff" filter="drop-shadow(0 0 6px #ec4899)"/>
         `;
       } else if (cfg === 'gold') {
         return `
           <defs>
-            <linearGradient id="gdw1${idSuffix}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#fffdf0"/>
-              <stop offset="50%" stop-color="#fde047"/>
-              <stop offset="100%" stop-color="#d97706"/>
+            <linearGradient id="gdp1${idSuffix}" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#b45309"/>
+              <stop offset="30%" stop-color="#f59e0b"/>
+              <stop offset="70%" stop-color="#fef08a"/>
+              <stop offset="100%" stop-color="#ffffff"/>
             </linearGradient>
-            <linearGradient id="gdw2${idSuffix}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#fef9c3"/>
-              <stop offset="100%" stop-color="#eab308"/>
+            <linearGradient id="gdp2${idSuffix}" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#92400e"/>
+              <stop offset="40%" stop-color="#fbbf24"/>
+              <stop offset="100%" stop-color="#fffbeb"/>
             </linearGradient>
-            <linearGradient id="gdw3${idSuffix}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#fde047"/>
-              <stop offset="100%" stop-color="#854d0e"/>
-            </linearGradient>
-            <linearGradient id="gdsp${idSuffix}" x1="0" y1="1" x2="1" y2="0">
-              <stop offset="0%" stop-color="#ffffff"/>
-              <stop offset="50%" stop-color="#fbbf24"/>
-              <stop offset="100%" stop-color="#b45309"/>
+            <linearGradient id="gdsp${idSuffix}" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0%" stop-color="#ffd700"/>
+              <stop offset="100%" stop-color="#ffffff"/>
             </linearGradient>
           </defs>
-          <!-- Soft Depth Shadow Silhouette -->
-          <path d="M0,4 C-8,-20 -20,-50 -32,-62 C-38,-56 -30,-32 -18,-18 C-28,-28 -38,-24 -36,-14 C-32,0 -20,6 0,4 Z" fill="#713f12" opacity="0.6"/>
-          <!-- Tier 1: Long Primary Flight Feather (Imperial Shimmer Gold) -->
-          <path d="M0,0 C-6,-24 -18,-52 -30,-60 C-34,-54 -24,-32 -14,-16 C-8,-8 -3,-2 0,0 Z" fill="url(#gdw1${idSuffix})" stroke="#d97706" stroke-width="1.3"/>
-          <!-- Tier 2: Middle Secondary Feather (Radiant Sun Gold) -->
-          <path d="M-8,-10 C-18,-28 -30,-36 -34,-34 C-36,-26 -26,-14 -12,-4 Z" fill="url(#gdw2${idSuffix})" stroke="#eab308" stroke-width="1.3"/>
-          <!-- Tier 3: Lower Base Covert Feather (Deep Amber Gold) -->
-          <path d="M-8,-2 C-18,-14 -28,-14 -28,-8 C-26,4 -14,6 0,2 Z" fill="url(#gdw3${idSuffix})" stroke="#b45309" stroke-width="1.3"/>
-          <!-- Flowing Imperial Wing Spine Along Upper Curve -->
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="url(#gdsp${idSuffix})" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#ffffff" stroke-width="1" stroke-linecap="round" fill="none"/>
-          <!-- Pure Gold Octagram Diamond Tip -->
-          <circle cx="-28" cy="-56" r="2.4" fill="#ffffff" filter="drop-shadow(0 0 5px #ffd700) drop-shadow(0 0 9px #eab308)"/>
+          <!-- Golden Aura Background Feather Depth -->
+          <path d="M0,5 C-12,-25 -28,-62 -45,-78 C-52,-70 -38,-42 -22,-22 C-34,-32 -48,-28 -46,-14 C-42,2 -25,8 0,5 Z" fill="#ffd700" opacity="0.3" filter="drop-shadow(0 0 10px #fbbf24)"/>
+          <!-- Tier 1: Main Flight Plume (Long, elegant sweeping curve) -->
+          <path d="M0,0 C-10,-32 -26,-68 -44,-78 C-50,-70 -36,-42 -20,-20 C-10,-10 -4,-2 0,0 Z" fill="url(#gdp1${idSuffix})" stroke="#fde047" stroke-width="1.6" filter="drop-shadow(0 0 8px rgba(251,191,36,0.5))"/>
+          <!-- Tier 2: Supporting High Plume -->
+          <path d="M-8,-14 C-22,-40 -40,-54 -48,-48 C-50,-38 -36,-18 -16,-6 Z" fill="url(#gdp2${idSuffix})" stroke="#fef08a" stroke-width="1.4"/>
+          <!-- Tier 3: Middle Plume -->
+          <path d="M-10,-6 C-26,-26 -46,-32 -50,-24 C-50,-14 -34,2 -14,2 Z" fill="url(#gdp1${idSuffix})" stroke="#fef08a" stroke-width="1.3"/>
+          <!-- Tier 4: Base Plume -->
+          <path d="M-8,0 C-22,-12 -40,-8 -40,0 C-36,10 -18,10 0,2 Z" fill="url(#gdp2${idSuffix})" stroke="#ffd700" stroke-width="1.2"/>
+          <!-- Flowing Golden Quill Spine -->
+          <path d="M0,2 C-10,-28 -24,-60 -42,-74" stroke="url(#gdsp${idSuffix})" stroke-width="2.8" stroke-linecap="round" fill="none" filter="drop-shadow(0 0 6px #fff)"/>
+          <!-- Radiant Starlight Tips -->
+          <text x="-56" y="-80" font-size="14" fill="#ffffff" filter="drop-shadow(0 0 6px #ffd700)">✦</text>
+          <text x="-62" y="-48" font-size="10" fill="#fde047">✨</text>
+          <circle cx="-44" cy="-78" r="2.8" fill="#ffffff" filter="drop-shadow(0 0 6px #ffd700)"/>
         `;
       } else if (cfg === 'species') {
         return `
@@ -925,18 +1051,26 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
         `;
       } else {
         return `
-          <!-- Soft Depth Shadow Silhouette -->
-          <path d="M0,4 C-8,-20 -20,-50 -32,-62 C-38,-56 -30,-32 -18,-18 C-28,-28 -38,-24 -36,-14 C-32,0 -20,6 0,4 Z" fill="#94a3b8" opacity="0.6"/>
-          <!-- Tier 1: Long Primary Flight Feather -->
-          <path d="M0,0 C-6,-24 -18,-52 -30,-60 C-34,-54 -24,-32 -14,-16 C-8,-8 -3,-2 0,0 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
-          <!-- Tier 2: Middle Secondary Feather -->
-          <path d="M-8,-10 C-18,-28 -30,-36 -34,-34 C-36,-26 -26,-14 -12,-4 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
-          <!-- Tier 3: Lower Base Covert Feather -->
-          <path d="M-8,-2 C-18,-14 -28,-14 -28,-8 C-26,4 -14,6 0,2 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
-          <!-- Flowing Golden Wing Spine Along Upper Curve -->
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-          <path d="M0,2 C-6,-20 -16,-46 -28,-56" stroke="#fef08a" stroke-width="1" stroke-linecap="round" fill="none"/>
-          <circle cx="-28" cy="-56" r="1.8" fill="#ffffff" filter="drop-shadow(0 0 4px #ffd700)"/>
+          <defs>
+            <linearGradient id="sr1${idSuffix}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="60%" stop-color="#f8fafc"/><stop offset="100%" stop-color="#e2e8f0"/></linearGradient>
+            <linearGradient id="srsp${idSuffix}" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#ffffff"/><stop offset="50%" stop-color="#fef08a"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>
+          </defs>
+          <!-- Soft Gold Depth Halo Silhouette -->
+          <path d="M0,6 C-10,-25 -25,-60 -40,-75 C-48,-68 -36,-40 -22,-22 C-34,-34 -46,-30 -44,-16 C-40,0 -25,8 0,6 Z" fill="#fbbf24" opacity="0.3" filter="drop-shadow(0 0 8px #fde047)"/>
+          <!-- Tier 1: Grand Ascended Flight Plume (Pure White with Gold Edging) -->
+          <path d="M0,0 C-8,-30 -22,-65 -38,-75 C-44,-68 -32,-40 -18,-20 C-10,-10 -4,-2 0,0 Z" fill="url(#sr1${idSuffix})" stroke="#fbbf24" stroke-width="1.5"/>
+          <!-- Tier 2: Upper Supporting Plume -->
+          <path d="M-8,-14 C-20,-38 -36,-50 -44,-46 C-46,-36 -34,-18 -14,-6 Z" fill="url(#sr1${idSuffix})" stroke="#e2e8f0" stroke-width="1.4"/>
+          <!-- Tier 3: Middle Flight Plume -->
+          <path d="M-10,-6 C-24,-24 -42,-30 -46,-22 C-46,-12 -32,2 -12,2 Z" fill="url(#sr1${idSuffix})" stroke="#e2e8f0" stroke-width="1.3"/>
+          <!-- Tier 4: Lower Base Divine Plume -->
+          <path d="M-8,0 C-20,-12 -36,-8 -36,0 C-32,10 -16,10 0,2 Z" fill="url(#sr1${idSuffix})" stroke="#cbd5e1" stroke-width="1.2"/>
+          <!-- Divine Golden Wing Spine with Halo Arc -->
+          <path d="M0,2 C-8,-25 -20,-58 -36,-70" stroke="url(#srsp${idSuffix})" stroke-width="3" stroke-linecap="round" fill="none" filter="drop-shadow(0 0 5px #ffd700)"/>
+          <path d="M0,2 C-8,-25 -20,-58 -36,-70" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+          <!-- Angelic Holy Diamond Tip -->
+          <circle cx="-36" cy="-70" r="3.2" fill="#ffffff" filter="drop-shadow(0 0 6px #ffd700) drop-shadow(0 0 10px #ffffff)"/>
+          <text x="-48" y="-76" font-size="12" fill="#ffd700">✦</text>
         `;
       }
     };
@@ -945,26 +1079,47 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     const rightCfg = getWingConfig(false);
 
     return `
-    <g class="dino-angel-wings ${isRainbow ? 'dino-rainbow-wings' : (isFallen ? 'dino-fallen-wings' : (isChaos ? 'dino-chaos-wings' : ''))}">
+    <g class="dino-angel-wings ${isRainbow ? 'dino-rainbow-wings' : (isFallen ? 'dino-fallen-wings' : (isChaos ? 'dino-chaos-wings' : (isMechaZero ? 'dino-mecha-zero-wings wing-glow' : (isCrimsonDrone ? 'dino-crimson-drone-wings' : (isTitanKatana ? 'dino-titan-katana-wings' : (isLava ? 'dino-lava-wings' : (isFrost ? 'dino-frost-wings' : (isGold ? 'dino-gold-wings' : (isUnicorn ? 'dino-unicorn-wings' : (isAngel ? 'dino-angel-seraph-wings' : ''))))))))))}">
       <!-- Left Wing -->
       <g transform="translate(${leftX}, ${y}) scale(${scale})">
-        <g class="angel-wing-anim-left" style="transform-origin: 0px 0px;">
+        <g class="${isCrimsonDrone ? 'drone-anim' : 'angel-wing-anim-left'}" style="transform-origin: 0px 0px;">
           ${renderWingFeathers(leftCfg, 'L' + id)}
         </g>
       </g>
       <!-- Right Wing (Mirrored) -->
       <g transform="translate(${rightX}, ${y}) scale(${-scale}, ${scale})">
-        <g class="angel-wing-anim-right" style="transform-origin: 0px 0px;">
+        <g class="${isCrimsonDrone ? 'drone-anim' : 'angel-wing-anim-right'}" style="transform-origin: 0px 0px;">
           ${renderWingFeathers(rightCfg, 'R' + id)}
         </g>
       </g>
     </g>`;
   };
 
-  // ⚜️ Celestial Breastplate (Angel Cross, Rainbow Prism Star, Fallen Eclipse Amethyst, Chaos Yin-Yang Orb)
+  // ⚜️ Celestial Breastplate (Angel Cross, Rainbow Prism Star, Fallen Eclipse Amethyst, Chaos Yin-Yang Orb, Mecha Cores)
   const drawCelestialBreastplate = (cx, cy, scale = 1) => {
     if (!isCelestial) return '';
-    if (isChaos) {
+    if (isMechaZero) {
+      return `
+      <g class="mecha-zero-breastplate" transform="translate(${cx}, ${cy}) scale(${scale})">
+        <circle cx="0" cy="0" r="6" fill="#0f172a" stroke="#00f5ff" stroke-width="1.5"/>
+        <circle cx="0" cy="0" r="4" fill="#00f5ff" filter="drop-shadow(0 0 6px #00f5ff)"/>
+        <circle cx="0" cy="0" r="1.5" fill="#ffffff"/>
+      </g>`;
+    } else if (isCrimsonDrone) {
+      return `
+      <g class="crimson-drone-breastplate" transform="translate(${cx}, ${cy}) scale(${scale})">
+        <polygon points="0,-6 6,0 0,6 -6,0" fill="#18181b" stroke="#f43f5e" stroke-width="1.5"/>
+        <polygon points="0,-3.5 3.5,0 0,3.5 -3.5,0" fill="#ef4444" filter="drop-shadow(0 0 5px #ef4444)"/>
+        <circle cx="0" cy="0" r="1.2" fill="#ffffff"/>
+      </g>`;
+    } else if (isTitanKatana) {
+      return `
+      <g class="titan-katana-breastplate" transform="translate(${cx}, ${cy}) scale(${scale})">
+        <path d="M-8,-8 L8,-8 L6,4 L0,9 L-6,4 Z" fill="#18181b" stroke="#ffd700" stroke-width="1.4"/>
+        <circle cx="0" cy="0" r="3.2" fill="#ffd700" stroke="#fff" stroke-width="0.8" filter="drop-shadow(0 0 6px #ffd700)"/>
+        <circle cx="0" cy="0" r="1.2" fill="#ffffff"/>
+      </g>`;
+    } else if (isChaos) {
       return `
       <g class="chaos-breastplate" transform="translate(${cx}, ${cy}) scale(${scale})">
         <path d="M0,-8 A8,8 0 0,0 0,8 A4,4 0 0,1 0,0 A4,4 0 0,0 0,-8 Z" fill="#ffd700" filter="drop-shadow(0 0 5px #f59e0b)"/>
@@ -1250,18 +1405,36 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     const svg = `<svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-wobble ${isGold ? 'gold-skin-aura' : ''}">
   <defs>
     <radialGradient id="eg${id}" cx="42%" cy="32%" r="70%">
-      <stop offset="0%" stop-color="${isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#fff5f5' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#ffffff' : (isLava ? '#fff7ed' : (isFrost ? '#ffffff' : '#fff9f0'))))))))}"/>
-      <stop offset="${(isAngel || isUnicorn) ? '40%' : '50%'}" stop-color="${isChaos ? '#e2e8f0' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#f97316' : (isFrost ? '#38bdf8' : (isUnicorn ? '#fff5f9' : c1))))))))}"/>
-      <stop offset="${(isAngel || isUnicorn) ? '75%' : '85%'}" stop-color="${isChaos ? '#3b0764' : (isRainbow ? '#c7d2fe' : (isFallen ? '#2e1065' : (isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : (isUnicorn ? '#fce7f3' : c2))))))))}"/>
-      ${isChaos ? `<stop offset="100%" stop-color="#09090b"/>` : (isRainbow ? `<stop offset="100%" stop-color="#fbcfe8"/>` : (isFallen ? `<stop offset="100%" stop-color="#09090b"/>` : (isFrostFire ? `<stop offset="100%" stop-color="#082f49"/>` : (isAngel ? `<stop offset="100%" stop-color="#94a3b8"/>` : (isLava ? `<stop offset="100%" stop-color="#1c1917"/>` : (isFrost ? `<stop offset="100%" stop-color="#0c4a6e"/>` : (isGold ? `<stop offset="100%" stop-color="#b45309"/>` : (isUnicorn ? `<stop offset="100%" stop-color="#f3e8ff"/>` : ''))))))))}
+      <stop offset="0%" stop-color="${isMechaZero ? '#ffffff' : (isCrimsonDrone ? '#fff1f2' : (isTitanKatana ? '#ffffff' : (isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#fff5f5' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#ffffff' : (isLava ? '#fff7ed' : (isFrost ? '#ffffff' : '#fff9f0')))))))))))}"/>
+      <stop offset="${(isAngel || isUnicorn || isMecha) ? '40%' : '50%'}" stop-color="${isMechaZero ? '#f0fdff' : (isCrimsonDrone ? '#fecdd3' : (isTitanKatana ? '#fef9c3' : (isChaos ? '#e2e8f0' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#f97316' : (isFrost ? '#38bdf8' : (isUnicorn ? '#fff5f9' : c1)))))))))))}"/>
+      <stop offset="${(isAngel || isUnicorn || isMecha) ? '75%' : '85%'}" stop-color="${isMechaZero ? '#bae6fd' : (isCrimsonDrone ? '#f43f5e' : (isTitanKatana ? '#fde047' : (isChaos ? '#3b0764' : (isRainbow ? '#c7d2fe' : (isFallen ? '#2e1065' : (isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : (isUnicorn ? '#fce7f3' : c2)))))))))))}"/>
+      ${isMechaZero ? `<stop offset="100%" stop-color="#0284c7"/>` : (isCrimsonDrone ? `<stop offset="100%" stop-color="#881337"/>` : (isTitanKatana ? `<stop offset="100%" stop-color="#ca8a04"/>` : (isChaos ? `<stop offset="100%" stop-color="#09090b"/>` : (isRainbow ? `<stop offset="100%" stop-color="#fbcfe8"/>` : (isFallen ? `<stop offset="100%" stop-color="#09090b"/>` : (isFrostFire ? `<stop offset="100%" stop-color="#082f49"/>` : (isAngel ? `<stop offset="100%" stop-color="#94a3b8"/>` : (isLava ? `<stop offset="100%" stop-color="#1c1917"/>` : (isFrost ? `<stop offset="100%" stop-color="#0c4a6e"/>` : (isGold ? `<stop offset="100%" stop-color="#b45309"/>` : (isUnicorn ? `<stop offset="100%" stop-color="#f3e8ff"/>` : '')))))))))))}
     </radialGradient>
+    ${isMecha ? `<linearGradient id="mIris${id}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${isMechaZero ? '#0f172a' : (isCrimsonDrone ? '#4c0519' : (isTitanKatana ? '#451a03' : '#18181b'))}"/>
+      <stop offset="55%" stop-color="${isMechaZero ? '#0369a1' : (isCrimsonDrone ? '#be123c' : (isTitanKatana ? '#b45309' : '#b45309'))}"/>
+      <stop offset="100%" stop-color="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#fde047' : '#ffd700'))}"/>
+    </linearGradient>` : ''}
   </defs>
   <ellipse cx="50" cy="98" rx="24" ry="5" fill="rgba(0,0,0,0.2)"/>
   ${drawAngelWings(28, 72, 66, 0.45)}
-  <ellipse cx="50" cy="58" rx="30" ry="38" fill="url(#eg${id})" stroke="${isAngel ? '#cbd5e1' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isChaos ? '#a855f7' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))))}" stroke-width="1.2"/>
+  <ellipse cx="50" cy="58" rx="30" ry="38" fill="url(#eg${id})" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#ffd700' : (isAngel ? '#cbd5e1' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isChaos ? '#a855f7' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')))))))))}" stroke-width="${isMecha ? '1.8' : '1.2'}"/>
   ${drawUnicornHorn(50, 24, 18, 6)}
   <!-- Front Crack -->
-  ${isChaos ? `
+  ${isMechaZero ? `
+    <path d="M26,45 C35,42 65,42 74,45" fill="none" stroke="#00f5ff" stroke-width="1.2" opacity="0.8"/>
+    <path d="M28,68 C38,72 62,72 72,68" fill="none" stroke="#00f5ff" stroke-width="1.2" opacity="0.8"/>
+    <polyline points="38,36 44,44 38,52 50,56 46,64" stroke="#00f5ff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 6px #00f5ff)"/>
+    <polyline points="38,36 44,44 38,52 50,56 46,64" stroke="#ffffff" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  ` : (isCrimsonDrone ? `
+    <path d="M26,45 C35,42 65,42 74,45" fill="none" stroke="#18181b" stroke-width="2"/>
+    <polyline points="38,36 44,44 38,52 50,56 46,64" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 6px #ef4444)"/>
+    <polyline points="38,36 44,44 38,52 50,56 46,64" stroke="#fecdd3" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  ` : (isTitanKatana ? `
+    <path d="M26,45 C35,42 65,42 74,45" fill="none" stroke="#78350f" stroke-width="1.5" stroke-dasharray="4,2"/>
+    <polyline points="38,36 44,44 38,52 50,56 46,64" stroke="#78350f" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="38,36 44,44 38,52 50,56 46,64" stroke="#ffd700" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+  ` : (isChaos ? `
     <polyline points="38,36 44,44 38,52 46,56" stroke="#fbbf24" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 4px #ffd700)"/>
     <polyline points="54,34 58,42 62,48 54,58" stroke="#c084fc" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 4px #7c3aed)"/>
   ` : (isRainbow ? `
@@ -1275,15 +1448,17 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     <polyline points="54,34 58,42 62,48 54,58" stroke="#00d2ff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 4px #00b4d8)"/>
   ` : `
     <polyline class="egg-crack-line" points="38,36 44,44 38,52 50,56 46,64" stroke="${isLava ? '#ff4500' : (isFrost ? '#00d2ff' : (isAngel ? '#f59e0b' : (isUnicorn ? '#f472b6' : '#f59e0b')))}" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  `)))}
+  `))))))}
   <!-- Symmetrical Peeking Eyes -->
   <g class="dino-part-eye">
-    <ellipse cx="38" cy="48" rx="4.5" ry="5" fill="white"/>
-    <ellipse cx="38" cy="48" rx="3" ry="3.5" fill="${isFrostFire ? '#ff3d00' : (isChaos ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#9333ea' : (isUnicorn ? '#a855f7' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e'))))))}"/>
+    <ellipse cx="38" cy="48" rx="4.5" ry="5" fill="white" stroke="${isMechaZero ? '#0369a1' : (isCrimsonDrone ? '#881337' : (isTitanKatana ? '#ffd700' : 'none'))}" stroke-width="${isMecha ? '1' : '0'}"/>
+    <ellipse cx="38" cy="48" rx="3.2" ry="3.6" fill="${isMecha ? `url(#mIris${id})` : (isFrostFire ? '#ff3d00' : (isChaos ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#9333ea' : (isUnicorn ? '#a855f7' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e')))))))}"/>
+    ${isMecha ? `<ellipse cx="38" cy="48" rx="1.4" ry="1.6" fill="${isMechaZero ? '#00f5ff' : (isTitanKatana ? '#ffd700' : '#18181b')}" opacity="0.85"/>` : ''}
     <circle cx="39.2" cy="46.8" r="1" fill="white"/>
 
-    <ellipse cx="62" cy="48" rx="4.5" ry="5" fill="white"/>
-    <ellipse cx="62" cy="48" rx="3" ry="3.5" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#9333ea' : (isRainbow ? '#38bdf8' : (isFallen ? '#9333ea' : (isUnicorn ? '#38bdf8' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e'))))))}"/>
+    <ellipse cx="62" cy="48" rx="4.5" ry="5" fill="white" stroke="${isMechaZero ? '#0369a1' : (isCrimsonDrone ? '#881337' : (isTitanKatana ? '#ffd700' : 'none'))}" stroke-width="${isMecha ? '1' : '0'}"/>
+    <ellipse cx="62" cy="48" rx="3.2" ry="3.6" fill="${isMecha ? `url(#mIris${id})` : (isFrostFire ? '#00d2ff' : (isChaos ? '#9333ea' : (isRainbow ? '#38bdf8' : (isFallen ? '#9333ea' : (isUnicorn ? '#38bdf8' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e')))))))}"/>
+    ${isMecha ? `<ellipse cx="62" cy="48" rx="1.4" ry="1.6" fill="${isMechaZero ? '#00f5ff' : (isTitanKatana ? '#ffd700' : '#18181b')}" opacity="0.85"/>` : ''}
     <circle cx="63.2" cy="46.8" r="1" fill="white"/>
   </g>
   ${drawAngelHalo(50, 10, 16, 4.5)}
@@ -1300,11 +1475,16 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     const svg = `<svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-bounce ${isGold ? 'gold-skin-aura' : ''}">
   <defs>
     <radialGradient id="bk${id}" cx="42%" cy="26%" r="74%">
-      <stop offset="0%" stop-color="${isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#ff793f' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#ffffff' : (isLava ? '#fff7ed' : (isFrost ? '#ffffff' : c1))))))))}"/>
-      <stop offset="${(isAngel || isUnicorn) ? '40%' : '50%'}" stop-color="${isChaos ? '#f1f5f9' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#f97316' : (isFrost ? '#38bdf8' : (isUnicorn ? '#fff5f9' : c1))))))))}"/>
-      <stop offset="${(isAngel || isUnicorn) ? '75%' : '85%'}" stop-color="${isChaos ? '#3b0764' : (isRainbow ? '#c7d2fe' : (isFallen ? '#2e1065' : (isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : (isUnicorn ? '#fce7f3' : c2))))))))}"/>
-      ${isChaos ? `<stop offset="100%" stop-color="#09090b"/>` : (isRainbow ? `<stop offset="100%" stop-color="#fbcfe8"/>` : (isFallen ? `<stop offset="100%" stop-color="#09090b"/>` : (isFrostFire ? `<stop offset="100%" stop-color="#082f49"/>` : (isAngel ? `<stop offset="100%" stop-color="#94a3b8"/>` : (isLava ? `<stop offset="100%" stop-color="#1c1917"/>` : (isFrost ? `<stop offset="100%" stop-color="#0c4a6e"/>` : (isGold ? `<stop offset="100%" stop-color="#b45309"/>` : (isUnicorn ? `<stop offset="100%" stop-color="#f3e8ff"/>` : ''))))))))}
+      <stop offset="0%" stop-color="${isMechaZero ? '#ffffff' : (isCrimsonDrone ? '#fff1f2' : (isTitanKatana ? '#ffffff' : (isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#ff793f' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#ffffff' : (isLava ? '#fff7ed' : (isFrost ? '#ffffff' : c1)))))))))))}"/>
+      <stop offset="${(isAngel || isUnicorn || isMecha) ? '40%' : '50%'}" stop-color="${isMechaZero ? '#f0fdff' : (isCrimsonDrone ? '#fecdd3' : (isTitanKatana ? '#fef9c3' : (isChaos ? '#f1f5f9' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#f97316' : (isFrost ? '#38bdf8' : (isUnicorn ? '#fff5f9' : c1)))))))))))}"/>
+      <stop offset="${(isAngel || isUnicorn || isMecha) ? '75%' : '85%'}" stop-color="${isMechaZero ? '#bae6fd' : (isCrimsonDrone ? '#f43f5e' : (isTitanKatana ? '#fde047' : (isChaos ? '#3b0764' : (isRainbow ? '#c7d2fe' : (isFallen ? '#2e1065' : (isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : (isUnicorn ? '#fce7f3' : c2)))))))))))}"/>
+      ${isMechaZero ? `<stop offset="100%" stop-color="#0284c7"/>` : (isCrimsonDrone ? `<stop offset="100%" stop-color="#881337"/>` : (isTitanKatana ? `<stop offset="100%" stop-color="#ca8a04"/>` : (isChaos ? `<stop offset="100%" stop-color="#09090b"/>` : (isRainbow ? `<stop offset="100%" stop-color="#fbcfe8"/>` : (isFallen ? `<stop offset="100%" stop-color="#09090b"/>` : (isFrostFire ? `<stop offset="100%" stop-color="#082f49"/>` : (isAngel ? `<stop offset="100%" stop-color="#94a3b8"/>` : (isLava ? `<stop offset="100%" stop-color="#1c1917"/>` : (isFrost ? `<stop offset="100%" stop-color="#0c4a6e"/>` : (isGold ? `<stop offset="100%" stop-color="#b45309"/>` : (isUnicorn ? `<stop offset="100%" stop-color="#f3e8ff"/>` : '')))))))))))}
     </radialGradient>
+    ${isMecha ? `<linearGradient id="mIris${id}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${isMechaZero ? '#0f172a' : (isCrimsonDrone ? '#4c0519' : (isTitanKatana ? '#451a03' : '#18181b'))}"/>
+      <stop offset="55%" stop-color="${isMechaZero ? '#0369a1' : (isCrimsonDrone ? '#be123c' : (isTitanKatana ? '#b45309' : '#b45309'))}"/>
+      <stop offset="100%" stop-color="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#fde047' : '#ffd700'))}"/>
+    </linearGradient>` : ''}
   </defs>
   <ellipse cx="50" cy="100" rx="26" ry="5" fill="rgba(0,0,0,0.2)"/>
   <!-- Tail -->
@@ -1313,13 +1493,13 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   </g>
   ${drawAngelWings(28, 72, 68, 0.55)}
   <!-- Symmetrical Body -->
-  <ellipse cx="50" cy="74" rx="26" ry="22" fill="url(#bk${id})" stroke="${isAngel ? '#94a3b8' : (isRainbow ? '#818cf8' : (isFallen ? '#7c3aed' : (isChaos ? '#8b5cf6' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))))}" stroke-width="1"/>
-  <ellipse cx="50" cy="78" rx="16" ry="14" fill="${isFrostFire ? 'rgba(254,240,138,0.5)' : (isChaos ? 'rgba(88,28,135,0.45)' : (isRainbow ? 'rgba(253,244,255,0.85)' : (isFallen ? 'rgba(46,16,101,0.65)' : (isAngel ? 'rgba(254,240,138,0.85)' : (isUnicorn ? 'rgba(253,242,248,0.7)' : (isGold ? 'rgba(255,251,235,0.7)' : (isLava ? 'rgba(254,215,170,0.85)' : (isFrost ? 'rgba(224,242,254,0.85)' : 'rgba(255,255,255,0.4)'))))))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isChaos ? '#ffd700' : (isLava ? '#f97316' : (isFrost ? '#38bdf8' : 'none')))))}" stroke-width="${(isCelestial || isLava || isFrost) ? '1.2' : '0'}"/>
+  <ellipse cx="50" cy="74" rx="26" ry="22" fill="url(#bk${id})" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#ffd700' : (isAngel ? '#94a3b8' : (isRainbow ? '#818cf8' : (isFallen ? '#7c3aed' : (isChaos ? '#8b5cf6' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')))))))))}" stroke-width="${isMecha ? '1.5' : '1'}"/>
+  <ellipse cx="50" cy="78" rx="16" ry="14" fill="${isMechaZero ? 'rgba(15,23,42,0.85)' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? 'rgba(254,249,195,0.85)' : (isFrostFire ? 'rgba(254,240,138,0.5)' : (isChaos ? 'rgba(88,28,135,0.45)' : (isRainbow ? 'rgba(253,244,255,0.85)' : (isFallen ? 'rgba(46,16,101,0.65)' : (isAngel ? 'rgba(254,240,138,0.85)' : (isUnicorn ? 'rgba(253,242,248,0.7)' : (isGold ? 'rgba(255,251,235,0.7)' : (isLava ? 'rgba(254,215,170,0.85)' : (isFrost ? 'rgba(224,242,254,0.85)' : 'rgba(255,255,255,0.4)')))))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#f43f5e' : (isTitanKatana ? '#ffd700' : (isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isChaos ? '#ffd700' : (isLava ? '#f97316' : (isFrost ? '#38bdf8' : 'none'))))))))}" stroke-width="${(isCelestial || isLava || isFrost) ? '1.2' : '0'}"/>
   <!-- Symmetrical Arms & Legs -->
-  <ellipse cx="28" cy="74" rx="6" ry="5" fill="${isFrostFire ? '#ff4757' : (isChaos ? '#fef08a' : (isRainbow ? '#fce7f3' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2))))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#a855f7' : (isChaos ? '#f59e0b' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')))))}" stroke-width="${(isCelestial || isLava || isFrost) ? '0.8' : '0'}"/>
-  <ellipse cx="72" cy="74" rx="6" ry="5" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#3b0764' : (isRainbow ? '#e0f2fe' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2))))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isChaos ? '#c084fc' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')))))}" stroke-width="${(isCelestial || isLava || isFrost) ? '0.8' : '0'}"/>
-  <ellipse cx="38" cy="94" rx="8" ry="6" fill="${isFrostFire ? '#ff3300' : (isChaos ? '#fbbf24' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2)))))}" stroke="${isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')}" stroke-width="${(isLava || isFrost) ? '0.8' : '0'}"/>
-  <ellipse cx="62" cy="94" rx="8" ry="6" fill="${isFrostFire ? '#0284c7' : (isChaos ? '#18181b' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2)))))}" stroke="${isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')}" stroke-width="${(isLava || isFrost) ? '0.8' : '0'}"/>
+  <ellipse cx="28" cy="74" rx="6" ry="5" fill="${isMechaZero ? '#e0f2fe' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? '#fef9c3' : (isFrostFire ? '#ff4757' : (isChaos ? '#fef08a' : (isRainbow ? '#fce7f3' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2)))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#f43f5e' : (isTitanKatana ? '#ffd700' : (isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#a855f7' : (isChaos ? '#f59e0b' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))))))}" stroke-width="${(isCelestial || isLava || isFrost) ? '0.8' : '0'}"/>
+  <ellipse cx="72" cy="74" rx="6" ry="5" fill="${isMechaZero ? '#e0f2fe' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? '#fef9c3' : (isFrostFire ? '#00d2ff' : (isChaos ? '#3b0764' : (isRainbow ? '#e0f2fe' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2)))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#f43f5e' : (isTitanKatana ? '#ffd700' : (isAngel ? '#f59e0b' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isChaos ? '#c084fc' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))))))}" stroke-width="${(isCelestial || isLava || isFrost) ? '0.8' : '0'}"/>
+  <ellipse cx="38" cy="94" rx="8" ry="6" fill="${isMechaZero ? '#0f172a' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? '#ca8a04' : (isFrostFire ? '#ff3300' : (isChaos ? '#fbbf24' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#e11d48' : (isTitanKatana ? '#ffd700' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))}" stroke-width="${(isMecha || isLava || isFrost) ? '1.2' : '0'}"/>
+  <ellipse cx="62" cy="94" rx="8" ry="6" fill="${isMechaZero ? '#0f172a' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? '#ca8a04' : (isFrostFire ? '#0284c7' : (isChaos ? '#18181b' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#e11d48' : (isTitanKatana ? '#ffd700' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))}" stroke-width="${(isMecha || isLava || isFrost) ? '1.2' : '0'}"/>
   <!-- Celestial Breastplate -->
   ${drawCelestialBreastplate(50, 77, 0.85)}
   <!-- Flowing Veins for Lava / Frost / FrostFire / Unicorn / Celestial -->
@@ -1360,32 +1540,52 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   <!-- Head Cast Shadow on Body -->
   ${isCelestial ? `<ellipse cx="50" cy="62" rx="16" ry="3.5" fill="rgba(15,23,42,0.2)"/>` : ''}
   <!-- Big Front Head -->
-  <ellipse cx="50" cy="42" rx="28" ry="26" fill="url(#bk${id})" stroke="${isAngel ? '#cbd5e1' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isChaos ? '#a855f7' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))))}" stroke-width="1.2"/>
+  <ellipse cx="50" cy="42" rx="28" ry="26" fill="url(#bk${id})" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#ffd700' : (isAngel ? '#cbd5e1' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isChaos ? '#a855f7' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')))))))))}" stroke-width="${isMecha ? '1.5' : '1.2'}"/>
+  ${isMechaZero ? `
+    <polygon points="22,34 16,18 25,26" fill="#0369a1" stroke="#00f5ff" stroke-width="1.2"/>
+    <polygon points="78,34 84,18 75,26" fill="#0369a1" stroke="#00f5ff" stroke-width="1.2"/>
+    <rect x="25" y="44" width="7" height="3" rx="1.5" fill="#00f5ff" filter="drop-shadow(0 0 4px #00f5ff)"/>
+    <rect x="68" y="44" width="7" height="3" rx="1.5" fill="#00f5ff" filter="drop-shadow(0 0 4px #00f5ff)"/>
+  ` : (isCrimsonDrone ? `
+    <polygon points="50,18 54,26 46,26" fill="#18181b" stroke="#f43f5e" stroke-width="1.2"/>
+  ` : (isTitanKatana ? `
+    <polygon points="50,18 45,10 50,14 55,10" fill="#ffd700" stroke="#ffffff" stroke-width="0.8"/>
+  ` : ''))}
   ${drawUnicornHorn(50, 20, 20, 6.5)}
   <!-- Soft Blushing Cheeks -->
-  <ellipse cx="28" cy="44" rx="5" ry="3.5" fill="${isFrostFire ? 'rgba(255,80,60,0.45)' : (isChaos ? 'rgba(251,191,36,0.35)' : (isRainbow ? 'rgba(244,114,182,0.45)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : (isLava ? 'rgba(249,115,22,0.45)' : (isFrost ? 'rgba(56,189,248,0.4)' : 'rgba(255,100,100,0.3)'))))))))}"/>
-  <ellipse cx="72" cy="44" rx="5" ry="3.5" fill="${isFrostFire ? 'rgba(56,189,248,0.45)' : (isChaos ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(56,189,248,0.4)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : (isLava ? 'rgba(249,115,22,0.45)' : (isFrost ? 'rgba(56,189,248,0.4)' : 'rgba(255,100,100,0.3)'))))))))}"/>
+  <ellipse cx="28" cy="44" rx="5" ry="3.5" fill="${isMechaZero ? 'rgba(56,189,248,0.45)' : (isCrimsonDrone ? 'rgba(244,63,94,0.38)' : (isTitanKatana ? 'rgba(249,115,22,0.4)' : (isFrostFire ? 'rgba(255,80,60,0.45)' : (isChaos ? 'rgba(251,191,36,0.35)' : (isRainbow ? 'rgba(244,114,182,0.45)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : (isLava ? 'rgba(249,115,22,0.45)' : (isFrost ? 'rgba(56,189,248,0.4)' : 'rgba(255,100,100,0.3)')))))))))))}"/>
+  <ellipse cx="72" cy="44" rx="5" ry="3.5" fill="${isMechaZero ? 'rgba(56,189,248,0.45)' : (isCrimsonDrone ? 'rgba(244,63,94,0.38)' : (isTitanKatana ? 'rgba(249,115,22,0.4)' : (isFrostFire ? 'rgba(56,189,248,0.45)' : (isChaos ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(56,189,248,0.4)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : (isLava ? 'rgba(249,115,22,0.45)' : (isFrost ? 'rgba(56,189,248,0.4)' : 'rgba(255,100,100,0.3)')))))))))))}"/>
   <!-- Symmetrical Front Eyes (Heterochromia on FrostFire, Chaos, Rainbow) -->
   <g class="dino-part-eye">
-    <ellipse cx="36" cy="38" rx="8" ry="9" fill="white"/>
-    <ellipse cx="36" cy="38" rx="5.5" ry="6.5" fill="${isFrostFire ? '#ff4500' : (isChaos ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#9333ea' : (isUnicorn ? '#a855f7' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e'))))))}"/>
+    <ellipse cx="36" cy="38" rx="8" ry="9" fill="white" stroke="${isMechaZero ? '#0369a1' : (isCrimsonDrone ? '#881337' : (isTitanKatana ? '#ffd700' : 'none'))}" stroke-width="${isMecha ? '1.2' : '0'}"/>
+    <ellipse cx="36" cy="38" rx="5.5" ry="6.5" fill="${isMecha ? `url(#mIris${id})` : (isFrostFire ? '#ff4500' : (isChaos ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#9333ea' : (isUnicorn ? '#a855f7' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e')))))))}"/>
+    ${isMecha ? `<ellipse cx="36" cy="38" rx="2.5" ry="2.9" fill="${isMechaZero ? '#00f5ff' : (isTitanKatana ? '#ffd700' : '#18181b')}" opacity="0.85"/>` : ''}
+    ${isMechaZero ? `<line x1="36" y1="33" x2="36" y2="43" stroke="#ffffff" stroke-width="1.1"/><line x1="31" y1="38" x2="41" y2="38" stroke="#ffffff" stroke-width="1.1"/>` : ''}
     <circle cx="38" cy="35.5" r="2" fill="white"/>
-    <circle cx="34.5" cy="40" r="1" fill="rgba(255,255,255,0.4)"/>
+    <circle cx="34.5" cy="40" r="1" fill="rgba(255,255,255,0.6)"/>
 
-    <ellipse cx="64" cy="38" rx="8" ry="9" fill="white"/>
-    <ellipse cx="64" cy="38" rx="5.5" ry="6.5" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#9333ea' : (isRainbow ? '#38bdf8' : (isFallen ? '#9333ea' : (isUnicorn ? '#38bdf8' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e'))))))}"/>
+    <ellipse cx="64" cy="38" rx="8" ry="9" fill="white" stroke="${isMechaZero ? '#0369a1' : (isCrimsonDrone ? '#881337' : (isTitanKatana ? '#ffd700' : 'none'))}" stroke-width="${isMecha ? '1.2' : '0'}"/>
+    <ellipse cx="64" cy="38" rx="5.5" ry="6.5" fill="${isMecha ? `url(#mIris${id})` : (isFrostFire ? '#00d2ff' : (isChaos ? '#9333ea' : (isRainbow ? '#38bdf8' : (isFallen ? '#9333ea' : (isUnicorn ? '#38bdf8' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e')))))))}"/>
+    ${isMecha ? `<ellipse cx="64" cy="38" rx="2.5" ry="2.9" fill="${isMechaZero ? '#00f5ff' : (isTitanKatana ? '#ffd700' : '#18181b')}" opacity="0.85"/>` : ''}
+    ${isMechaZero ? `<line x1="64" y1="33" x2="64" y2="43" stroke="#ffffff" stroke-width="1.1"/><line x1="59" y1="38" x2="69" y2="38" stroke="#ffffff" stroke-width="1.1"/>` : ''}
     <circle cx="66" cy="35.5" r="2" fill="white"/>
-    <circle cx="62.5" cy="40" r="1" fill="rgba(255,255,255,0.4)"/>
+    <circle cx="62.5" cy="40" r="1" fill="rgba(255,255,255,0.6)"/>
   </g>
   <!-- Subtle Mini Dragon Nostrils -->
-  <ellipse cx="48" cy="46" rx="1" ry="1.2" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.22)')))}"/>
-  <ellipse cx="52" cy="46" rx="1" ry="1.2" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.22)')))}"/>
+  <ellipse cx="48" cy="46" rx="1" ry="1.2" fill="${isMechaZero ? 'rgba(15,23,42,0.35)' : (isCrimsonDrone ? 'rgba(76,5,25,0.4)' : (isTitanKatana ? 'rgba(69,26,3,0.4)' : (isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.22)'))))))}"/>
+  <ellipse cx="52" cy="46" rx="1" ry="1.2" fill="${isMechaZero ? 'rgba(15,23,42,0.35)' : (isCrimsonDrone ? 'rgba(76,5,25,0.4)' : (isTitanKatana ? 'rgba(69,26,3,0.4)' : (isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.22)'))))))}"/>
   ${drawAngelHalo(50, 6, 17, 5)}
   ${drawSunglasses(50, 38, 42, 14)}
   ${drawGradCap(50, 24)}
   ${drawAllHeadwears(50, 24, 38, 1.0, 40, 0.96)}
-  <!-- Front Smile (NO FANGS on Angel & Rainbow) -->
-  ${isFrostFire ? `
+  <!-- Front Smile (NO FANGS on Angel, Rainbow, Mecha) -->
+  ${isMechaZero ? `
+    <path d="M44,52 Q50,55 56,52" stroke="#0f172a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  ` : (isCrimsonDrone ? `
+    <path d="M44,51 Q50,55 56,51" stroke="#4c0519" stroke-width="2" fill="none" stroke-linecap="round"/>
+  ` : (isTitanKatana ? `
+    <path d="M44,52 Q50,56 56,52" stroke="#451a03" stroke-width="2" fill="none" stroke-linecap="round"/>
+  ` : (isFrostFire ? `
     <path d="M43,51 Q50,54 57,51" stroke="#fbbf24" stroke-width="2.2" fill="none" stroke-linecap="round"/>
     <polygon points="45,51 47,56 49,51" fill="#ffffff" stroke="#ff4500" stroke-width="0.7"/>
     <polygon points="51,51 53,56 55,51" fill="#ffffff" stroke="#00d2ff" stroke-width="0.7"/>
@@ -1413,7 +1613,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     <path d="M44,51 Q50,55.5 56,51" stroke="#f472b6" stroke-width="2" fill="none" stroke-linecap="round"/>
   ` : `
     <path d="M44,51 Q50,56 56,51" stroke="rgba(0,0,0,0.45)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-  `)))))))}
+  `))))))))))}
 </svg>`;
     return effectsHtml + svg;
   }
@@ -1423,11 +1623,16 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     const svg = `<svg viewBox="0 0 110 120" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-float ${isGold ? 'gold-skin-aura' : ''}">
   <defs>
     <radialGradient id="tk${id}" cx="42%" cy="26%" r="75%">
-      <stop offset="0%" stop-color="${isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#ff793f' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#ffffff' : (isLava ? '#fff7ed' : (isFrost ? '#ffffff' : c1))))))))}"/>
-      <stop offset="${(isAngel || isUnicorn) ? '40%' : '50%'}" stop-color="${isChaos ? '#f1f5f9' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#f97316' : (isFrost ? '#38bdf8' : (isUnicorn ? '#fff5f9' : c1))))))))}"/>
-      <stop offset="${(isAngel || isUnicorn) ? '75%' : '85%'}" stop-color="${isChaos ? '#3b0764' : (isRainbow ? '#c7d2fe' : (isFallen ? '#2e1065' : (isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : (isUnicorn ? '#fce7f3' : c2))))))))}"/>
-      ${isChaos ? `<stop offset="100%" stop-color="#09090b"/>` : (isRainbow ? `<stop offset="100%" stop-color="#fbcfe8"/>` : (isFallen ? `<stop offset="100%" stop-color="#09090b"/>` : (isFrostFire ? `<stop offset="100%" stop-color="#082f49"/>` : (isAngel ? `<stop offset="100%" stop-color="#94a3b8"/>` : (isLava ? `<stop offset="100%" stop-color="#1c1917"/>` : (isFrost ? `<stop offset="100%" stop-color="#0c4a6e"/>` : (isGold ? `<stop offset="100%" stop-color="#b45309"/>` : (isUnicorn ? `<stop offset="100%" stop-color="#f3e8ff"/>` : ''))))))))}
+      <stop offset="0%" stop-color="${isMechaZero ? '#ffffff' : (isCrimsonDrone ? '#fff1f2' : (isTitanKatana ? '#ffffff' : (isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#ff793f' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#ffffff' : (isLava ? '#fff7ed' : (isFrost ? '#ffffff' : c1)))))))))))}"/>
+      <stop offset="${(isAngel || isUnicorn || isMecha) ? '40%' : '50%'}" stop-color="${isMechaZero ? '#f0fdff' : (isCrimsonDrone ? '#fecdd3' : (isTitanKatana ? '#fef9c3' : (isChaos ? '#f1f5f9' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#f97316' : (isFrost ? '#38bdf8' : (isUnicorn ? '#fff5f9' : c1)))))))))))}"/>
+      <stop offset="${(isAngel || isUnicorn || isMecha) ? '75%' : '85%'}" stop-color="${isMechaZero ? '#bae6fd' : (isCrimsonDrone ? '#f43f5e' : (isTitanKatana ? '#fde047' : (isChaos ? '#3b0764' : (isRainbow ? '#c7d2fe' : (isFallen ? '#2e1065' : (isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : (isUnicorn ? '#fce7f3' : c2)))))))))))}"/>
+      ${isMechaZero ? `<stop offset="100%" stop-color="#0284c7"/>` : (isCrimsonDrone ? `<stop offset="100%" stop-color="#881337"/>` : (isTitanKatana ? `<stop offset="100%" stop-color="#ca8a04"/>` : (isChaos ? `<stop offset="100%" stop-color="#09090b"/>` : (isRainbow ? `<stop offset="100%" stop-color="#fbcfe8"/>` : (isFallen ? `<stop offset="100%" stop-color="#09090b"/>` : (isFrostFire ? `<stop offset="100%" stop-color="#082f49"/>` : (isAngel ? `<stop offset="100%" stop-color="#94a3b8"/>` : (isLava ? `<stop offset="100%" stop-color="#1c1917"/>` : (isFrost ? `<stop offset="100%" stop-color="#0c4a6e"/>` : (isGold ? `<stop offset="100%" stop-color="#b45309"/>` : (isUnicorn ? `<stop offset="100%" stop-color="#f3e8ff"/>` : '')))))))))))}
     </radialGradient>
+    ${isMecha ? `<linearGradient id="mIris${id}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${isMechaZero ? '#0f172a' : (isCrimsonDrone ? '#4c0519' : (isTitanKatana ? '#451a03' : '#18181b'))}"/>
+      <stop offset="55%" stop-color="${isMechaZero ? '#0369a1' : (isCrimsonDrone ? '#be123c' : (isTitanKatana ? '#b45309' : '#b45309'))}"/>
+      <stop offset="100%" stop-color="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#fde047' : '#ffd700'))}"/>
+    </linearGradient>` : ''}
   </defs>
   <ellipse cx="55" cy="110" rx="32" ry="6" fill="rgba(0,0,0,0.22)"/>
   <!-- Tail -->
@@ -1436,20 +1641,20 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   </g>
   ${drawAngelWings(32, 78, 72, 0.8)}
   <!-- Spiked Shoulder Armor & Lean Taller Body -->
-  <ellipse cx="55" cy="80" rx="28" ry="24" fill="url(#tk${id})" stroke="${isAngel ? '#94a3b8' : (isRainbow ? '#818cf8' : (isFallen ? '#7c3aed' : (isChaos ? '#8b5cf6' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))))}" stroke-width="1.2"/>
-  <ellipse cx="55" cy="84" rx="17" ry="16" fill="${isFrostFire ? 'rgba(254,240,138,0.5)' : (isChaos ? 'rgba(88,28,135,0.45)' : (isRainbow ? 'rgba(253,244,255,0.85)' : (isFallen ? 'rgba(46,16,101,0.65)' : (isAngel ? 'rgba(254,240,138,0.85)' : (isUnicorn ? 'rgba(253,242,248,0.7)' : (isGold ? 'rgba(255,251,235,0.7)' : 'rgba(255,255,255,0.35)'))))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isChaos ? '#ffd700' : 'none')))}" stroke-width="${isCelestial ? '1.2' : '0'}"/>
-  <!-- Shoulder Spikes (Hidden on all Celestial and Unicorn) -->
+  <ellipse cx="55" cy="80" rx="28" ry="24" fill="url(#tk${id})" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#ffd700' : (isAngel ? '#94a3b8' : (isRainbow ? '#818cf8' : (isFallen ? '#7c3aed' : (isChaos ? '#8b5cf6' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')))))))))}" stroke-width="${isMecha ? '1.5' : '1.2'}"/>
+  <ellipse cx="55" cy="84" rx="17" ry="16" fill="${isMechaZero ? 'rgba(15,23,42,0.85)' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? 'rgba(254,249,195,0.85)' : (isFrostFire ? 'rgba(254,240,138,0.5)' : (isChaos ? 'rgba(88,28,135,0.45)' : (isRainbow ? 'rgba(253,244,255,0.85)' : (isFallen ? 'rgba(46,16,101,0.65)' : (isAngel ? 'rgba(254,240,138,0.85)' : (isUnicorn ? 'rgba(253,242,248,0.7)' : (isGold ? 'rgba(255,251,235,0.7)' : 'rgba(255,255,255,0.35)')))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#f43f5e' : (isTitanKatana ? '#ffd700' : (isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isChaos ? '#ffd700' : 'none'))))))}" stroke-width="${isCelestial ? '1.2' : '0'}"/>
+  <!-- Shoulder Spikes (Hidden on all Celestial, Unicorn, and Mecha) -->
   ${!isCelestial && !isUnicorn ? `
   <polygon points="22,70 12,60 25,64" fill="${isFrostFire ? '#ff4757' : c2}"/>
   <polygon points="88,70 98,60 85,64" fill="${isFrostFire ? '#00d2ff' : c2}"/>
   ` : ''}
   <!-- Arms & Legs -->
   <g class="dino-part-arm">
-    <ellipse cx="30" cy="78" rx="8" ry="5" fill="${isFrostFire ? '#ff4757' : (isChaos ? '#fef08a' : (isRainbow ? '#fce7f3' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c1))))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#a855f7' : (isChaos ? '#f59e0b' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')))))}" stroke-width="${(isCelestial || isLava || isFrost) ? '0.8' : '0'}"/>
-    <ellipse cx="80" cy="78" rx="8" ry="5" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#3b0764' : (isRainbow ? '#e0f2fe' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c1))))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isChaos ? '#c084fc' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')))))}" stroke-width="${(isCelestial || isLava || isFrost) ? '0.8' : '0'}"/>
+    <ellipse cx="30" cy="78" rx="8" ry="5" fill="${isMechaZero ? '#e0f2fe' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? '#fef9c3' : (isFrostFire ? '#ff4757' : (isChaos ? '#fef08a' : (isRainbow ? '#fce7f3' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c1)))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#f43f5e' : (isTitanKatana ? '#ffd700' : (isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#a855f7' : (isChaos ? '#f59e0b' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))))))}" stroke-width="${(isCelestial || isLava || isFrost) ? '0.8' : '0'}"/>
+    <ellipse cx="80" cy="78" rx="8" ry="5" fill="${isMechaZero ? '#e0f2fe' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? '#fef9c3' : (isFrostFire ? '#00d2ff' : (isChaos ? '#3b0764' : (isRainbow ? '#e0f2fe' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c1)))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#f43f5e' : (isTitanKatana ? '#ffd700' : (isAngel ? '#f59e0b' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isChaos ? '#c084fc' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))))))}" stroke-width="${(isCelestial || isLava || isFrost) ? '0.8' : '0'}"/>
   </g>
-  <ellipse cx="42" cy="100" rx="9" ry="7" fill="${isFrostFire ? '#ff3300' : (isChaos ? '#fbbf24' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2)))))}" stroke="${isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')}" stroke-width="${(isLava || isFrost) ? '0.8' : '0'}"/>
-  <ellipse cx="68" cy="100" rx="9" ry="7" fill="${isFrostFire ? '#0284c7' : (isChaos ? '#18181b' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2)))))}" stroke="${isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')}" stroke-width="${(isLava || isFrost) ? '0.8' : '0'}"/>
+  <ellipse cx="42" cy="100" rx="9" ry="7" fill="${isMechaZero ? '#0f172a' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? '#ca8a04' : (isFrostFire ? '#ff3300' : (isChaos ? '#fbbf24' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#e11d48' : (isTitanKatana ? '#ffd700' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))}" stroke-width="${(isMecha || isLava || isFrost) ? '1.2' : '0'}"/>
+  <ellipse cx="68" cy="100" rx="9" ry="7" fill="${isMechaZero ? '#0f172a' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? '#ca8a04' : (isFrostFire ? '#0284c7' : (isChaos ? '#18181b' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#e11d48' : (isTitanKatana ? '#ffd700' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))}" stroke-width="${(isMecha || isLava || isFrost) ? '1.2' : '0'}"/>
   <!-- Celestial Breastplate -->
   ${drawCelestialBreastplate(55, 84.5, 1)}
   <!-- Flowing Veins for Lava / Frost / FrostFire / Unicorn / Celestial -->
@@ -1497,38 +1702,57 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   <!-- Head Cast Shadow on Body -->
   ${isCelestial ? `<ellipse cx="55" cy="62" rx="18" ry="4" fill="rgba(15,23,42,0.2)"/>` : ''}
   <!-- Cool Taller Head -->
-  <ellipse cx="55" cy="38" rx="30" ry="28" fill="url(#tk${id})" stroke="${isAngel ? '#cbd5e1' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isChaos ? '#a855f7' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))))}" stroke-width="1.2"/>
-  <!-- Spikes Symmetrical (Hidden on Unicorn to keep forehead clean) -->
-  ${!isUnicorn ? `
+  <ellipse cx="55" cy="38" rx="30" ry="28" fill="url(#tk${id})" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#ffd700' : (isAngel ? '#cbd5e1' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isChaos ? '#a855f7' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')))))))))}" stroke-width="${isMecha ? '1.5' : '1.2'}"/>
+  <!-- Head crest / Spikes Symmetrical -->
+  ${isMechaZero ? `
+    <polygon points="25,28 18,12 28,20" fill="#0369a1" stroke="#00f5ff" stroke-width="1.2"/>
+    <polygon points="85,28 92,12 82,20" fill="#0369a1" stroke="#00f5ff" stroke-width="1.2"/>
+    <rect x="28" y="42" width="7" height="3" rx="1.5" fill="#00f5ff" filter="drop-shadow(0 0 4px #00f5ff)"/>
+    <rect x="75" y="42" width="7" height="3" rx="1.5" fill="#00f5ff" filter="drop-shadow(0 0 4px #00f5ff)"/>
+  ` : (isCrimsonDrone ? `
+    <polygon points="55,14 60,24 50,24" fill="#18181b" stroke="#f43f5e" stroke-width="1.2"/>
+  ` : (isTitanKatana ? `
+    <polygon points="55,14 48,4 55,8 62,4" fill="#ffd700" stroke="#ffffff" stroke-width="0.9" filter="drop-shadow(0 0 4px #ffd700)"/>
+  ` : (!isUnicorn ? `
   <path d="M55,10 L50,0 L60,0 Z" fill="${isFrostFire ? '#ffd700' : (isChaos ? '#fbbf24' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isAngel ? '#f59e0b' : cA))))}"/>
   <path d="M42,14 L36,4 L46,10 Z" fill="${isFrostFire ? '#ff4500' : (isChaos ? '#ffd700' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isAngel ? '#f59e0b' : cA))))}"/>
   <path d="M68,14 L74,4 L64,10 Z" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#a855f7' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isAngel ? '#f59e0b' : cA))))}"/>
-  ` : ''}
+  ` : '')))}
   ${drawUnicornHorn(55, 16, 24, 7)}
   <!-- Soft Blushing Cheeks -->
-  <ellipse cx="32" cy="42" rx="6" ry="4" fill="${isFrostFire ? 'rgba(255,80,60,0.4)' : (isChaos ? 'rgba(251,191,36,0.3)' : (isRainbow ? 'rgba(244,114,182,0.4)' : (isFallen ? 'rgba(168,85,247,0.3)' : (isAngel ? 'rgba(251,191,36,0.3)' : (isUnicorn ? 'rgba(244,114,182,0.4)' : (isGold ? 'rgba(251,146,60,0.25)' : (isLava ? 'rgba(249,115,22,0.45)' : (isFrost ? 'rgba(56,189,248,0.4)' : 'rgba(255,100,100,0.25)'))))))))}"/>
-  <ellipse cx="78" cy="42" rx="6" ry="4" fill="${isFrostFire ? 'rgba(56,189,248,0.4)' : (isChaos ? 'rgba(168,85,247,0.3)' : (isRainbow ? 'rgba(56,189,248,0.4)' : (isFallen ? 'rgba(168,85,247,0.3)' : (isAngel ? 'rgba(251,191,36,0.3)' : (isUnicorn ? 'rgba(244,114,182,0.4)' : (isGold ? 'rgba(251,146,60,0.25)' : (isLava ? 'rgba(249,115,22,0.45)' : (isFrost ? 'rgba(56,189,248,0.4)' : 'rgba(255,100,100,0.25)'))))))))}"/>
-  <!-- Eyes Front (Heterochromia on FrostFire, Chaos, Rainbow, Unicorn) -->
+  <ellipse cx="32" cy="42" rx="6" ry="4" fill="${isMechaZero ? 'rgba(56,189,248,0.45)' : (isCrimsonDrone ? 'rgba(244,63,94,0.38)' : (isTitanKatana ? 'rgba(249,115,22,0.4)' : (isFrostFire ? 'rgba(255,80,60,0.4)' : (isChaos ? 'rgba(251,191,36,0.3)' : (isRainbow ? 'rgba(244,114,182,0.4)' : (isFallen ? 'rgba(168,85,247,0.3)' : (isAngel ? 'rgba(251,191,36,0.3)' : (isUnicorn ? 'rgba(244,114,182,0.4)' : (isGold ? 'rgba(251,146,60,0.25)' : (isLava ? 'rgba(249,115,22,0.45)' : (isFrost ? 'rgba(56,189,248,0.4)' : 'rgba(255,100,100,0.25)')))))))))))}"/>
+  <ellipse cx="78" cy="42" rx="6" ry="4" fill="${isMechaZero ? 'rgba(56,189,248,0.45)' : (isCrimsonDrone ? 'rgba(244,63,94,0.38)' : (isTitanKatana ? 'rgba(249,115,22,0.4)' : (isFrostFire ? 'rgba(56,189,248,0.4)' : (isChaos ? 'rgba(168,85,247,0.3)' : (isRainbow ? 'rgba(56,189,248,0.4)' : (isFallen ? 'rgba(168,85,247,0.3)' : (isAngel ? 'rgba(251,191,36,0.3)' : (isUnicorn ? 'rgba(244,114,182,0.4)' : (isGold ? 'rgba(251,146,60,0.25)' : (isLava ? 'rgba(249,115,22,0.45)' : (isFrost ? 'rgba(56,189,248,0.4)' : 'rgba(255,100,100,0.25)')))))))))))}"/>
+  <!-- Eyes Front -->
   <g class="dino-part-eye">
-    <ellipse cx="41" cy="34" rx="9.5" ry="10" fill="white"/>
-    <ellipse cx="41" cy="34" rx="7" ry="7.5" fill="${isFrostFire ? '#ff4500' : (isChaos ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#9333ea' : (isUnicorn ? '#a855f7' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e'))))))}"/>
+    <ellipse cx="41" cy="34" rx="9.5" ry="10" fill="white" stroke="${isMechaZero ? '#0369a1' : (isCrimsonDrone ? '#881337' : (isTitanKatana ? '#ffd700' : 'none'))}" stroke-width="${isMecha ? '1.2' : '0'}"/>
+    <ellipse cx="41" cy="34" rx="7" ry="7.5" fill="${isMecha ? `url(#mIris${id})` : (isFrostFire ? '#ff4500' : (isChaos ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#9333ea' : (isUnicorn ? '#a855f7' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e')))))))}"/>
+    ${isMecha ? `<ellipse cx="41" cy="34" rx="3.1" ry="3.4" fill="${isMechaZero ? '#00f5ff' : (isTitanKatana ? '#ffd700' : '#18181b')}" opacity="0.85"/>` : ''}
+    ${isMechaZero ? `<line x1="41" y1="28" x2="41" y2="40" stroke="#ffffff" stroke-width="1.1"/><line x1="35" y1="34" x2="47" y2="34" stroke="#ffffff" stroke-width="1.1"/>` : ''}
     <circle cx="43.5" cy="31.5" r="2.2" fill="white"/>
-    <circle cx="39.5" cy="36" r="1.1" fill="rgba(255,255,255,0.4)"/>
+    <circle cx="39.5" cy="36" r="1.1" fill="rgba(255,255,255,0.6)"/>
 
-    <ellipse cx="69" cy="34" rx="9.5" ry="10" fill="white"/>
-    <ellipse cx="69" cy="34" rx="7" ry="7.5" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#9333ea' : (isRainbow ? '#38bdf8' : (isFallen ? '#9333ea' : (isUnicorn ? '#38bdf8' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e'))))))}"/>
+    <ellipse cx="69" cy="34" rx="9.5" ry="10" fill="white" stroke="${isMechaZero ? '#0369a1' : (isCrimsonDrone ? '#881337' : (isTitanKatana ? '#ffd700' : 'none'))}" stroke-width="${isMecha ? '1.2' : '0'}"/>
+    <ellipse cx="69" cy="34" rx="7" ry="7.5" fill="${isMecha ? `url(#mIris${id})` : (isFrostFire ? '#00d2ff' : (isChaos ? '#9333ea' : (isRainbow ? '#38bdf8' : (isFallen ? '#9333ea' : (isUnicorn ? '#38bdf8' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e')))))))}"/>
+    ${isMecha ? `<ellipse cx="69" cy="34" rx="3.1" ry="3.4" fill="${isMechaZero ? '#00f5ff' : (isTitanKatana ? '#ffd700' : '#18181b')}" opacity="0.85"/>` : ''}
+    ${isMechaZero ? `<line x1="69" y1="28" x2="69" y2="40" stroke="#ffffff" stroke-width="1.1"/><line x1="63" y1="34" x2="75" y2="34" stroke="#ffffff" stroke-width="1.1"/>` : ''}
     <circle cx="71.5" cy="31.5" r="2.2" fill="white"/>
-    <circle cx="67.5" cy="36" r="1.1" fill="rgba(255,255,255,0.4)"/>
+    <circle cx="67.5" cy="36" r="1.1" fill="rgba(255,255,255,0.6)"/>
   </g>
   <!-- Subtle Mini Nostrils -->
-  <ellipse cx="52.5" cy="43.5" rx="1.2" ry="1.4" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.22)')))}"/>
-  <ellipse cx="57.5" cy="43.5" rx="1.2" ry="1.4" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.22)')))}"/>
+  <ellipse cx="52.5" cy="43.5" rx="1.2" ry="1.4" fill="${isMechaZero ? 'rgba(15,23,42,0.35)' : (isCrimsonDrone ? 'rgba(76,5,25,0.4)' : (isTitanKatana ? 'rgba(69,26,3,0.4)' : (isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.22)'))))))}"/>
+  <ellipse cx="57.5" cy="43.5" rx="1.2" ry="1.4" fill="${isMechaZero ? 'rgba(15,23,42,0.35)' : (isCrimsonDrone ? 'rgba(76,5,25,0.4)' : (isTitanKatana ? 'rgba(69,26,3,0.4)' : (isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.22)'))))))}"/>
   ${drawAngelHalo(55, 0, 19, 5.5)}
   ${drawSunglasses(55, 34, 46, 15)}
   ${drawGradCap(55, 20)}
   ${drawAllHeadwears(55, 18, 34, 1.08, 34, 1.05)}
-  <!-- Confident Teen Smirk (NO FANGS on Angel, Rainbow, Unicorn) -->
-  ${isFrostFire ? `
+  <!-- Confident Teen Smirk (NO FANGS on Angel, Rainbow, Unicorn, Mecha) -->
+  ${isMechaZero ? `
+    <path d="M48,50 Q55,54 62,50" stroke="#0f172a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  ` : (isCrimsonDrone ? `
+    <path d="M48,49 Q55,54 62,49" stroke="#4c0519" stroke-width="2" fill="none" stroke-linecap="round"/>
+  ` : (isTitanKatana ? `
+    <path d="M48,50 Q55,54 62,50" stroke="#451a03" stroke-width="2" fill="none" stroke-linecap="round"/>
+  ` : (isFrostFire ? `
     <path d="M46,49 Q55,53.5 64,49" stroke="#fbbf24" stroke-width="2.4" fill="none" stroke-linecap="round"/>
     <polygon points="48,49 50,55 52,49" fill="#ffffff" stroke="#ff4500" stroke-width="0.8"/>
     <polygon points="58,49 60,55 62,49" fill="#ffffff" stroke="#00d2ff" stroke-width="0.8"/>
@@ -1558,7 +1782,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     <path d="M46,49 Q55,54.5 64,49" stroke="rgba(0,0,0,0.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
     <polygon points="49,49 51,53.5 53,49" fill="#ffffff" stroke="rgba(0,0,0,0.3)" stroke-width="0.6"/>
     <polygon points="57,49 59,53.5 61,49" fill="#ffffff" stroke="rgba(0,0,0,0.3)" stroke-width="0.6"/>
-  `)))))))}
+  `))))))))))}
 </svg>`;
     return effectsHtml + svg;
   }
@@ -1568,22 +1792,27 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     const svg = `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-pulse ${isGold ? 'gold-skin-aura' : ''}">
   <defs>
     <radialGradient id="ak${id}" cx="42%" cy="26%" r="76%">
-      <stop offset="0%" stop-color="${isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#ff793f' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#ffffff' : (isLava ? '#fff7ed' : (isFrost ? '#ffffff' : c1))))))))}"/>
-      <stop offset="${(isAngel || isUnicorn) ? '40%' : '50%'}" stop-color="${isChaos ? '#f1f5f9' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#f97316' : (isFrost ? '#38bdf8' : (isUnicorn ? '#fff5f9' : c1))))))))}"/>
-      <stop offset="${(isAngel || isUnicorn) ? '75%' : '85%'}" stop-color="${isChaos ? '#3b0764' : (isRainbow ? '#c7d2fe' : (isFallen ? '#2e1065' : (isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : (isUnicorn ? '#fce7f3' : c2))))))))}"/>
-      ${isChaos ? `<stop offset="100%" stop-color="#09090b"/>` : (isRainbow ? `<stop offset="100%" stop-color="#fbcfe8"/>` : (isFallen ? `<stop offset="100%" stop-color="#09090b"/>` : (isFrostFire ? `<stop offset="100%" stop-color="#082f49"/>` : (isAngel ? `<stop offset="100%" stop-color="#94a3b8"/>` : (isLava ? `<stop offset="100%" stop-color="#1c1917"/>` : (isFrost ? `<stop offset="100%" stop-color="#0c4a6e"/>` : (isGold ? `<stop offset="100%" stop-color="#b45309"/>` : (isUnicorn ? `<stop offset="100%" stop-color="#f3e8ff"/>` : ''))))))))}
+      <stop offset="0%" stop-color="${isMechaZero ? '#ffffff' : (isCrimsonDrone ? '#fff1f2' : (isTitanKatana ? '#ffffff' : (isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#ff793f' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#ffffff' : (isLava ? '#fff7ed' : (isFrost ? '#ffffff' : c1)))))))))))}"/>
+      <stop offset="${(isAngel || isUnicorn || isMecha) ? '40%' : '50%'}" stop-color="${isMechaZero ? '#f0fdff' : (isCrimsonDrone ? '#fecdd3' : (isTitanKatana ? '#fef9c3' : (isChaos ? '#f1f5f9' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#f97316' : (isFrost ? '#38bdf8' : (isUnicorn ? '#fff5f9' : c1)))))))))))}"/>
+      <stop offset="${(isAngel || isUnicorn || isMecha) ? '75%' : '85%'}" stop-color="${isMechaZero ? '#bae6fd' : (isCrimsonDrone ? '#f43f5e' : (isTitanKatana ? '#fde047' : (isChaos ? '#3b0764' : (isRainbow ? '#c7d2fe' : (isFallen ? '#2e1065' : (isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : (isUnicorn ? '#fce7f3' : c2)))))))))))}"/>
+      ${isMechaZero ? `<stop offset="100%" stop-color="#0284c7"/>` : (isCrimsonDrone ? `<stop offset="100%" stop-color="#881337"/>` : (isTitanKatana ? `<stop offset="100%" stop-color="#ca8a04"/>` : (isChaos ? `<stop offset="100%" stop-color="#09090b"/>` : (isRainbow ? `<stop offset="100%" stop-color="#fbcfe8"/>` : (isFallen ? `<stop offset="100%" stop-color="#09090b"/>` : (isFrostFire ? `<stop offset="100%" stop-color="#082f49"/>` : (isAngel ? `<stop offset="100%" stop-color="#94a3b8"/>` : (isLava ? `<stop offset="100%" stop-color="#1c1917"/>` : (isFrost ? `<stop offset="100%" stop-color="#0c4a6e"/>` : (isGold ? `<stop offset="100%" stop-color="#b45309"/>` : (isUnicorn ? `<stop offset="100%" stop-color="#f3e8ff"/>` : '')))))))))))}
     </radialGradient>
+    ${isMecha ? `<linearGradient id="mIris${id}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${isMechaZero ? '#0f172a' : (isCrimsonDrone ? '#4c0519' : (isTitanKatana ? '#451a03' : '#18181b'))}"/>
+      <stop offset="55%" stop-color="${isMechaZero ? '#0369a1' : (isCrimsonDrone ? '#be123c' : (isTitanKatana ? '#b45309' : '#b45309'))}"/>
+      <stop offset="100%" stop-color="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#fde047' : '#ffd700'))}"/>
+    </linearGradient>` : ''}
   </defs>
   <ellipse cx="60" cy="112" rx="38" ry="6" fill="rgba(0,0,0,0.25)"/>
   ${drawAngelWings(36, 84, 70, 0.95)}
   <!-- Symmetrical Body -->
-  <ellipse cx="60" cy="78" rx="32" ry="26" fill="url(#ak${id})" stroke="${isAngel ? '#94a3b8' : (isRainbow ? '#818cf8' : (isFallen ? '#7c3aed' : (isChaos ? '#8b5cf6' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))))}" stroke-width="1.2"/>
-  <ellipse cx="60" cy="82" rx="19" ry="17" fill="${isFrostFire ? 'rgba(254,240,138,0.55)' : (isChaos ? 'rgba(88,28,135,0.5)' : (isRainbow ? 'rgba(253,244,255,0.88)' : (isFallen ? 'rgba(46,16,101,0.7)' : (isAngel ? 'rgba(254,240,138,0.88)' : (isUnicorn ? 'rgba(253,242,248,0.7)' : (isGold ? 'rgba(255,251,235,0.7)' : 'rgba(255,220,180,0.4)'))))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isChaos ? '#ffd700' : 'none')))}" stroke-width="${isCelestial ? '1.4' : '0'}"/>
+  <ellipse cx="60" cy="78" rx="32" ry="26" fill="url(#ak${id})" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#ffd700' : (isAngel ? '#94a3b8' : (isRainbow ? '#818cf8' : (isFallen ? '#7c3aed' : (isChaos ? '#8b5cf6' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')))))))))}" stroke-width="${isMecha ? '1.8' : '1.2'}"/>
+  <ellipse cx="60" cy="82" rx="19" ry="17" fill="${isMechaZero ? 'rgba(15,23,42,0.85)' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? 'rgba(254,249,195,0.85)' : (isFrostFire ? 'rgba(254,240,138,0.55)' : (isChaos ? 'rgba(88,28,135,0.5)' : (isRainbow ? 'rgba(253,244,255,0.88)' : (isFallen ? 'rgba(46,16,101,0.7)' : (isAngel ? 'rgba(254,240,138,0.88)' : (isUnicorn ? 'rgba(253,242,248,0.7)' : (isGold ? 'rgba(255,251,235,0.7)' : 'rgba(255,220,180,0.4)')))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#f43f5e' : (isTitanKatana ? '#ffd700' : (isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isChaos ? '#ffd700' : 'none'))))))}" stroke-width="${(isCelestial || isMecha) ? '1.4' : '0'}"/>
   <!-- Arms & Legs -->
-  <ellipse cx="34" cy="76" rx="8" ry="6" fill="${isFrostFire ? '#ff4757' : (isChaos ? '#fef08a' : (isRainbow ? '#fce7f3' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c1))))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#a855f7' : (isChaos ? '#f59e0b' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')))))}" stroke-width="${(isCelestial || isLava || isFrost) ? '0.8' : '0'}"/>
-  <ellipse cx="86" cy="76" rx="8" ry="6" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#3b0764' : (isRainbow ? '#e0f2fe' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c1))))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isChaos ? '#c084fc' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')))))}" stroke-width="${(isCelestial || isLava || isFrost) ? '0.8' : '0'}"/>
-  <ellipse cx="46" cy="100" rx="10" ry="8" fill="${isFrostFire ? '#ff3300' : (isChaos ? '#fbbf24' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2)))))}" stroke="${isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')}" stroke-width="${(isLava || isFrost) ? '0.8' : '0'}"/>
-  <ellipse cx="74" cy="100" rx="10" ry="8" fill="${isFrostFire ? '#0284c7' : (isChaos ? '#18181b' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2)))))}" stroke="${isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')}" stroke-width="${(isLava || isFrost) ? '0.8' : '0'}"/>
+  <ellipse cx="34" cy="76" rx="8" ry="6" fill="${isMechaZero ? '#e0f2fe' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? '#fef9c3' : (isFrostFire ? '#ff4757' : (isChaos ? '#fef08a' : (isRainbow ? '#fce7f3' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c1)))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#f43f5e' : (isTitanKatana ? '#ffd700' : (isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#a855f7' : (isChaos ? '#f59e0b' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))))))}" stroke-width="${(isCelestial || isMecha || isLava || isFrost) ? '0.8' : '0'}"/>
+  <ellipse cx="86" cy="76" rx="8" ry="6" fill="${isMechaZero ? '#e0f2fe' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? '#fef9c3' : (isFrostFire ? '#00d2ff' : (isChaos ? '#3b0764' : (isRainbow ? '#e0f2fe' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c1)))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#f43f5e' : (isTitanKatana ? '#ffd700' : (isAngel ? '#f59e0b' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isChaos ? '#c084fc' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))))))}" stroke-width="${(isCelestial || isMecha || isLava || isFrost) ? '0.8' : '0'}"/>
+  <ellipse cx="46" cy="100" rx="10" ry="8" fill="${isMechaZero ? '#0f172a' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? '#ca8a04' : (isFrostFire ? '#ff3300' : (isChaos ? '#fbbf24' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#ef4444' : (isTitanKatana ? '#ffd700' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))}" stroke-width="${(isMecha || isLava || isFrost) ? '0.8' : '0'}"/>
+  <ellipse cx="74" cy="100" rx="10" ry="8" fill="${isMechaZero ? '#0f172a' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? '#ca8a04' : (isFrostFire ? '#0284c7' : (isChaos ? '#18181b' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#ef4444' : (isTitanKatana ? '#ffd700' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))}" stroke-width="${(isMecha || isLava || isFrost) ? '0.8' : '0'}"/>
   <!-- Celestial Breastplate -->
   ${drawCelestialBreastplate(60, 81.5, 1.15)}
   <!-- Flowing Veins for Lava / Frost / FrostFire / Unicorn / Celestial -->
@@ -1631,37 +1860,57 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   <!-- Head Cast Shadow on Body -->
   ${isCelestial ? `<ellipse cx="60" cy="64" rx="20" ry="4.5" fill="rgba(15,23,42,0.2)"/>` : ''}
   <!-- Big Front Head -->
-  <ellipse cx="60" cy="38" rx="32" ry="28" fill="url(#ak${id})" stroke="${isAngel ? '#cbd5e1' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isChaos ? '#a855f7' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))))}" stroke-width="1.2"/>
+  <ellipse cx="60" cy="38" rx="32" ry="28" fill="url(#ak${id})" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#ffd700' : (isAngel ? '#cbd5e1' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isChaos ? '#a855f7' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')))))))))}" stroke-width="${isMecha ? '1.8' : '1.2'}"/>
   ${drawUnicornHorn(60, 16, 26, 8)}
   <!-- Symmetrical Spikes (Hidden on Unicorn) -->
-  ${!isUnicorn ? `
+  ${!isUnicorn ? (isMechaZero ? `
+  <polygon points="46,12 36,0 48,6" fill="#00f5ff" stroke="#ffffff" stroke-width="1.2"/>
+  <polygon points="74,12 84,0 72,6" fill="#00f5ff" stroke="#ffffff" stroke-width="1.2"/>
+  ` : (isCrimsonDrone ? `
+  <polygon points="46,12 34,2 48,6" fill="#ef4444" stroke="#ffffff" stroke-width="1.2"/>
+  <polygon points="74,12 86,2 72,6" fill="#ef4444" stroke="#ffffff" stroke-width="1.2"/>
+  ` : (isTitanKatana ? `
+  <polygon points="46,12 34,0 48,6" fill="#18181b" stroke="#ffd700" stroke-width="1.2"/>
+  <polygon points="74,12 86,0 72,6" fill="#18181b" stroke="#ffd700" stroke-width="1.2"/>
+  <polygon points="60,18 50,6 60,11 70,6" fill="#ffd700" stroke="#ffffff" stroke-width="1" filter="drop-shadow(0 0 5px #ffd700)"/>
+  ` : `
   <polygon points="46,12 40,2 50,8" fill="${isFrostFire ? '#ff4500' : (isChaos ? '#ffd700' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isAngel ? '#f59e0b' : cA))))}"/>
   <polygon points="74,12 80,2 70,8" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#a855f7' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isAngel ? '#f59e0b' : cA))))}"/>
-  ` : ''}
+  `))) : ''}
   <!-- Soft Blushing Cheeks -->
-  <ellipse cx="36" cy="42" rx="7" ry="4.5" fill="${isFrostFire ? 'rgba(255,80,60,0.45)' : (isChaos ? 'rgba(251,191,36,0.35)' : (isRainbow ? 'rgba(244,114,182,0.45)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : (isLava ? 'rgba(249,115,22,0.45)' : (isFrost ? 'rgba(56,189,248,0.4)' : 'rgba(255,100,100,0.28)'))))))))}"/>
-  <ellipse cx="84" cy="42" rx="7" ry="4.5" fill="${isFrostFire ? 'rgba(56,189,248,0.45)' : (isChaos ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(56,189,248,0.4)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : (isLava ? 'rgba(249,115,22,0.45)' : (isFrost ? 'rgba(56,189,248,0.4)' : 'rgba(255,100,100,0.28)'))))))))}"/>
+  <ellipse cx="36" cy="42" rx="7" ry="4.5" fill="${isMechaZero ? 'rgba(56,189,248,0.45)' : (isCrimsonDrone ? 'rgba(244,63,94,0.38)' : (isTitanKatana ? 'rgba(249,115,22,0.4)' : (isFrostFire ? 'rgba(255,80,60,0.45)' : (isChaos ? 'rgba(251,191,36,0.35)' : (isRainbow ? 'rgba(244,114,182,0.45)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : (isLava ? 'rgba(249,115,22,0.45)' : (isFrost ? 'rgba(56,189,248,0.4)' : 'rgba(255,100,100,0.28)')))))))))))}"/>
+  <ellipse cx="84" cy="42" rx="7" ry="4.5" fill="${isMechaZero ? 'rgba(56,189,248,0.45)' : (isCrimsonDrone ? 'rgba(244,63,94,0.38)' : (isTitanKatana ? 'rgba(249,115,22,0.4)' : (isFrostFire ? 'rgba(56,189,248,0.45)' : (isChaos ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(56,189,248,0.4)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : (isLava ? 'rgba(249,115,22,0.45)' : (isFrost ? 'rgba(56,189,248,0.4)' : 'rgba(255,100,100,0.28)')))))))))))}"/>
   <!-- Symmetrical Eyes (Heterochromia on FrostFire, Chaos, Rainbow, Unicorn) -->
   <g class="dino-part-eye">
-    <ellipse cx="44" cy="32" rx="9" ry="10" fill="white"/>
-    <ellipse cx="44" cy="32" rx="6.5" ry="7" fill="${isFrostFire ? '#ff4500' : (isChaos ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#9333ea' : (isUnicorn ? '#a855f7' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e'))))))}"/>
+    <ellipse cx="44" cy="32" rx="9" ry="10" fill="white" stroke="${isMechaZero ? '#0369a1' : (isCrimsonDrone ? '#881337' : (isTitanKatana ? '#ffd700' : 'none'))}" stroke-width="${isMecha ? '1.3' : '0'}"/>
+    <ellipse cx="44" cy="32" rx="6.5" ry="7" fill="${isMecha ? `url(#mIris${id})` : (isFrostFire ? '#ff4500' : (isChaos ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#9333ea' : (isUnicorn ? '#a855f7' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e')))))))}"/>
+    ${isMecha ? `<ellipse cx="44" cy="32" rx="2.9" ry="3.1" fill="${isMechaZero ? '#00f5ff' : (isTitanKatana ? '#ffd700' : '#18181b')}" opacity="0.85"/>` : ''}
+    ${isMechaZero ? `<line x1="44" y1="27" x2="44" y2="37" stroke="#ffffff" stroke-width="1.1"/><line x1="39" y1="32" x2="49" y2="32" stroke="#ffffff" stroke-width="1.1"/>` : ''}
     <circle cx="46" cy="29.5" r="2" fill="white"/>
-    <circle cx="42.5" cy="34" r="1" fill="rgba(255,255,255,0.4)"/>
+    <circle cx="42.5" cy="34" r="1" fill="rgba(255,255,255,0.65)"/>
 
-    <ellipse cx="76" cy="32" rx="9" ry="10" fill="white"/>
-    <ellipse cx="76" cy="32" rx="6.5" ry="7" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#9333ea' : (isRainbow ? '#38bdf8' : (isFallen ? '#9333ea' : (isUnicorn ? '#38bdf8' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e'))))))}"/>
+    <ellipse cx="76" cy="32" rx="9" ry="10" fill="white" stroke="${isMechaZero ? '#0369a1' : (isCrimsonDrone ? '#881337' : (isTitanKatana ? '#ffd700' : 'none'))}" stroke-width="${isMecha ? '1.3' : '0'}"/>
+    <ellipse cx="76" cy="32" rx="6.5" ry="7" fill="${isMecha ? `url(#mIris${id})` : (isFrostFire ? '#00d2ff' : (isChaos ? '#9333ea' : (isRainbow ? '#38bdf8' : (isFallen ? '#9333ea' : (isUnicorn ? '#38bdf8' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e')))))))}"/>
+    ${isMecha ? `<ellipse cx="76" cy="32" rx="2.9" ry="3.1" fill="${isMechaZero ? '#00f5ff' : (isTitanKatana ? '#ffd700' : '#18181b')}" opacity="0.85"/>` : ''}
+    ${isMechaZero ? `<line x1="76" y1="27" x2="76" y2="37" stroke="#ffffff" stroke-width="1.1"/><line x1="71" y1="32" x2="81" y2="32" stroke="#ffffff" stroke-width="1.1"/>` : ''}
     <circle cx="78" cy="29.5" r="2" fill="white"/>
-    <circle cx="74.5" cy="34" r="1" fill="rgba(255,255,255,0.4)"/>
+    <circle cx="74.5" cy="34" r="1" fill="rgba(255,255,255,0.65)"/>
   </g>
   <!-- Subtle Mini Nostrils -->
-  <ellipse cx="57.5" cy="44.5" rx="1.3" ry="1.5" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.25)')))}"/>
-  <ellipse cx="62.5" cy="44.5" rx="1.3" ry="1.5" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.25)')))}"/>
+  <ellipse cx="57.5" cy="44.5" rx="1.3" ry="1.5" fill="${isMechaZero ? 'rgba(15,23,42,0.35)' : (isCrimsonDrone ? 'rgba(76,5,25,0.4)' : (isTitanKatana ? 'rgba(69,26,3,0.4)' : (isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.25)'))))))}"/>
+  <ellipse cx="62.5" cy="44.5" rx="1.3" ry="1.5" fill="${isMechaZero ? 'rgba(15,23,42,0.35)' : (isCrimsonDrone ? 'rgba(76,5,25,0.4)' : (isTitanKatana ? 'rgba(69,26,3,0.4)' : (isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.25)'))))))}"/>
   ${drawAngelHalo(60, 0, 21, 6)}
   ${drawSunglasses(60, 32, 48, 16)}
   ${drawGradCap(60, 20)}
   ${drawAllHeadwears(60, 18, 32, 1.18, 34, 1.15)}
-  <!-- Warrior Mouth & Smile (NO FANGS on Angel, Rainbow, Unicorn) -->
-  ${isFrostFire ? `
+  <!-- Warrior Mouth & Smile (NO FANGS on Angel, Rainbow, Unicorn, Mecha) -->
+  ${isMechaZero ? `
+    <path d="M49,50 Q60,55 71,50" stroke="#0f172a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  ` : (isCrimsonDrone ? `
+    <path d="M49,50 Q60,55 71,50" stroke="#4c0519" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  ` : (isTitanKatana ? `
+    <path d="M49,50 Q60,55 71,50" stroke="#451a03" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  ` : (isFrostFire ? `
     <path d="M49,50 Q60,54.5 71,50" stroke="#fbbf24" stroke-width="2.6" fill="none" stroke-linecap="round"/>
     <polygon points="52,50 54,57 56,50" fill="#ffffff" stroke="#ff4500" stroke-width="0.8"/>
     <polygon points="64,50 66,57 68,50" fill="#ffffff" stroke="#00d2ff" stroke-width="0.8"/>
@@ -1691,7 +1940,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     <path d="M49,50 Q60,55 71,50" stroke="rgba(0,0,0,0.55)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
     <polygon points="52,50 54,55 56,50" fill="#ffffff" stroke="rgba(0,0,0,0.3)" stroke-width="0.7"/>
     <polygon points="64,50 66,55 68,50" fill="#ffffff" stroke="rgba(0,0,0,0.3)" stroke-width="0.7"/>
-  `)))))))}
+  `))))))))))}
 </svg>`;
     return effectsHtml + svg;
   }
@@ -1700,11 +1949,16 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   const svg = `<svg viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-float ${isGold ? 'gold-skin-aura' : ''}">
   <defs>
     <radialGradient id="lk${id}" cx="42%" cy="24%" r="78%">
-      <stop offset="0%" stop-color="${isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#fff7ed' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#ffffff' : (isLava ? '#fff7ed' : (isFrost ? '#ffffff' : '#fff3a8'))))))))}"/>
-      <stop offset="${(isAngel || isUnicorn) ? '35%' : '35%'}" stop-color="${isChaos ? '#f1f5f9' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#f97316' : (isFrost ? '#38bdf8' : (isUnicorn ? '#fff5f9' : cA))))))))}"/>
-      <stop offset="${(isAngel || isUnicorn) ? '75%' : '75%'}" stop-color="${isChaos ? '#3b0764' : (isRainbow ? '#c7d2fe' : (isFallen ? '#2e1065' : (isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : (isUnicorn ? '#fce7f3' : c1))))))))}"/>
-      <stop offset="100%" stop-color="${isChaos ? '#09090b' : (isRainbow ? '#fbcfe8' : (isFallen ? '#09090b' : (isFrostFire ? '#082f49' : (isGold ? '#b45309' : (isAngel ? '#94a3b8' : (isLava ? '#590000' : (isFrost ? '#082f49' : (isUnicorn ? '#f3e8ff' : c2))))))))}"/>
+      <stop offset="0%" stop-color="${isMechaZero ? '#ffffff' : (isCrimsonDrone ? '#fff1f2' : (isTitanKatana ? '#ffffff' : (isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#fff7ed' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#ffffff' : (isLava ? '#fff7ed' : (isFrost ? '#ffffff' : '#fff3a8')))))))))))}"/>
+      <stop offset="${(isAngel || isUnicorn || isMecha) ? '35%' : '35%'}" stop-color="${isMechaZero ? '#f0fdff' : (isCrimsonDrone ? '#fecdd3' : (isTitanKatana ? '#fef9c3' : (isChaos ? '#f1f5f9' : (isRainbow ? '#fdf4ff' : (isFallen ? '#18181b' : (isFrostFire ? '#ff4757' : (isGold ? '#fec84d' : (isAngel ? '#f1f5f9' : (isLava ? '#f97316' : (isFrost ? '#38bdf8' : (isUnicorn ? '#fff5f9' : cA)))))))))))}"/>
+      <stop offset="${(isAngel || isUnicorn || isMecha) ? '75%' : '75%'}" stop-color="${isMechaZero ? '#bae6fd' : (isCrimsonDrone ? '#f43f5e' : (isTitanKatana ? '#fde047' : (isChaos ? '#3b0764' : (isRainbow ? '#c7d2fe' : (isFallen ? '#2e1065' : (isFrostFire ? '#0284c7' : (isGold ? '#e69500' : (isAngel ? '#cbd5e1' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : (isUnicorn ? '#fce7f3' : c1)))))))))))}"/>
+      <stop offset="100%" stop-color="${isMechaZero ? '#0284c7' : (isCrimsonDrone ? '#881337' : (isTitanKatana ? '#ca8a04' : (isChaos ? '#09090b' : (isRainbow ? '#fbcfe8' : (isFallen ? '#09090b' : (isFrostFire ? '#082f49' : (isGold ? '#b45309' : (isAngel ? '#94a3b8' : (isLava ? '#590000' : (isFrost ? '#082f49' : (isUnicorn ? '#f3e8ff' : c2)))))))))))}"/>
     </radialGradient>
+    ${isMecha ? `<linearGradient id="mIris${id}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${isMechaZero ? '#0f172a' : (isCrimsonDrone ? '#4c0519' : (isTitanKatana ? '#451a03' : '#18181b'))}"/>
+      <stop offset="55%" stop-color="${isMechaZero ? '#0369a1' : (isCrimsonDrone ? '#be123c' : (isTitanKatana ? '#b45309' : '#b45309'))}"/>
+      <stop offset="100%" stop-color="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#fde047' : '#ffd700'))}"/>
+    </linearGradient>` : ''}
     <linearGradient id="lwg${id}" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="${isAngel ? '#ffffff' : (isGold ? '#fff9db' : '#ffe066')}"/>
       <stop offset="50%" stop-color="${c1}"/>
@@ -1727,17 +1981,17 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   <!-- Majestic Grand Dragon Wings (Angel-style 3-Tier Layered Feathers with Breathing Animation) -->
   ${drawAngelWings(36, 94, 76, 1.2, true)}
   <!-- Symmetrical Body -->
-  <ellipse cx="65" cy="85" rx="35" ry="29" fill="url(#lk${id})" stroke="${isAngel ? '#94a3b8' : (isRainbow ? '#818cf8' : (isFallen ? '#7c3aed' : (isChaos ? '#8b5cf6' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))))}" stroke-width="1.4"/>
-  <ellipse cx="65" cy="89" rx="21" ry="19" fill="${isFrostFire ? 'rgba(254,240,138,0.6)' : (isChaos ? 'rgba(88,28,135,0.55)' : (isRainbow ? 'rgba(253,244,255,0.9)' : (isFallen ? 'rgba(46,16,101,0.75)' : (isAngel ? 'rgba(254,240,138,0.9)' : (isUnicorn ? 'rgba(253,242,248,0.75)' : (isGold ? 'rgba(255,251,235,0.7)' : (isLava ? 'rgba(254,215,170,0.85)' : (isFrost ? 'rgba(224,242,254,0.85)' : 'rgba(255,255,255,0.5)'))))))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isChaos ? '#ffd700' : (isLava ? '#f97316' : (isFrost ? '#38bdf8' : 'none')))))}" stroke-width="${(isCelestial || isLava || isFrost) ? '1.5' : '0'}"/>
+  <ellipse cx="65" cy="85" rx="35" ry="29" fill="url(#lk${id})" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#ffd700' : (isAngel ? '#94a3b8' : (isRainbow ? '#818cf8' : (isFallen ? '#7c3aed' : (isChaos ? '#8b5cf6' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')))))))))}" stroke-width="${isMecha ? '2' : '1.4'}"/>
+  <ellipse cx="65" cy="89" rx="21" ry="19" fill="${isMechaZero ? 'rgba(15,23,42,0.85)' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? 'rgba(254,249,195,0.85)' : (isFrostFire ? 'rgba(254,240,138,0.6)' : (isChaos ? 'rgba(88,28,135,0.55)' : (isRainbow ? 'rgba(253,244,255,0.9)' : (isFallen ? 'rgba(46,16,101,0.75)' : (isAngel ? 'rgba(254,240,138,0.9)' : (isUnicorn ? 'rgba(253,242,248,0.75)' : (isGold ? 'rgba(255,251,235,0.7)' : (isLava ? 'rgba(254,215,170,0.85)' : (isFrost ? 'rgba(224,242,254,0.85)' : 'rgba(255,255,255,0.5)')))))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#ffd700' : (isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isChaos ? '#ffd700' : (isLava ? '#f97316' : (isFrost ? '#38bdf8' : 'none'))))))))}" stroke-width="${(isCelestial || isMecha || isLava || isFrost) ? '1.5' : '0'}"/>
   <!-- Star Chest Gem / Celestial Breastplate -->
   ${isCelestial ? drawCelestialBreastplate(65, 84, 1.3) : `
   <polygon points="65,74 68,81 75,84 68,87 65,94 62,87 55,84 62,81" fill="#ffd700" stroke="#fff" stroke-width="1.2" filter="drop-shadow(0 0 8px ${isFrostFire ? '#ff9f43' : '#ffd700'})"/>
   `}
   <!-- Arms & Legs -->
-  <ellipse cx="38" cy="82" rx="9" ry="6.5" fill="${isFrostFire ? '#ff4757' : (isChaos ? '#fef08a' : (isRainbow ? '#fce7f3' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c1))))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#a855f7' : (isChaos ? '#f59e0b' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')))))}" stroke-width="${(isCelestial || isLava || isFrost) ? '0.8' : '0'}"/>
-  <ellipse cx="92" cy="82" rx="9" ry="6.5" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#3b0764' : (isRainbow ? '#e0f2fe' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c1))))))}" stroke="${isAngel ? '#f59e0b' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isChaos ? '#c084fc' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')))))}" stroke-width="${(isCelestial || isLava || isFrost) ? '0.8' : '0'}"/>
-  <ellipse cx="48" cy="108" rx="11" ry="8" fill="${isFrostFire ? '#ff3300' : (isChaos ? '#fbbf24' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2)))))}" stroke="${isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')}" stroke-width="${(isLava || isFrost) ? '0.8' : '0'}"/>
-  <ellipse cx="82" cy="108" rx="11" ry="8" fill="${isFrostFire ? '#0284c7' : (isChaos ? '#18181b' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2)))))}" stroke="${isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')}" stroke-width="${(isLava || isFrost) ? '0.8' : '0'}"/>
+  <ellipse cx="38" cy="82" rx="9" ry="6.5" fill="${isMechaZero ? '#e0f2fe' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? '#fef9c3' : (isFrostFire ? '#ff4757' : (isChaos ? '#fef08a' : (isRainbow ? '#fce7f3' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c1)))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#ffd700' : (isAngel ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#a855f7' : (isChaos ? '#f59e0b' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))))))}" stroke-width="${(isCelestial || isMecha || isLava || isFrost) ? '0.8' : '0'}"/>
+  <ellipse cx="92" cy="82" rx="9" ry="6.5" fill="${isMechaZero ? '#e0f2fe' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? '#fef9c3' : (isFrostFire ? '#00d2ff' : (isChaos ? '#3b0764' : (isRainbow ? '#e0f2fe' : (isFallen ? '#2e1065' : (isAngel ? '#fef08a' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c1)))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#ffd700' : (isAngel ? '#f59e0b' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isChaos ? '#c084fc' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))))))}" stroke-width="${(isCelestial || isMecha || isLava || isFrost) ? '0.8' : '0'}"/>
+  <ellipse cx="48" cy="108" rx="11" ry="8" fill="${isMechaZero ? '#0f172a' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? '#ca8a04' : (isFrostFire ? '#ff3300' : (isChaos ? '#fbbf24' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#ffd700' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))}" stroke-width="${(isMecha || isLava || isFrost) ? '0.8' : '0'}"/>
+  <ellipse cx="82" cy="108" rx="11" ry="8" fill="${isMechaZero ? '#0f172a' : (isCrimsonDrone ? '#18181b' : (isTitanKatana ? '#ca8a04' : (isFrostFire ? '#0284c7' : (isChaos ? '#18181b' : (isRainbow ? '#c7d2fe' : (isFallen ? '#18181b' : (isLava ? '#b91c1c' : (isFrost ? '#0284c7' : c2))))))))}" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#ffd700' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))}" stroke-width="${(isMecha || isLava || isFrost) ? '0.8' : '0'}"/>
   <!-- Flowing Veins for Lava / Frost / FrostFire / Unicorn / Celestial -->
   ${isFrostFire ? `
     <g class="frostfire-flowing-vein" fill="none" stroke-width="2.4" stroke-linecap="round">
@@ -1783,40 +2037,69 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   <!-- Head Cast Shadow on Body -->
   ${isCelestial ? `<ellipse cx="65" cy="67" rx="22" ry="5" fill="rgba(15,23,42,0.25)"/>` : ''}
   <!-- Noble Head -->
-  <ellipse cx="65" cy="44" rx="35" ry="31" fill="url(#lk${id})" stroke="${isAngel ? '#cbd5e1' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isChaos ? '#a855f7' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none'))))))}" stroke-width="1.4"/>
+  <ellipse cx="65" cy="44" rx="35" ry="31" fill="url(#lk${id})" stroke="${isMechaZero ? '#00f5ff' : (isCrimsonDrone ? '#fb7185' : (isTitanKatana ? '#ffd700' : (isAngel ? '#cbd5e1' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isChaos ? '#a855f7' : (isUnicorn ? '#f472b6' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : 'none')))))))))}" stroke-width="${isMecha ? '2' : '1.4'}"/>
   <!-- Spinal Crest Spikes (Hidden on Unicorn to keep glorious horn clear) -->
-  ${!isUnicorn ? `
+  ${!isUnicorn ? (isMechaZero ? `
+  <polygon points="40,24 18,6 46,14" fill="#00f5ff" stroke="#ffffff" stroke-width="1.5"/>
+  <polygon points="90,24 112,6 84,14" fill="#00f5ff" stroke="#ffffff" stroke-width="1.5"/>
+  <polygon points="65,0 55,16 75,16" fill="#ffffff" stroke="#00f5ff" stroke-width="1.5"/>
+  <polygon points="52,10 43,20 58,18" fill="#0369a1"/>
+  <polygon points="78,10 87,20 72,18" fill="#0369a1"/>
+  ` : (isCrimsonDrone ? `
+  <polygon points="40,24 18,6 46,14" fill="#ef4444" stroke="#ffffff" stroke-width="1.5"/>
+  <polygon points="90,24 112,6 84,14" fill="#ef4444" stroke="#ffffff" stroke-width="1.5"/>
+  <polygon points="65,0 55,16 75,16" fill="#ffffff" stroke="#ef4444" stroke-width="1.5"/>
+  <polygon points="52,10 43,20 58,18" fill="#18181b"/>
+  <polygon points="78,10 87,20 72,18" fill="#18181b"/>
+  ` : (isTitanKatana ? `
+  <polygon points="40,24 18,6 46,14" fill="#18181b" stroke="#ffd700" stroke-width="1.5"/>
+  <polygon points="90,24 112,6 84,14" fill="#18181b" stroke="#ffd700" stroke-width="1.5"/>
+  <polygon points="65,0 55,16 75,16" fill="#ffd700" stroke="#ffffff" stroke-width="1.5" filter="drop-shadow(0 0 8px #ffd700)"/>
+  <polygon points="65,18 52,6 65,11 78,6" fill="#ffd700" stroke="#ffffff" stroke-width="1.2" filter="drop-shadow(0 0 6px #ffd700)"/>
+  <polygon points="52,10 43,20 58,18" fill="#f59e0b"/>
+  <polygon points="78,10 87,20 72,18" fill="#f59e0b"/>
+  ` : `
   <polygon points="40,24 22,8 46,14" fill="${isFrostFire ? '#ff4500' : (isChaos ? '#ffd700' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isLava ? '#ea580c' : (isFrost ? '#e0f2fe' : '#ffd700')))))}" stroke="${isFrostFire ? '#ff3300' : (isChaos ? '#f59e0b' : (isRainbow ? '#f43f5e' : (isFallen ? '#6d28d9' : (isLava ? '#f97316' : (isFrost ? '#38bdf8' : '#d97706')))))}" stroke-width="1.5"/>
   <polygon points="90,24 108,8 84,14" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#a855f7' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isLava ? '#ea580c' : (isFrost ? '#e0f2fe' : '#ffd700')))))}" stroke="${isFrostFire ? '#0284c7' : (isChaos ? '#7c3aed' : (isRainbow ? '#0284c7' : (isFallen ? '#6d28d9' : (isLava ? '#f97316' : (isFrost ? '#38bdf8' : '#d97706')))))}" stroke-width="1.5"/>
   <polygon points="65,2 57,16 73,16" fill="${isChaos ? '#fbbf24' : (isRainbow ? '#f472b6' : (isFallen ? '#c084fc' : (isLava ? '#fde047' : (isFrost ? '#ffffff' : '#ffe066'))))}" stroke="${isChaos ? '#ffd700' : (isRainbow ? '#f43f5e' : (isFallen ? '#7c3aed' : (isLava ? '#f97316' : (isFrost ? '#7dd3fc' : '#ffd700'))))}" stroke-width="1.5"/>
   <polygon points="52,10 45,20 58,18" fill="${isFrostFire ? '#ff4500' : (isChaos ? '#ffd700' : (isRainbow ? '#f472b6' : (isFallen ? '#7c3aed' : (isAngel ? '#f59e0b' : cA))))}"/>
   <polygon points="78,10 85,20 72,18" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#a855f7' : (isRainbow ? '#38bdf8' : (isFallen ? '#a855f7' : (isAngel ? '#f59e0b' : cA))))}"/>
-  ` : ''}
+  `))) : ''}
   ${drawUnicornHorn(65, 18, 28, 9)}
   <!-- Soft Blushing Cheeks -->
-  <ellipse cx="38" cy="46" rx="7" ry="5" fill="${isFrostFire ? 'rgba(255,80,60,0.45)' : (isChaos ? 'rgba(251,191,36,0.35)' : (isRainbow ? 'rgba(244,114,182,0.45)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : (isLava ? 'rgba(249,115,22,0.45)' : (isFrost ? 'rgba(56,189,248,0.4)' : 'rgba(255,100,100,0.28)'))))))))}"/>
-  <ellipse cx="92" cy="46" rx="7" ry="5" fill="${isFrostFire ? 'rgba(56,189,248,0.45)' : (isChaos ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(56,189,248,0.4)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : (isLava ? 'rgba(249,115,22,0.45)' : (isFrost ? 'rgba(56,189,248,0.4)' : 'rgba(255,100,100,0.28)'))))))))}"/>
+  <ellipse cx="38" cy="46" rx="7" ry="5" fill="${isMechaZero ? 'rgba(56,189,248,0.45)' : (isCrimsonDrone ? 'rgba(244,63,94,0.38)' : (isTitanKatana ? 'rgba(249,115,22,0.4)' : (isFrostFire ? 'rgba(255,80,60,0.45)' : (isChaos ? 'rgba(251,191,36,0.35)' : (isRainbow ? 'rgba(244,114,182,0.45)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : (isLava ? 'rgba(249,115,22,0.45)' : (isFrost ? 'rgba(56,189,248,0.4)' : 'rgba(255,100,100,0.28)')))))))))))}"/>
+  <ellipse cx="92" cy="46" rx="7" ry="5" fill="${isMechaZero ? 'rgba(56,189,248,0.45)' : (isCrimsonDrone ? 'rgba(244,63,94,0.38)' : (isTitanKatana ? 'rgba(249,115,22,0.4)' : (isFrostFire ? 'rgba(56,189,248,0.45)' : (isChaos ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(56,189,248,0.4)' : (isFallen ? 'rgba(168,85,247,0.35)' : (isAngel ? 'rgba(251,191,36,0.35)' : (isUnicorn ? 'rgba(244,114,182,0.45)' : (isGold ? 'rgba(251,146,60,0.28)' : (isLava ? 'rgba(249,115,22,0.45)' : (isFrost ? 'rgba(56,189,248,0.4)' : 'rgba(255,100,100,0.28)')))))))))))}"/>
   <!-- Symmetrical Cute Glossy Eyes (Heterochromia on FrostFire, Chaos, Rainbow, Unicorn) -->
   <g class="dino-part-eye">
-    <ellipse cx="48" cy="38" rx="10" ry="11" fill="white"/>
-    <ellipse cx="48" cy="38" rx="7.5" ry="8" fill="${isFrostFire ? '#ff4500' : (isChaos ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#9333ea' : (isUnicorn ? '#a855f7' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e'))))))}"/>
+    <ellipse cx="48" cy="38" rx="10" ry="11" fill="white" stroke="${isMechaZero ? '#0369a1' : (isCrimsonDrone ? '#881337' : (isTitanKatana ? '#ffd700' : 'none'))}" stroke-width="${isMecha ? '1.3' : '0'}"/>
+    <ellipse cx="48" cy="38" rx="7.5" ry="8" fill="${isMecha ? `url(#mIris${id})` : (isFrostFire ? '#ff4500' : (isChaos ? '#f59e0b' : (isRainbow ? '#f472b6' : (isFallen ? '#9333ea' : (isUnicorn ? '#a855f7' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e')))))))}"/>
+    ${isMecha ? `<ellipse cx="48" cy="39.2" rx="3.4" ry="3.6" fill="${isMechaZero ? '#00f5ff' : (isTitanKatana ? '#ffd700' : '#18181b')}" opacity="0.85"/>` : ''}
+    ${isMechaZero ? `<line x1="48" y1="32" x2="48" y2="44" stroke="#ffffff" stroke-width="1.2" opacity="0.9"/><line x1="42" y1="38" x2="54" y2="38" stroke="#ffffff" stroke-width="1.2" opacity="0.9"/>` : ''}
     <circle cx="50.5" cy="35.5" r="2.2" fill="white"/>
-    <circle cx="46.5" cy="40" r="1.1" fill="rgba(255,255,255,0.4)"/>
+    <circle cx="46.5" cy="40" r="1.1" fill="rgba(255,255,255,0.65)"/>
 
-    <ellipse cx="82" cy="38" rx="10" ry="11" fill="white"/>
-    <ellipse cx="82" cy="38" rx="7.5" ry="8" fill="${isFrostFire ? '#00d2ff' : (isChaos ? '#9333ea' : (isRainbow ? '#38bdf8' : (isFallen ? '#9333ea' : (isUnicorn ? '#38bdf8' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e'))))))}"/>
+    <ellipse cx="82" cy="38" rx="10" ry="11" fill="white" stroke="${isMechaZero ? '#0369a1' : (isCrimsonDrone ? '#881337' : (isTitanKatana ? '#ffd700' : 'none'))}" stroke-width="${isMecha ? '1.3' : '0'}"/>
+    <ellipse cx="82" cy="38" rx="7.5" ry="8" fill="${isMecha ? `url(#mIris${id})` : (isFrostFire ? '#00d2ff' : (isChaos ? '#9333ea' : (isRainbow ? '#38bdf8' : (isFallen ? '#9333ea' : (isUnicorn ? '#38bdf8' : (isLava ? '#f59e0b' : (isFrost ? '#00f5ff' : '#1a1a2e')))))))}"/>
+    ${isMecha ? `<ellipse cx="82" cy="39.2" rx="3.4" ry="3.6" fill="${isMechaZero ? '#00f5ff' : (isTitanKatana ? '#ffd700' : '#18181b')}" opacity="0.85"/>` : ''}
+    ${isMechaZero ? `<line x1="82" y1="32" x2="82" y2="44" stroke="#ffffff" stroke-width="1.2" opacity="0.9"/><line x1="76" y1="38" x2="88" y2="38" stroke="#ffffff" stroke-width="1.2" opacity="0.9"/>` : ''}
     <circle cx="84.5" cy="35.5" r="2.2" fill="white"/>
-    <circle cx="80.5" cy="40" r="1.1" fill="rgba(255,255,255,0.4)"/>
+    <circle cx="80.5" cy="40" r="1.1" fill="rgba(255,255,255,0.65)"/>
   </g>
   <!-- Subtle Mini Nostrils -->
-  <ellipse cx="62" cy="47.5" rx="1.3" ry="1.6" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.25)')))}"/>
-  <ellipse cx="68" cy="47.5" rx="1.3" ry="1.6" fill="${isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.25)')))}"/>
+  <ellipse cx="62" cy="47.5" rx="1.3" ry="1.6" fill="${isMechaZero ? 'rgba(15,23,42,0.35)' : (isCrimsonDrone ? 'rgba(76,5,25,0.4)' : (isTitanKatana ? 'rgba(69,26,3,0.4)' : (isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.25)'))))))}"/>
+  <ellipse cx="68" cy="47.5" rx="1.3" ry="1.6" fill="${isMechaZero ? 'rgba(15,23,42,0.35)' : (isCrimsonDrone ? 'rgba(76,5,25,0.4)' : (isTitanKatana ? 'rgba(69,26,3,0.4)' : (isAngel ? 'rgba(217,119,6,0.35)' : (isUnicorn ? 'rgba(168,85,247,0.35)' : (isRainbow ? 'rgba(244,114,182,0.35)' : (isFallen ? 'rgba(168,85,247,0.35)' : 'rgba(0,0,0,0.25)'))))))}"/>
   ${drawAngelHalo(65, -10, 26, 7)}
   ${drawSunglasses(65, 38, 50, 16)}
   ${drawGradCap(65, 24)}
   ${drawAllHeadwears(65, 22, 38, 1.28, 40, 1.25)}
-  <!-- Cute Regal Smile (NO FANGS on Angel, Rainbow, Unicorn) -->
-  ${isFrostFire ? `
+  <!-- Cute Regal Smile (NO FANGS on Angel, Rainbow, Unicorn, Mecha) -->
+  ${isMechaZero ? `
+    <path d="M53,53 Q65,58 77,53" stroke="#0f172a" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  ` : (isCrimsonDrone ? `
+    <path d="M53,53 Q65,58 77,53" stroke="#4c0519" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  ` : (isTitanKatana ? `
+    <path d="M53,53 Q65,58 77,53" stroke="#451a03" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  ` : (isFrostFire ? `
     <path d="M53,53 Q65,57.5 77,53" stroke="#fbbf24" stroke-width="2.8" fill="none" stroke-linecap="round"/>
     <polygon points="56,53 58,60 60,53" fill="#ffffff" stroke="#ff4500" stroke-width="0.9"/>
     <polygon points="70,53 72,60 74,53" fill="#ffffff" stroke="#00d2ff" stroke-width="0.9"/>
@@ -1846,7 +2129,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     <path d="M53,53 Q65,58 77,53" stroke="rgba(0,0,0,0.55)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
     <polygon points="56,53 58,59 60,53" fill="#ffffff" stroke="rgba(0,0,0,0.3)" stroke-width="0.8"/>
     <polygon points="70,53 72,59 74,53" fill="#ffffff" stroke="rgba(0,0,0,0.3)" stroke-width="0.8"/>
-  `)))))))}
+  `))))))))))}
 </svg>`;
     return effectsHtml + svg;
   } catch (err) {
