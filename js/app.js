@@ -194,7 +194,10 @@ class DinoApp {
   }
 
   switchView(viewName) {
+    if (this.currentView === viewName) return;
     this.currentView = viewName;
+
+    // Instant Visual Feedback on Tab & Pane
     document.querySelectorAll('.nav-tab').forEach(tab => {
       tab.classList.toggle('active', tab.dataset.view === viewName);
     });
@@ -203,16 +206,23 @@ class DinoApp {
       pane.classList.toggle('active', pane.id === `view-${viewName}`);
     });
 
-    // Smart Background Hibernation: Only run park wander cycle when inside park view!
+    // Smart Background Hibernation: Only run park wander and hut cycles when inside park view!
     if (viewName === 'park') {
       this.renderParkView();
       this.startParkWanderLoop();
+      this.startHutLoop();
     } else {
+      // Pause all park timers immediately to release main thread & battery
       this.stopParkWanderLoop();
-      if (viewName === 'console') { this.renderConsoleCards(); }
-      else if (viewName === 'screen') { this.renderScreenView(); }
-      else if (viewName === 'shop') { this.renderShopView(); }
-      else if (viewName === 'history') { this.renderHistoryView(); }
+      this.stopHutLoop();
+
+      // Render non-park views in next animation frame for zero tap latency
+      requestAnimationFrame(() => {
+        if (viewName === 'console') { this.renderConsoleCards(); }
+        else if (viewName === 'screen') { this.renderScreenView(); }
+        else if (viewName === 'shop') { this.renderShopView(); }
+        else if (viewName === 'history') { this.renderHistoryView(); }
+      });
     }
   }
 
@@ -1239,6 +1249,10 @@ class DinoApp {
     const layer = document.getElementById('park-dinos-layer');
     if (!layer) return;
 
+    // Reset occupants when entering park view to guarantee dinosaurs start fresh outside and never get stuck
+    if (this.hut) this.hut.occupants.clear();
+    if (this.skyHut) this.skyHut.occupants.clear();
+
     const students = window.storageMgr.getStudents();
     if (!students || students.length === 0) {
       layer.innerHTML = `<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:#fff; font-weight:700; font-size:1.1rem; text-shadow:0 2px 8px rgba(0,0,0,0.5);">草地上暂无恐龙散步，请在管理台新增学生！🦕</div>`;
@@ -1323,29 +1337,32 @@ class DinoApp {
   startParkWanderLoop() {
     this.stopParkWanderLoop();
 
-    // Wander every 3.5s for a random subset of dinos with Hut Avoidance
+    // Wander every 2.8s for lively dinosaurs with Hut Avoidance
     this.parkWanderInterval = setInterval(() => {
+      if (this.currentView !== 'park' || document.hidden) return;
       const sprites = document.querySelectorAll('.park-dino-sprite');
       if (!sprites || sprites.length === 0) return;
 
       sprites.forEach(sprite => {
         const sid = sprite.dataset.id;
         const isOccupant = (this.hut && this.hut.occupants.has(sid)) || (this.skyHut && this.skyHut.occupants.has(sid));
-        // Auto-heal: If a dinosaur became stuck invisible but is not inside any hut, restore it immediately
-        if (!isOccupant && sprite.style.opacity === '0' && sprite.dataset.isEntering !== 'true') {
+        // Auto-heal: If a dinosaur became stuck invisible or entering but is not inside any hut, restore it immediately
+        if (!isOccupant && (sprite.style.opacity === '0' || sprite.classList.contains('dino-squeeze-in') || sprite.dataset.isEntering === 'true')) {
           sprite.style.opacity = '1';
           sprite.classList.remove('dino-squeeze-in');
+          delete sprite.dataset.isEntering;
         }
         // Skip if dino is currently executing entrance animation or inside hut
         if (sprite.dataset.isEntering === 'true' || isOccupant) return;
 
-        if (Math.random() < 0.5) {
+        // 70% wander probability for lively feel
+        if (Math.random() < 0.70) {
           const isFlying = sprite.dataset.isFlying === 'true';
           const currentLeft = parseFloat(sprite.style.left) || 40;
           const currentTop  = parseFloat(sprite.style.top)  || (isFlying ? 15 : 60);
 
-          // Wander range (-15% ~ +15% horizontal, -10% ~ +10% vertical)
-          const dLeft = (Math.random() * 30 - 15);
+          // Wander range (-14% ~ +14% horizontal, -10% ~ +10% vertical)
+          const dLeft = (Math.random() * 28 - 14);
           const dTop  = (Math.random() * 20 - 10);
 
           let newLeft = Math.min(88, Math.max(5, currentLeft + dLeft));
@@ -1387,9 +1404,8 @@ class DinoApp {
           sprite.style.transform = `scale(${perspScale})`;
         }
       });
-    }, 3500);
+    }, 2800);
   }
-
 
   stopParkWanderLoop() {
     if (this.parkWanderInterval) {
@@ -1407,13 +1423,22 @@ class DinoApp {
     this.hut = { id: 'single', name: '🏰 恐龙豪华庄园', maxOccupants: 3, occupants: new Set() };
     // Sky Castle for Legend Flying Dragons: max 2 occupants
     this.skyHut = { id: 'sky', name: '☁️ 天空之城', maxOccupants: 2, occupants: new Set() };
-    this.startHutLoop();
+    
+    // Only start hut loop if currently inside park
+    if (this.currentView === 'park') {
+      this.startHutLoop();
+    }
 
     // Tablet Wakeup & Visibility Recovery Listener (prevents dinosaurs getting stuck when tablet sleeps)
     if (!this._visibilityBound) {
       document.addEventListener('visibilitychange', () => {
         if (!document.hidden && this.currentView === 'park') {
           this.recoverParkSprites();
+          this.startParkWanderLoop();
+          this.startHutLoop();
+        } else if (document.hidden) {
+          this.stopParkWanderLoop();
+          this.stopHutLoop();
         }
       });
       this._visibilityBound = true;
@@ -1451,8 +1476,13 @@ class DinoApp {
   }
 
   startHutLoop() {
+    this.stopHutLoop();
+    // Only run if we are actively viewing the Safari Park
+    if (this.currentView !== 'park' || document.hidden) return;
+
     // Hut tick every 5 seconds
     this.hutInterval = setInterval(() => {
+      if (this.currentView !== 'park' || document.hidden) return;
       this.updateHutDayNightVisuals();
       this.tryDinoEnterHut();
       this.tryLegendEnterSkyHut();
@@ -1460,8 +1490,20 @@ class DinoApp {
 
     // Peek window random timer
     this.hutPeekInterval = setInterval(() => {
+      if (this.currentView !== 'park' || document.hidden) return;
       this.triggerRandomPeek();
     }, 12000);
+  }
+
+  stopHutLoop() {
+    if (this.hutInterval) {
+      clearInterval(this.hutInterval);
+      this.hutInterval = null;
+    }
+    if (this.hutPeekInterval) {
+      clearInterval(this.hutPeekInterval);
+      this.hutPeekInterval = null;
+    }
   }
 
   updateHutDayNightVisuals() {
@@ -1480,6 +1522,7 @@ class DinoApp {
   }
 
   tryDinoEnterHut() {
+    if (this.currentView !== 'park' || document.hidden) return;
     if (!this.hut || this.hut.occupants.size >= this.hut.maxOccupants) return;
     const prob = this.getEnterProbability();
     if (Math.random() > prob) return;
@@ -1497,6 +1540,7 @@ class DinoApp {
   }
 
   tryLegendEnterSkyHut() {
+    if (this.currentView !== 'park' || document.hidden) return;
     if (!this.skyHut || this.skyHut.occupants.size >= this.skyHut.maxOccupants) return;
     const prob = 0.35;
     if (Math.random() > prob) return;
@@ -1798,7 +1842,7 @@ class DinoApp {
       const isInsideVilla = this.hut && this.hut.occupants.has(sid);
       const isInsideSky = this.skyHut && this.skyHut.occupants.has(sid);
       if (!isInsideVilla && !isInsideSky) {
-        if (sprite.style.opacity === '0' || sprite.classList.contains('dino-squeeze-in')) {
+        if (sprite.style.opacity === '0' || sprite.classList.contains('dino-squeeze-in') || sprite.dataset.isEntering === 'true') {
           sprite.classList.remove('dino-squeeze-in');
           sprite.style.opacity = '1';
           sprite.style.transition = '';

@@ -1316,7 +1316,7 @@
           <label style="font-weight:700; font-size:0.95rem; color:var(--text-main); display:block; margin-bottom:8px;">
             🎒 已解锁外观衣橱：
           </label>
-          <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; flex-direction:column; gap:8px; max-height:185px; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-right:4px;">
             <label id="wardrobe-crown" style="display:none; align-items:center; gap:8px; font-weight:700; color:#f1c40f; cursor:pointer;">
               <input type="checkbox" id="detail-crown-checkbox" style="accent-color:#f1c40f; width:18px; height:18px;">
               👑 穿戴/脱下 超炫流光金冠框
@@ -1453,7 +1453,7 @@
           <span style="font-size:0.9rem; color:var(--text-muted);">当前总积分：<strong id="detail-score" class="score-highlight"></strong></span>
         </div>
       </div>
-      <div style="display: flex; gap: 10px; justify-content: space-between;">
+      <div class="modal-sticky-footer" style="display: flex; gap: 10px; justify-content: space-between; align-items: center;">
         <button class="btn btn-danger" onclick="window.dinoApp.deleteCurrentStudent()">🗑️ 移除学生</button>
         <div style="display:flex; gap:10px;">
           <button class="btn btn-secondary btn-modal-cancel">取消</button>

@@ -117,9 +117,9 @@ class SoundController {
       osc.connect(gain);
       gain.connect(this.audioCtx.destination);
 
+      osc.onended = () => { try { osc.disconnect(); gain.disconnect(); } catch(e){} };
       osc.start(now);
       osc.stop(now + 0.35);
-      setTimeout(() => { try { osc.disconnect(); gain.disconnect(); } catch(e){} }, 400);
 
       // Soft bass note every 4 beats
       if (step % 4 === 0) {
@@ -136,9 +136,9 @@ class SoundController {
         bassOsc.connect(bassGain);
         bassGain.connect(this.audioCtx.destination);
 
+        bassOsc.onended = () => { try { bassOsc.disconnect(); bassGain.disconnect(); } catch(e){} };
         bassOsc.start(now);
         bassOsc.stop(now + 0.48);
-        setTimeout(() => { try { bassOsc.disconnect(); bassGain.disconnect(); } catch(e){} }, 550);
       }
     };
 
