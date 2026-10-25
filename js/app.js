@@ -1276,6 +1276,30 @@ class DinoApp {
     }
   }
 
+  // Helper: GPU-accelerated 60FPS sprite positioning via translate3d(Xpx, Ypx, 0) scale(S)
+  setParkSpriteTransform(sprite, leftPct, topPct, scaleVal) {
+    if (!sprite) return;
+    const l = parseFloat(leftPct);
+    const t = parseFloat(topPct);
+    const s = (scaleVal !== undefined && scaleVal !== null) ? parseFloat(scaleVal) : (parseFloat(sprite.dataset.scale) || 0.75);
+    sprite.dataset.left  = l.toFixed(1);
+    sprite.dataset.top   = t.toFixed(1);
+    sprite.dataset.scale = s.toFixed(2);
+    const layer = document.getElementById('park-dinos-layer');
+    const w = (layer && layer.clientWidth > 0) ? layer.clientWidth : (window.innerWidth - 32);
+    const h = (layer && layer.clientHeight > 0) ? layer.clientHeight : (window.innerHeight - 150);
+    const tx = (l / 100) * w;
+    const ty = (t / 100) * h;
+    sprite.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0) scale(${s.toFixed(2)})`;
+  }
+
+  refreshParkSpriteTransforms() {
+    if (this.currentView !== 'park') return;
+    document.querySelectorAll('.park-dino-sprite').forEach(sprite => {
+      this.setParkSpriteTransform(sprite, sprite.dataset.left || 40, sprite.dataset.top || 60, sprite.dataset.scale || 0.75);
+    });
+  }
+
   // View 5: 🏞️ Dinosaur Safari Park (恐龙大草原乐园)
   renderParkView() {
     const layer = document.getElementById('park-dinos-layer');
@@ -1295,11 +1319,14 @@ class DinoApp {
     const existingSprites = new Map();
     layer.querySelectorAll('.park-dino-sprite').forEach(el => {
       existingSprites.set(el.dataset.id, {
-        left: parseFloat(el.style.left) || 20,
-        top: parseFloat(el.style.top) || 55,
+        left: parseFloat(el.dataset.left || el.style.left) || 20,
+        top: parseFloat(el.dataset.top || el.style.top) || 55,
         isFlipped: el.classList.contains('flip-left')
       });
     });
+
+    const layerW = (layer.clientWidth > 0) ? layer.clientWidth : (window.innerWidth - 32);
+    const layerH = (layer.clientHeight > 0) ? layer.clientHeight : (window.innerHeight - 150);
 
     // Spread dinos in a wider grid across full ground area
     const cols = Math.ceil(Math.sqrt(students.length * 1.6));
@@ -1340,6 +1367,9 @@ class DinoApp {
         ? 0.85
         : (0.55 + (pos.top / 100) * 0.30);
 
+      const tx = (pos.left / 100) * layerW;
+      const ty = (pos.top / 100) * layerH;
+
       const flyClass = isLegend ? 'park-dino-legend-flying' : '';
 
       return `
@@ -1347,7 +1377,10 @@ class DinoApp {
              id="park-sprite-${s.id}" 
              data-id="${s.id}"
              data-is-flying="${isLegend ? 'true' : 'false'}"
-             style="left: ${pos.left.toFixed(1)}%; top: ${pos.top.toFixed(1)}%; z-index: ${isLegend ? 9999 : Math.floor(pos.top * 10) + 1000}; transform: scale(${perspScale.toFixed(2)});"
+             data-left="${pos.left.toFixed(1)}"
+             data-top="${pos.top.toFixed(1)}"
+             data-scale="${perspScale.toFixed(2)}"
+             style="left: 0px; top: 0px; z-index: ${isLegend ? 9999 : Math.floor(pos.top * 10) + 1000}; transform: translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0) scale(${perspScale.toFixed(2)});"
              onclick="window.dinoApp.triggerParkDinoClick(this, '${s.id}')">
 
           <div class="park-dino-nametag">
@@ -1374,7 +1407,7 @@ class DinoApp {
       const sprites = document.querySelectorAll('.park-dino-sprite');
       if (!sprites || sprites.length === 0) return;
 
-      sprites.forEach(sprite => {
+      sprites.forEach((sprite, idx) => {
         const sid = sprite.dataset.id;
         const isOccupant = (this.hut && this.hut.occupants.has(sid)) || (this.skyHut && this.skyHut.occupants.has(sid));
         // Auto-heal: If a dinosaur became stuck invisible or entering but is not inside any hut, restore it immediately
@@ -1389,8 +1422,8 @@ class DinoApp {
         // 75% wander probability for lively feel
         if (Math.random() < 0.75) {
           const isFlying = sprite.dataset.isFlying === 'true';
-          const currentLeft = parseFloat(sprite.style.left) || 40;
-          const currentTop  = parseFloat(sprite.style.top)  || (isFlying ? 15 : 60);
+          const currentLeft = parseFloat(sprite.dataset.left || sprite.style.left) || 40;
+          const currentTop  = parseFloat(sprite.dataset.top  || sprite.style.top)  || (isFlying ? 15 : 60);
 
           // Wander range (-14% ~ +14% horizontal, -10% ~ +10% vertical)
           const dLeft = (Math.random() * 28 - 14);
@@ -1412,20 +1445,22 @@ class DinoApp {
             }
           }
 
-          const perspScale = isFlying ? 0.85 : (0.55 + (newTop / 100) * 0.30).toFixed(2);
+          const perspScale = isFlying ? 0.85 : parseFloat((0.55 + (newTop / 100) * 0.30).toFixed(2));
 
-          if (newLeft < currentLeft - 0.5) {
-            sprite.classList.add('flip-left');
-            sprite.classList.remove('flip-right');
-          } else if (newLeft > currentLeft + 0.5) {
-            sprite.classList.add('flip-right');
-            sprite.classList.remove('flip-left');
-          }
-
-          sprite.style.left      = `${newLeft.toFixed(1)}%`;
-          sprite.style.top       = `${newTop.toFixed(1)}%`;
-          sprite.style.zIndex    = `${isFlying ? 9999 : Math.floor(newTop * 10) + 1000}`;
-          sprite.style.transform = `scale(${perspScale})`;
+          // Micro-stagger so all dinosaurs don't start/stop in rigid lockstep
+          const staggerMs = (idx % 6) * 80;
+          setTimeout(() => {
+            if (!sprite.isConnected || sprite.dataset.isEntering === 'true') return;
+            if (newLeft < currentLeft - 0.5) {
+              sprite.classList.add('flip-left');
+              sprite.classList.remove('flip-right');
+            } else if (newLeft > currentLeft + 0.5) {
+              sprite.classList.add('flip-right');
+              sprite.classList.remove('flip-left');
+            }
+            sprite.style.zIndex = `${isFlying ? 9999 : Math.floor(newTop * 10) + 1000}`;
+            this.setParkSpriteTransform(sprite, newLeft, newTop, perspScale);
+          }, staggerMs);
         }
       });
     };
@@ -1456,6 +1491,23 @@ class DinoApp {
     this.hut = { id: 'single', name: '🏰 恐龙豪华庄园', maxOccupants: 3, occupants: new Set() };
     // Sky Castle for Legend Flying Dragons: max 2 occupants
     this.skyHut = { id: 'sky', name: '☁️ 天空之城', maxOccupants: 2, occupants: new Set() };
+
+    // On iPad/iOS, strip expensive inline SVG filter="url(#...)" from background Huts to guarantee 60FPS GPU compositing
+    if (window.IS_IPAD_IOS) {
+      document.querySelectorAll('#park-hut-sky svg [filter], #park-hut-single svg [filter]').forEach(el => {
+        el.removeAttribute('filter');
+      });
+    }
+
+    // Recompute pixel transforms when tablet rotates or window resizes
+    if (!this._parkResizeBound) {
+      window.addEventListener('resize', () => {
+        if (this.currentView === 'park') {
+          this.refreshParkSpriteTransforms();
+        }
+      });
+      this._parkResizeBound = true;
+    }
     
     // Only start hut loop if currently inside park
     if (this.currentView === 'park') {
@@ -1619,10 +1671,8 @@ class DinoApp {
     const doorGlow = document.getElementById('sky-door-glow');
     if (doorGlow) doorGlow.style.opacity = '1';
 
-    sprite.style.transition = 'left 2.2s ease-in-out, top 2.2s ease-in-out, transform 2.2s ease-in-out';
-    sprite.style.left = `${DOOR_LEFT}%`;
-    sprite.style.top  = `${DOOR_TOP}%`;
-    sprite.style.transform = 'scale(0.45)';
+    sprite.style.transition = 'transform 2.2s ease-in-out, opacity 0.6s ease';
+    this.setParkSpriteTransform(sprite, DOOR_LEFT, DOOR_TOP, 0.45);
 
     setTimeout(() => {
       const bubble = document.createElement('div');
@@ -1656,20 +1706,16 @@ class DinoApp {
 
     sprite.classList.remove('dino-squeeze-in');
     sprite.style.transition = 'none';
-    sprite.style.left = `${DOOR_LEFT}%`;
-    sprite.style.top  = `${DOOR_TOP}%`;
     sprite.style.opacity = '0';
-    sprite.style.transform = 'scale(0.3)';
+    this.setParkSpriteTransform(sprite, DOOR_LEFT, DOOR_TOP, 0.30);
     void sprite.offsetWidth;
-
-    sprite.style.transition = 'opacity 1s ease, transform 1s ease, left 2s ease-out, top 2s ease-out';
-    sprite.style.opacity = '1';
-    sprite.style.transform = 'scale(0.85)';
 
     const exitLeft = (DOOR_LEFT + (Math.random() * 30 - 15)).toFixed(1);
     const exitTop  = (DOOR_TOP + (Math.random() * 12 - 6)).toFixed(1);
-    sprite.style.left = `${exitLeft}%`;
-    sprite.style.top  = `${exitTop}%`;
+
+    sprite.style.transition = 'opacity 1s ease, transform 2s ease-out';
+    sprite.style.opacity = '1';
+    this.setParkSpriteTransform(sprite, exitLeft, exitTop, 0.85);
 
     setTimeout(() => {
       sprite.style.transition = '';
@@ -1709,7 +1755,7 @@ class DinoApp {
     const DOOR_TOP  = doorPos.top;
 
     // Facing direction facing towards door
-    const currentLeft = parseFloat(sprite.style.left) || 40;
+    const currentLeft = parseFloat(sprite.dataset.left || sprite.style.left) || 40;
     if (currentLeft < DOOR_LEFT - 0.5) {
       sprite.classList.add('flip-right');
       sprite.classList.remove('flip-left');
@@ -1722,12 +1768,10 @@ class DinoApp {
     const doorGlow = document.getElementById('door-glow-overlay');
     if (doorGlow) doorGlow.style.opacity = '0.9';
 
-    // Phase 1: Walk to doorstep
-    sprite.style.transition = 'left 1.8s ease-in-out, top 1.8s ease-in-out, transform 1.8s ease-in-out';
-    sprite.style.left = `${DOOR_LEFT}%`;
-    sprite.style.top  = `${DOOR_TOP}%`;
+    // Phase 1: Walk to doorstep using GPU translate3d
+    sprite.style.transition = 'transform 1.8s ease-in-out, opacity 0.6s ease';
     sprite.style.zIndex = '125';
-    sprite.style.transform = 'scale(0.65)'; // scale down for perspective near door
+    this.setParkSpriteTransform(sprite, DOOR_LEFT, DOOR_TOP, 0.65);
 
     // Phase 2: After walking to doorstep, pop cute happy bubble, squeeze into doorway, then fade out door glow
     setTimeout(() => {
@@ -1769,22 +1813,18 @@ class DinoApp {
     // Reset squeeze class and set position right in doorway
     sprite.classList.remove('dino-squeeze-in');
     sprite.style.transition = 'none';
-    sprite.style.left = `${DOOR_LEFT}%`;
-    sprite.style.top  = `${DOOR_TOP}%`;
     sprite.style.opacity = '0';
-    sprite.style.transform = 'scale(0.3)';
+    this.setParkSpriteTransform(sprite, DOOR_LEFT, DOOR_TOP, 0.30);
     void sprite.offsetWidth; // force reflow
 
-    // Phase 1: Emerge out of doorway onto stone steps
-    sprite.style.transition = 'opacity 0.8s ease, transform 0.8s ease, left 1.5s ease-out, top 1.5s ease-out';
-    sprite.style.opacity = '1';
-    sprite.style.transform = 'scale(0.72)';
-
-    // Phase 2: Walk forward out onto grass
+    // Walk forward out onto grass using GPU translate3d
     const exitLeft = (DOOR_LEFT + (Math.random() * 12 - 6)).toFixed(1);
     const exitTop  = (DOOR_TOP + 6 + Math.random() * 8).toFixed(1);
-    sprite.style.left = `${exitLeft}%`;
-    sprite.style.top  = `${exitTop}%`;
+    const exitScale = parseFloat((0.55 + (parseFloat(exitTop) / 100) * 0.30).toFixed(2));
+
+    sprite.style.transition = 'opacity 0.8s ease, transform 1.5s ease-out';
+    sprite.style.opacity = '1';
+    this.setParkSpriteTransform(sprite, exitLeft, exitTop, exitScale);
 
     // Reset transition after emerging and clear entering flag
     setTimeout(() => {

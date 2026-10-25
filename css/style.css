@@ -4140,20 +4140,25 @@ svg.gold-skin-aura {
 
 /* ── Dino Doorway Squeeze-in Animation (Phase 2 of entering) ── */
 .park-dino-sprite.dino-squeeze-in {
+  opacity: 0 !important;
+  transition: opacity 0.6s ease !important;
+}
+
+.park-dino-sprite.dino-squeeze-in .park-dino-body {
   animation: dinoDoorSqueeze 0.65s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards !important;
 }
 
 @keyframes dinoDoorSqueeze {
   0% {
-    transform: scale(0.65) scaleX(1);
+    transform: scale(1) scaleX(1);
     opacity: 1;
   }
   60% {
-    transform: scale(0.45) scaleX(0.3) translateY(-8px);
+    transform: scale(0.65) scaleX(0.3) translateY(-8px);
     opacity: 0.7;
   }
   100% {
-    transform: scale(0.1) scaleX(0.05) translateY(-15px);
+    transform: scale(0.15) scaleX(0.05) translateY(-15px);
     opacity: 0;
   }
 }
@@ -4692,6 +4697,8 @@ svg.gold-skin-aura {
 
 .park-dino-sprite {
   position: absolute;
+  left: 0;
+  top: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -4700,8 +4707,8 @@ svg.gold-skin-aura {
   will-change: transform;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  transition: left 2.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              top  2.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 2.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              opacity 0.6s ease;
   cursor: pointer;
   overflow: visible;
   pointer-events: auto;           /* sprites are clickable even though layer is none */
@@ -5484,6 +5491,13 @@ body.is-ipad-device .dino-svg-vivid *,
 body.is-ipad-device .park-dino-legend-flying,
 body.is-ipad-device .park-dino-legend-flying::after,
 body.is-ipad-device .park-tree,
+body.is-ipad-device .park-cloud,
+body.is-ipad-device .park-star,
+body.is-ipad-device .firefly,
+body.is-ipad-device .sky-hut-svg,
+body.is-ipad-device .sky-hut-svg *,
+body.is-ipad-device .hut-svg,
+body.is-ipad-device .hut-svg *,
 body.is-ipad-device .starry-magic-circle-wrap,
 body.is-ipad-device .lava-circle-wrap,
 body.is-ipad-device .cyber-circle-wrap,
@@ -5498,9 +5512,7 @@ body.is-ipad-device .park-moon-svg {
   -webkit-filter: none !important;
 }
 
-/* Stop continuous SVG internal path/transform re-rasterization on iPad */
-body.is-ipad-device .angel-wing-anim-left,
-body.is-ipad-device .angel-wing-anim-right,
+/* Stop continuous non-essential stroke/background repaints on iPad while KEEPING wing flapping & breathing! */
 body.is-ipad-device .lava-flowing-vein,
 body.is-ipad-device .frost-flowing-vein,
 body.is-ipad-device .frostfire-flowing-vein,
@@ -5516,15 +5528,23 @@ body.is-ipad-device .park-flower,
 body.is-ipad-device .park-river,
 body.is-ipad-device .park-sun-rays,
 body.is-ipad-device .park-moon-rays,
+body.is-ipad-device .park-star,
+body.is-ipad-device .hut-sky,
 body.is-ipad-device .park-dino-legend-flying::after {
   animation: none !important;
 }
 
-/* Cache 24 multi-dino SVGs as static GPU textures on iPad so wandering & tab switching run at 60 FPS */
-body.is-ipad-device #view-console .dino-svg-vivid,
-body.is-ipad-device #view-park .dino-svg-vivid,
-body.is-ipad-device #view-screen .dino-svg-vivid {
+/* Stop full-screen 9-stop gradient CPU repaint on iPad Safari Park (day/night still handled by GPU .park-night-overlay opacity) */
+body.is-ipad-device .park-wrapper {
   animation: none !important;
+  background: linear-gradient(180deg, #1e6fa0 0%, #3098c8 22%, #62bde0 40%, #a8dff5 55%, #d0f0fa 62%, #b7ebb0 65%, #5cc966 70%, #34a853 82%, #1e7a33 100%) !important;
+}
+
+/* Hardware-accelerate dinosaur breathing & wing flapping on iPad GPU */
+body.is-ipad-device .dino-svg-vivid,
+body.is-ipad-device .angel-wing-anim-left,
+body.is-ipad-device .angel-wing-anim-right {
+  will-change: transform;
 }
 
 
