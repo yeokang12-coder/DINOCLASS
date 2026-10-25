@@ -2,6 +2,20 @@
    DinoClass (恐龙班级小帮手) - Data, Species & Cute Chibi Dinosaur SVG Engine
    =========================================================================== */
 
+// 🍎 Precise iPad / iOS WebKit Hardware Detector (Never matches Android / Xiaomi Pad)
+window.IS_IPAD_IOS = (() => {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent || '';
+  if (/Android/i.test(ua)) return false;
+  return /iPad|iPhone|iPod/i.test(ua) || (/Macintosh|Mac OS X/i.test(ua) && navigator.maxTouchPoints > 1);
+})();
+if (window.IS_IPAD_IOS && typeof document !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', () => {
+    document.body.classList.add('is-ipad-device');
+  });
+  if (document.body) document.body.classList.add('is-ipad-device');
+}
+
 const DINO_DATA = {
   STAGES: [
     { key: 'egg', name: '恐龙蛋', minScore: 0, maxScore: 30, icon: '🥚', badgeClass: 'egg', title: '孵化中' },
@@ -1402,7 +1416,7 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
 
   // ── EGG (Front Facing) ──────────────────────────────────────────────────
   if (stageKey === 'egg') {
-    const svg = `<svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-wobble ${isGold ? 'gold-skin-aura' : ''}">
+    const svg = `<svg width="100%" height="100%" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-wobble ${isGold ? 'gold-skin-aura' : ''}">
   <defs>
     <radialGradient id="eg${id}" cx="42%" cy="32%" r="70%">
       <stop offset="0%" stop-color="${isMechaZero ? '#ffffff' : (isCrimsonDrone ? '#fff1f2' : (isTitanKatana ? '#ffffff' : (isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#fff5f5' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#ffffff' : (isLava ? '#fff7ed' : (isFrost ? '#ffffff' : '#fff9f0')))))))))))}"/>
@@ -1467,12 +1481,12 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   ${drawAllHeadwears(50, 28, 48, 0.78, 48, 0.90)}
   <text x="50" y="106" font-size="8" text-anchor="middle" fill="${isFrostFire ? '#ff4757' : (isChaos ? '#8b5cf6' : (isRainbow ? '#db2777' : (isFallen ? '#9333ea' : (isAngel ? '#d97706' : (isUnicorn ? '#ec4899' : c1)))))}" font-weight="bold">30分破壳!</text>
 </svg>`;
-    return effectsHtml + svg;
+    return window.IS_IPAD_IOS ? (effectsHtml + svg).replace(/\s*filter="drop-shadow\([^"]*\)"/g, '') : (effectsHtml + svg);
   }
 
   // ── BABY (Front Facing Symmetrical) ─────────────────────────────────────
   if (stageKey === 'baby') {
-    const svg = `<svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-bounce ${isGold ? 'gold-skin-aura' : ''}">
+    const svg = `<svg width="100%" height="100%" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-bounce ${isGold ? 'gold-skin-aura' : ''}">
   <defs>
     <radialGradient id="bk${id}" cx="42%" cy="26%" r="74%">
       <stop offset="0%" stop-color="${isMechaZero ? '#ffffff' : (isCrimsonDrone ? '#fff1f2' : (isTitanKatana ? '#ffffff' : (isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#ff793f' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#ffffff' : (isLava ? '#fff7ed' : (isFrost ? '#ffffff' : c1)))))))))))}"/>
@@ -1615,12 +1629,12 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     <path d="M44,51 Q50,56 56,51" stroke="rgba(0,0,0,0.45)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
   `))))))))))}
 </svg>`;
-    return effectsHtml + svg;
+    return window.IS_IPAD_IOS ? (effectsHtml + svg).replace(/\s*filter="drop-shadow\([^"]*\)"/g, '') : (effectsHtml + svg);
   }
 
   // ── TEEN (Front Facing Symmetrical) ─────────────────────────────────────
   if (stageKey === 'teen') {
-    const svg = `<svg viewBox="0 0 110 120" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-float ${isGold ? 'gold-skin-aura' : ''}">
+    const svg = `<svg width="100%" height="100%" viewBox="0 0 110 120" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-float ${isGold ? 'gold-skin-aura' : ''}">
   <defs>
     <radialGradient id="tk${id}" cx="42%" cy="26%" r="75%">
       <stop offset="0%" stop-color="${isMechaZero ? '#ffffff' : (isCrimsonDrone ? '#fff1f2' : (isTitanKatana ? '#ffffff' : (isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#ff793f' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#ffffff' : (isLava ? '#fff7ed' : (isFrost ? '#ffffff' : c1)))))))))))}"/>
@@ -1784,12 +1798,12 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     <polygon points="57,49 59,53.5 61,49" fill="#ffffff" stroke="rgba(0,0,0,0.3)" stroke-width="0.6"/>
   `))))))))))}
 </svg>`;
-    return effectsHtml + svg;
+    return window.IS_IPAD_IOS ? (effectsHtml + svg).replace(/\s*filter="drop-shadow\([^"]*\)"/g, '') : (effectsHtml + svg);
   }
 
   // ── APEX (Front Facing Symmetrical) ─────────────────────────────────────
   if (stageKey === 'apex') {
-    const svg = `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-pulse ${isGold ? 'gold-skin-aura' : ''}">
+    const svg = `<svg width="100%" height="100%" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-pulse ${isGold ? 'gold-skin-aura' : ''}">
   <defs>
     <radialGradient id="ak${id}" cx="42%" cy="26%" r="76%">
       <stop offset="0%" stop-color="${isMechaZero ? '#ffffff' : (isCrimsonDrone ? '#fff1f2' : (isTitanKatana ? '#ffffff' : (isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#ff793f' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#ffffff' : (isLava ? '#fff7ed' : (isFrost ? '#ffffff' : c1)))))))))))}"/>
@@ -1942,11 +1956,11 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     <polygon points="64,50 66,55 68,50" fill="#ffffff" stroke="rgba(0,0,0,0.3)" stroke-width="0.7"/>
   `))))))))))}
 </svg>`;
-    return effectsHtml + svg;
+    return window.IS_IPAD_IOS ? (effectsHtml + svg).replace(/\s*filter="drop-shadow\([^"]*\)"/g, '') : (effectsHtml + svg);
   }
 
   // ── LEGEND (Epic Majestic Chibi Dragon) ─────────────────────────────────
-  const svg = `<svg viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-float ${isGold ? 'gold-skin-aura' : ''}">
+  const svg = `<svg width="100%" height="100%" viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-float ${isGold ? 'gold-skin-aura' : ''}">
   <defs>
     <radialGradient id="lk${id}" cx="42%" cy="24%" r="78%">
       <stop offset="0%" stop-color="${isMechaZero ? '#ffffff' : (isCrimsonDrone ? '#fff1f2' : (isTitanKatana ? '#ffffff' : (isChaos ? '#ffffff' : (isRainbow ? '#ffffff' : (isFallen ? '#27272a' : (isFrostFire ? '#fff7ed' : (isGold ? '#fff9db' : (isAngel ? '#ffffff' : (isUnicorn ? '#ffffff' : (isLava ? '#fff7ed' : (isFrost ? '#ffffff' : '#fff3a8')))))))))))}"/>
@@ -2131,10 +2145,10 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
     <polygon points="70,53 72,59 74,53" fill="#ffffff" stroke="rgba(0,0,0,0.3)" stroke-width="0.8"/>
   `))))))))))}
 </svg>`;
-    return effectsHtml + svg;
+    return window.IS_IPAD_IOS ? (effectsHtml + svg).replace(/\s*filter="drop-shadow\([^"]*\)"/g, '') : (effectsHtml + svg);
   } catch (err) {
     console.error('generateDinoSVG safe fallback triggered:', err);
-    return `<svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-bounce">
+    return `<svg width="100%" height="100%" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg" class="dino-svg-vivid dino-anim-bounce">
       <ellipse cx="50" cy="58" rx="30" ry="38" fill="#38bdf8"/>
       <ellipse cx="42" cy="48" rx="4" ry="5" fill="#fff"/>
       <ellipse cx="58" cy="48" rx="4" ry="5" fill="#fff"/>

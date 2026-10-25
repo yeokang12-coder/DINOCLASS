@@ -11,7 +11,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="css/style.css?v=5.9.3">
+  <link rel="stylesheet" href="css/style.css?v=6.0.0">
 </head>
 <body>
 
@@ -1665,12 +1665,12 @@
   <!-- Firebase Realtime Database SDK (Compat v9) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-  <script src="js/firebase_sync.js?v=5.9.3"></script>
-  <script src="js/sound.js"></script>
-  <script src="js/confetti.js"></script>
-  <script src="js/dino_data.js?v=5.9.3"></script>
-  <script src="js/storage.js?v=5.9.3"></script>
-  <script src="js/app.js?v=5.9.3"></script>
+  <script src="js/firebase_sync.js?v=6.0.0"></script>
+  <script src="js/sound.js?v=6.0.0"></script>
+  <script src="js/confetti.js?v=6.0.0"></script>
+  <script src="js/dino_data.js?v=6.0.0"></script>
+  <script src="js/storage.js?v=6.0.0"></script>
+  <script src="js/app.js?v=6.0.0"></script>
 
   <!-- 🎮 DinoClass Welcome Play Gate Splash Overlay -->
   <div class="welcome-overlay" id="welcome-gate">
@@ -1685,9 +1685,16 @@
   </div>
   <!-- PWA Service Worker Registration -->
   <script>
+    if ('caches' in window) {
+      caches.keys().then(keys => {
+        keys.forEach(k => {
+          if (k !== 'dinoclass-v6.0.0') caches.delete(k);
+        });
+      });
+    }
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js')
+        navigator.serviceWorker.register('service-worker.js?v=6.0.0')
           .then(reg => {
             console.log('DinoClass PWA ServiceWorker registered:', reg.scope);
             if (typeof reg.update === 'function') reg.update();

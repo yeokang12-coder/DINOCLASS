@@ -77,10 +77,42 @@ class DinoApp {
       this.openClassManageModal();
     });
 
+    // Instant Fast-Tap Helper (Eliminates iPad Safari scroll-cancel & tap latency)
+    const bindFastTap = (el, handler) => {
+      if (!el) return;
+      let startX = 0, startY = 0, lastFire = 0;
+      el.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length === 1) {
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+        }
+      }, { passive: true });
+      el.addEventListener('touchend', (e) => {
+        if (!e.changedTouches || e.changedTouches.length !== 1) return;
+        const dx = Math.abs(e.changedTouches[0].clientX - startX);
+        const dy = Math.abs(e.changedTouches[0].clientY - startY);
+        if (dx < 24 && dy < 24) {
+          const now = Date.now();
+          if (now - lastFire > 280) {
+            lastFire = now;
+            if (e.cancelable) e.preventDefault();
+            handler(e, el);
+          }
+        }
+      }, { passive: false });
+      el.addEventListener('click', (e) => {
+        const now = Date.now();
+        if (now - lastFire > 280) {
+          lastFire = now;
+          handler(e, el);
+        }
+      });
+    };
+
     // Nav Tabs
     document.querySelectorAll('.nav-tab').forEach(tab => {
-      tab.addEventListener('click', (e) => {
-        const view = e.currentTarget.dataset.view;
+      bindFastTap(tab, (e, targetEl) => {
+        const view = (targetEl || e.currentTarget).dataset.view;
         this.switchView(view);
       });
     });
@@ -88,7 +120,7 @@ class DinoApp {
     // Sound Toggle
     const soundBtn = document.getElementById('btn-toggle-sound');
     if (soundBtn) {
-      soundBtn.addEventListener('click', () => {
+      bindFastTap(soundBtn, () => {
         const enabled = window.soundCtrl.toggleSound();
         soundBtn.innerHTML = enabled ? '🔊 音效: 开' : '🔇 音效: 关';
         soundBtn.classList.toggle('btn-secondary', !enabled);
@@ -104,7 +136,7 @@ class DinoApp {
       bgmBtn.classList.toggle('btn-secondary', !isBgmOn);
       bgmBtn.classList.toggle('btn-gold', isBgmOn);
 
-      bgmBtn.addEventListener('click', () => {
+      bindFastTap(bgmBtn, () => {
         const bgmEnabled = window.soundCtrl.toggleBGM();
         bgmBtn.innerHTML = bgmEnabled ? '🎵 音乐: 开' : '🎵 音乐: 关';
         bgmBtn.classList.toggle('btn-secondary', !bgmEnabled);
@@ -115,13 +147,13 @@ class DinoApp {
     // Performance Rendering Mode Toggle
     const perfBtn = document.getElementById('btn-toggle-perf-mode');
     if (perfBtn) {
-      perfBtn.addEventListener('click', () => {
+      bindFastTap(perfBtn, () => {
         this.togglePerfMode();
       });
     }
 
     // 🎮 Welcome Play Gate Overlay
-    document.getElementById('btn-enter-class')?.addEventListener('click', () => {
+    bindFastTap(document.getElementById('btn-enter-class'), () => {
       const gate = document.getElementById('welcome-gate');
       if (gate) gate.classList.add('hidden');
       if (window.soundCtrl) {
@@ -147,13 +179,13 @@ class DinoApp {
     }
 
     // Modal Triggers & Controls
-    document.getElementById('btn-batch-score')?.addEventListener('click', () => this.openBatchScoreModal());
-    document.getElementById('btn-add-student')?.addEventListener('click', () => this.openAddStudentModal());
-    document.getElementById('btn-reset-demo')?.addEventListener('click', () => this.resetDemoData());
-    document.getElementById('btn-export-data')?.addEventListener('click', () => window.storageMgr.exportJSON());
-    document.getElementById('btn-import-data')?.addEventListener('click', () => this.triggerImportJSON());
-    document.getElementById('btn-cloud-sync-pill')?.addEventListener('click', () => this.openFirebaseModal());
-    document.getElementById('btn-cloud-sync-toolbar')?.addEventListener('click', () => this.openFirebaseModal());
+    bindFastTap(document.getElementById('btn-batch-score'), () => this.openBatchScoreModal());
+    bindFastTap(document.getElementById('btn-add-student'), () => this.openAddStudentModal());
+    bindFastTap(document.getElementById('btn-reset-demo'), () => this.resetDemoData());
+    bindFastTap(document.getElementById('btn-export-data'), () => window.storageMgr.exportJSON());
+    bindFastTap(document.getElementById('btn-import-data'), () => this.triggerImportJSON());
+    bindFastTap(document.getElementById('btn-cloud-sync-pill'), () => this.openFirebaseModal());
+    bindFastTap(document.getElementById('btn-cloud-sync-toolbar'), () => this.openFirebaseModal());
 
     // Select All Checkbox
     document.getElementById('checkbox-select-all')?.addEventListener('change', (e) => {
@@ -1337,8 +1369,7 @@ class DinoApp {
   startParkWanderLoop() {
     this.stopParkWanderLoop();
 
-    // Wander every 2.8s for lively dinosaurs with Hut Avoidance
-    this.parkWanderInterval = setInterval(() => {
+    const doWanderTick = () => {
       if (this.currentView !== 'park' || document.hidden) return;
       const sprites = document.querySelectorAll('.park-dino-sprite');
       if (!sprites || sprites.length === 0) return;
@@ -1355,8 +1386,8 @@ class DinoApp {
         // Skip if dino is currently executing entrance animation or inside hut
         if (sprite.dataset.isEntering === 'true' || isOccupant) return;
 
-        // 70% wander probability for lively feel
-        if (Math.random() < 0.70) {
+        // 75% wander probability for lively feel
+        if (Math.random() < 0.75) {
           const isFlying = sprite.dataset.isFlying === 'true';
           const currentLeft = parseFloat(sprite.style.left) || 40;
           const currentTop  = parseFloat(sprite.style.top)  || (isFlying ? 15 : 60);
@@ -1371,25 +1402,18 @@ class DinoApp {
             : Math.min(82, Math.max(45, currentTop + dTop));
 
           // 🏰 Hut Exclusion Zone Avoidance Algorithm:
-          // Villa body occupies left: 55% ~ 88%, top: 44% ~ 76%
-          // If ground dino wanders into Villa body, redirect to left grass (left < 54%) or front lawn (top > 77%)
           if (!isFlying && newLeft >= 55 && newLeft <= 88 && newTop >= 44 && newTop <= 76) {
             if (currentLeft < 55) {
-              // Steer back left to open field
               newLeft = Math.min(53, currentLeft + (Math.random() * -10));
             } else if (currentTop > 75) {
-              // Steer down in front of steps
               newTop = 78 + Math.random() * 4;
             } else {
-              // Redirect to open left field
               newLeft = 48 + Math.random() * 6;
             }
           }
 
-          // Scale: Legend dragons maintain graceful flight scale, ground dinos scale by depth
           const perspScale = isFlying ? 0.85 : (0.55 + (newTop / 100) * 0.30).toFixed(2);
 
-          // Flip direction based on horizontal movement
           if (newLeft < currentLeft - 0.5) {
             sprite.classList.add('flip-left');
             sprite.classList.remove('flip-right');
@@ -1404,10 +1428,19 @@ class DinoApp {
           sprite.style.transform = `scale(${perspScale})`;
         }
       });
-    }, 2800);
+    };
+
+    // Trigger first step almost immediately (400ms) so dinos start moving right away
+    this.parkWanderFirstTimer = setTimeout(doWanderTick, 400);
+    // Continue wandering every 2.6s
+    this.parkWanderInterval = setInterval(doWanderTick, 2600);
   }
 
   stopParkWanderLoop() {
+    if (this.parkWanderFirstTimer) {
+      clearTimeout(this.parkWanderFirstTimer);
+      this.parkWanderFirstTimer = null;
+    }
     if (this.parkWanderInterval) {
       clearInterval(this.parkWanderInterval);
       this.parkWanderInterval = null;
@@ -3604,6 +3637,13 @@ class DinoApp {
 
   // ── ⚡ 渲染模式管理（极速流畅 / 华丽特效）──
   initPerfMode() {
+    if (window.IS_IPAD_IOS) {
+      document.body.classList.add('is-ipad-device');
+      if (!sessionStorage.getItem('DINOCLASS_IPAD_PERF_INIT_V6')) {
+        localStorage.setItem('DINOCLASS_PERF_MODE', 'performance');
+        sessionStorage.setItem('DINOCLASS_IPAD_PERF_INIT_V6', '1');
+      }
+    }
     const saved = localStorage.getItem('DINOCLASS_PERF_MODE') || 'performance';
     this.setPerfMode(saved, false);
   }
