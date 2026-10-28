@@ -1052,9 +1052,20 @@ body {
 }
 
 .winner-dino-avatar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 220px;
   height: 220px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  overflow: visible !important;
+}
+
+.winner-dino-avatar > svg.dino-svg-vivid {
+  width: 100% !important;
+  height: 100% !important;
+  overflow: visible !important;
 }
 
 .winner-student-name {

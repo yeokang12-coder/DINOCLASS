@@ -1221,17 +1221,28 @@ class DinoApp {
         window.soundCtrl.playLevelUp();
         window.confettiFX && window.confettiFX.launch(120);
 
-        // Show fullscreen winner reveal card
+        // Show fullscreen winner reveal card (with full equipped skin, wings, accessories, crown & title badge)
         const stage = getStageByScore(winner.score);
         const spec = DINO_DATA.SPECIES[winner.speciesKey] || DINO_DATA.SPECIES.rex;
+        const hasCrown = !!winner.hasCrown;
+        const hasFireworks = !!(winner.earned && winner.earned.fireworks && winner.equipped && winner.equipped.fireworks);
 
         const avatarEl = document.getElementById('winner-dino-avatar');
         const nameEl = document.getElementById('winner-student-name');
         const speciesEl = document.getElementById('winner-species-text');
 
-        if (avatarEl) avatarEl.innerHTML = generateDinoSVG(winner.speciesKey, stage.key);
+        if (avatarEl) {
+          avatarEl.innerHTML = `
+            ${hasFireworks ? '<div class="fireworks-particles"><span></span><span></span><span></span><span></span><span></span><span></span></div>' : ''}
+            ${hasCrown ? '<div class="crowned-floating-crown" style="font-size:2.4rem; top:-26px; left:50%; transform:translateX(-50%); position:absolute; z-index:25;">👑</div>' : ''}
+            ${generateDinoSVG(winner.speciesKey, stage.key, winner.equipped || {})}
+          `;
+        }
         if (nameEl) nameEl.textContent = winner.name;
-        if (speciesEl) speciesEl.textContent = `${spec.name} · ${stage.icon} ${stage.name}`;
+        if (speciesEl) {
+          const titleHtml = winner.titleBadge ? `<div style="margin-top:8px;"><span class="title-badge-tag" style="font-size:0.95rem; padding:4px 14px;">🏷️ ${winner.titleBadge}</span></div>` : '';
+          speciesEl.innerHTML = `<div>${spec.name} · ${stage.icon} ${stage.name}</div>${titleHtml}`;
+        }
 
         const revealEl = document.getElementById('fullscreen-wheel-winner-reveal');
         if (revealEl) revealEl.style.display = 'flex';
