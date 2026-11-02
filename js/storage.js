@@ -33,22 +33,16 @@ class StorageManager {
             if (name === '三(1)班' || name === '三（1）班') name = 'ON';
             if (!name) continue;
 
-            // 核心权威规则：3K班的合法 ID 只能是 class_3k_24，拒绝 0人幽灵班
-            if ((name === '3K班' || name === '3K') && c.id !== 'class_3k_24') continue;
-            // 核心权威规则：ON 的合法 ID 只能是 class_primary_5，拒绝 0人幽灵班
-            if (name === 'ON' && c.id !== 'class_primary_5') continue;
-
-            if (seenNames.has(name) || seenIds.has(c.id)) continue;
-            seenNames.add(name);
-            seenIds.add(c.id);
-            clean.push({ id: c.id, name: name });
+          // 通用去重：同名或同 ID 视为重复，保留先出现者（不限制具体班级）
+          if (seenNames.has(name) || seenIds.has(c.id)) continue;
+          seenNames.add(name);
+          seenIds.add(c.id);
+          clean.push({ id: c.id, name: name });
           }
 
-          if (!clean.some(c => c.id === 'class_3k_24')) {
-            clean.unshift({ id: 'class_3k_24', name: '3K班' });
-          }
-          if (!clean.some(c => c.id === 'class_primary_5')) {
-            clean.push({ id: 'class_primary_5', name: 'ON' });
+          // 若列表为空（被全部过滤），回退到 3K 班作为初始默认班级
+          if (clean.length === 0) {
+            clean.push({ id: 'class_3k_24', name: '3K班' });
           }
 
           this.saveClassesList(clean);
@@ -142,8 +136,8 @@ class StorageManager {
       { id: 'class_primary_5', name: 'ON' }
     ];
 
-    const seenNames = new Set(['3K班', '3K', 'ON', '三(1)班', '三（1）班']);
-    const seenIds = new Set(['class_3k_24', 'class_primary_5', 'class_default']);
+    const seenNames = new Set();
+    const seenIds = new Set(['class_default']);
 
     // 保留其他真正的自定义班级，同时清理同名幽灵班级本地垃圾
     this.classesList.forEach(c => {
@@ -162,9 +156,9 @@ class StorageManager {
     this.classesList = cleanList;
     this.saveClassesList();
 
-    // 纠正当前激活班级
+    // 纠正当前激活班级：若不在清理后的列表中，切到列表第一个有效班级
     if (this.currentClassId === 'class_default' || !cleanList.some(c => c.id === this.currentClassId)) {
-      this.currentClassId = (legacyData && isFiveStudents(legacyData)) ? 'class_primary_5' : 'class_3k_24';
+      this.currentClassId = cleanList.length > 0 ? cleanList[0].id : 'class_3k_24';
       try { localStorage.setItem(ACTIVE_CLASS_ID_KEY, this.currentClassId); } catch(e) {}
     }
 
@@ -265,15 +259,8 @@ class StorageManager {
         if (Array.isArray(parsed.students)) {
           let needsSave = false;
 
-          // 🛡️ class_3k_24 权威自愈：若本地恰好因误导入或历史原因总分为 0 或人数被覆盖，立即恢复为 5427 分 24人权威数据
-          if (effectiveClassId === 'class_3k_24') {
-            const totalScore = parsed.students.reduce((acc, s) => acc + (s.score || 0), 0);
-            if ((totalScore === 0 || parsed.students.length < 20) && typeof CANONICAL_3K_DATA !== 'undefined') {
-              console.warn('[Storage] class_3k_24 本地数据异常或人数不足，立即使用 5427分 24人权威数据自愈恢复！');
-              parsed = JSON.parse(JSON.stringify(CANONICAL_3K_DATA));
-              needsSave = true;
-            }
-          }
+          // 通用数据修复：不再针对特定班级做"权威数据自愈"
+          // 所有班级均按实际数据加载，0分即为0分，不做强制恢复
 
           parsed.students.forEach(s => {
             s.equipped = s.equipped || {};
@@ -469,35 +456,36 @@ class StorageManager {
     return true;
   }
 
-  // 一键理顺并恢复标准双班级目录（彻底清理所有多端重叠加的垃圾班级）
+  // 一键理顺并清理无效班级目录（通用逻辑：去重 + 剔除 class_default，不强制恢复固定班级）
   sanitizeToStandardClasses() {
-    const cleanList = [
-      { id: 'class_3k_24', name: '3K班' },
-      { id: 'class_primary_5', name: 'ON' }
-    ];
+    const seenIds = new Set();
+    const seenNames = new Set();
+    const cleanList = [];
+
+    this.classesList.forEach(c => {
+      if (!c || !c.id || c.id === 'class_default') return;
+      const name = (c.name || '').trim();
+      if (!name) return;
+      if (seenIds.has(c.id) || seenNames.has(name)) return;
+      seenIds.add(c.id);
+      seenNames.add(name);
+      cleanList.push({ id: c.id, name: name });
+    });
+
+    // 若清理后为空，回退到 3K 班作为保底默认班级
+    if (cleanList.length === 0) {
+      cleanList.push({ id: 'class_3k_24', name: '3K班' });
+    }
+
     this.classesList = cleanList;
     this.saveClassesList();
 
-    // 确保 class_3k_24 本地权威数据完好
-    let class3kData = this.loadRawData('class_3k_24');
-    const score3k = (class3kData && Array.isArray(class3kData.students)) ? class3kData.students.reduce((a, s) => a + (s.score || 0), 0) : 0;
-    if (!class3kData || score3k === 0) {
-      class3kData = JSON.parse(JSON.stringify(CANONICAL_3K_DATA));
-      try { localStorage.setItem(this.getClassStorageKey('class_3k_24'), JSON.stringify(class3kData)); } catch(e) {}
+    // 如果当前激活班级已不在列表中，切到列表第一个班级
+    if (!cleanList.some(c => c.id === this.currentClassId)) {
+      this.currentClassId = cleanList[0].id;
+      try { localStorage.setItem(ACTIVE_CLASS_ID_KEY, this.currentClassId); } catch (e) {}
+      this.data = this.loadData(this.currentClassId);
     }
-
-    // 确保 class_primary_5 本地数据名称更新为 ON
-    const primaryData = this.loadRawData('class_primary_5');
-    if (primaryData) {
-      primaryData.className = 'ON';
-      try { localStorage.setItem(this.getClassStorageKey('class_primary_5'), JSON.stringify(primaryData)); } catch(e) {}
-    }
-
-    if (this.currentClassId !== 'class_3k_24' && this.currentClassId !== 'class_primary_5') {
-      this.currentClassId = 'class_3k_24';
-      try { localStorage.setItem(ACTIVE_CLASS_ID_KEY, 'class_3k_24'); } catch (e) {}
-    }
-    this.data = this.loadData(this.currentClassId);
 
     // 强行同步至云端，覆盖清除云端堆叠的历史垃圾目录
     if (window.firebaseSyncMgr && typeof window.firebaseSyncMgr.syncClassesMeta === 'function') {
@@ -520,17 +508,9 @@ class StorageManager {
       if (rc.id === 'class_default') return;
 
       let cleanName = (rc.name || '').trim();
-      if (cleanName === '三(1)班' || cleanName === '三（1）班') {
-        cleanName = 'ON';
-      }
       if (!cleanName) return;
 
-      // 核心权威规则：3K班 的唯一合法 ID 只能是 class_3k_24，彻底干掉 0人幽灵班
-      if ((cleanName === '3K班' || cleanName === '3K') && rc.id !== 'class_3k_24') return;
-      // 核心权威规则：ON 的唯一合法 ID 只能是 class_primary_5，彻底干掉 0人幽灵班
-      if (cleanName === 'ON' && rc.id !== 'class_primary_5') return;
-
-      // 严格去重：名称或 ID 出现过一律丢弃
+      // 通用去重：名称或 ID 出现过一律丢弃（不限制具体班级 ID 绑定）
       if (seenIds.has(rc.id) || seenNames.has(cleanName)) return;
 
       seenIds.add(rc.id);
@@ -540,13 +520,7 @@ class StorageManager {
 
     if (sanitized.length === 0) return;
 
-    // 确保核心双班级必定在列表中
-    if (!sanitized.some(c => c.id === 'class_3k_24')) {
-      sanitized.unshift({ id: 'class_3k_24', name: '3K班' });
-    }
-    if (!sanitized.some(c => c.id === 'class_primary_5')) {
-      sanitized.push({ id: 'class_primary_5', name: 'ON' });
-    }
+    // 不再强制塞入固定班级；以清洗后的云端目录为准
 
     // 权威覆盖：直接以清洗后的云端目录为准！绝对不再累加本地已失效的旧班级
     this.classesList = sanitized;
@@ -582,15 +556,11 @@ class StorageManager {
   applyRemoteClassData(classId, remoteData) {
     if (!classId || !remoteData || !Array.isArray(remoteData.students)) return false;
 
-    // 🛡️ 零分防御装甲：若远程推来的是 0 分空壳或异常包，坚决拒绝覆盖本地已有的权威积分！
+    // 🛡️ 零分防御装甲：若远程推来的是 0 分空壳或异常包，坚决拒绝覆盖本地已有的权威积分！（通用规则，适用所有班级）
     const incomingScore = remoteData.students.reduce((a, s) => a + (s.score || 0), 0);
     const currentLocalScore = this.getClassTotalScore(classId);
     if (incomingScore === 0 && currentLocalScore > 0) {
       console.warn(`[Storage] 🛡️ 拦截到班级 [${classId}] 远程 0 分异常数据包，坚决保护本地现有的 ${currentLocalScore} 分权威数据！`);
-      return false;
-    }
-    if (classId === 'class_3k_24' && incomingScore === 0) {
-      console.warn('[Storage] 🛡️ 3K班远程数据积分为 0，坚决拒绝应用！保护权威 5379 分！');
       return false;
     }
 
@@ -1081,21 +1051,15 @@ class StorageManager {
 
       // 🌟 分支二：传统单班级备份 (Legacy Single-Class Backup)
       if (Array.isArray(parsed.students)) {
-        // 🛡️ 跨班级防误覆盖拦截
-        const currentName = this.getActiveClassName() || (this.currentClassId === 'class_3k_24' ? '3K班' : 'ON班');
+        // 🛡️ 跨班级防误覆盖拦截（通用逻辑：比对当前班级名与导入文件班级名）
+        const currentName = this.getActiveClassName() || '';
         const importedName = parsed.className || '';
         const importedId = parsed.classId || '';
 
-        const isCurrent3K = this.currentClassId === 'class_3k_24' || currentName.includes('3K');
-        const isImported3K = importedId === 'class_3k_24' || importedName.includes('3K');
-        const isCurrentON = this.currentClassId === 'class_primary_5' || currentName.toUpperCase().includes('ON');
-        const isImportedON = importedId === 'class_primary_5' || importedName.toUpperCase().includes('ON');
-
-        if ((isCurrent3K && isImportedON) || (isCurrentON && isImported3K)) {
-          const targetName = isCurrent3K ? '3K班' : 'ON班';
-          const srcName = isImportedON ? 'ON班' : '3K班';
+        // 若导入文件的班级名与当前班级名不一致（且都不是空），弹窗警告
+        if (currentName && importedName && currentName !== importedName) {
           const studentCount = parsed.students.length;
-          const confirmMsg = `⚠️ 班级不匹配警告：\n\n您当前处于【${targetName}】，但导入的文件是【${srcName} (${studentCount}人)】的数据！\n\n如果继续导入，将会用【${srcName}】覆盖当前【${targetName}】。\n\n是否仍然强制覆盖？建议点击【取消】，先切换到【${srcName}】后再导入。`;
+          const confirmMsg = `⚠️ 班级不匹配警告：\n\n您当前处于【${currentName}】，但导入的文件是【${importedName} (${studentCount}人)】的数据！\n\n如果继续导入，将会用【${importedName}】覆盖当前【${currentName}】。\n\n是否仍然强制覆盖？建议点击【取消】，先切换到【${importedName}】后再导入。`;
           if (!window.confirm(confirmMsg)) {
             return { cancelled: true };
           }

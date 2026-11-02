@@ -3488,10 +3488,7 @@ class DinoApp {
         const name = (c.name || '').trim();
         if (!name || seenNames.has(name)) continue;
 
-        // 核心权威过滤：3K班必须是 class_3k_24，ON必须是 class_primary_5
-        if ((name === '3K班' || name === '3K') && c.id !== 'class_3k_24') continue;
-        if (name === 'ON' && c.id !== 'class_primary_5') continue;
-
+        // 通用去重：同名或同 ID 跳过（不限制具体班级 ID 绑定）
         seenIds.add(c.id);
         seenNames.add(name);
         cleanItems.push(c);
@@ -3580,10 +3577,7 @@ class DinoApp {
       const name = (c.name || '').trim();
       if (!name || seenNames.has(name)) continue;
 
-      // 核心权威过滤：3K班必须是 class_3k_24，ON必须是 class_primary_5
-      if ((name === '3K班' || name === '3K') && c.id !== 'class_3k_24') continue;
-      if (name === 'ON' && c.id !== 'class_primary_5') continue;
-
+      // 通用去重：同名或同 ID 跳过（不限制具体班级 ID 绑定）
       seenIds.add(c.id);
       seenNames.add(name);
       cleanItems.push(c);

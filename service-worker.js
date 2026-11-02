@@ -1,14 +1,14 @@
-const CACHE_NAME = 'dinoclass-v6.0.2';
+const CACHE_NAME = 'dinoclass-v6.0.3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './css/style.css?v=6.0.2',
-  './js/app.js?v=6.0.2',
-  './js/sound.js?v=6.0.2',
-  './js/storage.js?v=6.0.2',
-  './js/dino_data.js?v=6.0.2',
-  './js/confetti.js?v=6.0.2',
-  './js/firebase_sync.js?v=6.0.2',
+  './css/style.css?v=6.0.3',
+  './js/app.js?v=6.0.3',
+  './js/sound.js?v=6.0.3',
+  './js/storage.js?v=6.0.3',
+  './js/dino_data.js?v=6.0.3',
+  './js/confetti.js?v=6.0.3',
+  './js/firebase_sync.js?v=6.0.3',
   './icon.jpg',
   './manifest.json'
 ];
