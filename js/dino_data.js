@@ -755,20 +755,25 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
   const drawAngelWings = (leftX, rightX, y, scale = 1, forceRender = false) => {
     if (!hasSkinWings && !forceRender) return '';
 
+    // 每侧翼型除形状外还带 sx/sy 尺寸补偿系数：
+    // 合体皮肤左右各用一套独立翼型，两套轮廓的包围盒本来就不同，
+    // 直接并排会一大一小，故按实测包围盒均值归一（单皮肤恒为 1，不受影响）。
     const getWingConfig = (isLeft) => {
-      if (isMechaZero) return 'mecha_zero';
-      if (isCrimsonDrone) return 'crimson_drone';
-      if (isTitanKatana) return 'titan_katana';
-      if (isChaos) return isLeft ? 'angel' : 'fallen';
-      if (isFrostFire) return isLeft ? 'lava' : 'frost';
-      if (isRainbow) return 'rainbow';
-      if (isFallen) return 'fallen';
-      if (isAngel) return 'angel';
-      if (isLava) return 'lava';
-      if (isFrost) return 'frost';
-      if (isUnicorn) return 'unicorn';
-      if (isGold) return 'gold';
-      return 'species';
+      if (isMechaZero) return { cfg: 'mecha_zero', sx: 1, sy: 1 };
+      if (isCrimsonDrone) return { cfg: 'crimson_drone', sx: 1, sy: 1 };
+      if (isTitanKatana) return { cfg: 'titan_katana', sx: 1, sy: 1 };
+      // ☯️ 光暗双生：天使翼实测 48×94.3，恶魔翼 78×82.7 -> 归一至 63×88.5
+      if (isChaos) return isLeft ? { cfg: 'angel', sx: 1.31, sy: 0.94 } : { cfg: 'fallen', sx: 0.81, sy: 1.07 };
+      // ☯️ 冰火双生：火龙翼实测 80×80，冰晶翼 76.5×95.2 -> 归一至 78.3×87.6
+      if (isFrostFire) return isLeft ? { cfg: 'lava', sx: 0.98, sy: 1.10 } : { cfg: 'frost', sx: 1.02, sy: 0.92 };
+      if (isRainbow) return { cfg: 'rainbow', sx: 1, sy: 1 };
+      if (isFallen) return { cfg: 'fallen', sx: 1, sy: 1 };
+      if (isAngel) return { cfg: 'angel', sx: 1, sy: 1 };
+      if (isLava) return { cfg: 'lava', sx: 1, sy: 1 };
+      if (isFrost) return { cfg: 'frost', sx: 1, sy: 1 };
+      if (isUnicorn) return { cfg: 'unicorn', sx: 1, sy: 1 };
+      if (isGold) return { cfg: 'gold', sx: 1, sy: 1 };
+      return { cfg: 'species', sx: 1, sy: 1 };
     };
 
     const renderWingFeathers = (cfg, idSuffix) => {
@@ -1089,21 +1094,21 @@ function generateDinoSVG(speciesKey, stageKey, equipped = {}) {
       }
     };
 
-    const leftCfg = getWingConfig(true);
-    const rightCfg = getWingConfig(false);
+    const leftWing = getWingConfig(true);
+    const rightWing = getWingConfig(false);
 
     return `
     <g class="dino-angel-wings ${isRainbow ? 'dino-rainbow-wings' : (isFallen ? 'dino-fallen-wings' : (isChaos ? 'dino-chaos-wings' : (isMechaZero ? 'dino-mecha-zero-wings wing-glow' : (isCrimsonDrone ? 'dino-crimson-drone-wings' : (isTitanKatana ? 'dino-titan-katana-wings' : (isLava ? 'dino-lava-wings' : (isFrost ? 'dino-frost-wings' : (isGold ? 'dino-gold-wings' : (isUnicorn ? 'dino-unicorn-wings' : (isAngel ? 'dino-angel-seraph-wings' : ''))))))))))}">
       <!-- Left Wing -->
-      <g transform="translate(${leftX}, ${y}) scale(${scale})">
+      <g transform="translate(${leftX}, ${y}) scale(${leftWing.sx * scale}, ${leftWing.sy * scale})">
         <g class="${isCrimsonDrone ? 'drone-anim' : 'angel-wing-anim-left'}" style="transform-origin: 0px 0px;">
-          ${renderWingFeathers(leftCfg, 'L' + id)}
+          ${renderWingFeathers(leftWing.cfg, 'L' + id)}
         </g>
       </g>
       <!-- Right Wing (Mirrored) -->
-      <g transform="translate(${rightX}, ${y}) scale(${-scale}, ${scale})">
+      <g transform="translate(${rightX}, ${y}) scale(${-rightWing.sx * scale}, ${rightWing.sy * scale})">
         <g class="${isCrimsonDrone ? 'drone-anim' : 'angel-wing-anim-right'}" style="transform-origin: 0px 0px;">
-          ${renderWingFeathers(rightCfg, 'R' + id)}
+          ${renderWingFeathers(rightWing.cfg, 'R' + id)}
         </g>
       </g>
     </g>`;
