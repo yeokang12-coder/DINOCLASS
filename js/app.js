@@ -2307,23 +2307,45 @@ class DinoApp {
     this.renderShopMannequin();
   }
 
-  // 👤 Sync mannequin with specific student's dinosaur
+  // 👤 Sync mannequin with specific student's dinosaur (物种 + 形态 + 当前穿着的全部装备)
   syncShopMannequinWithStudent(studentId) {
     if (!studentId || !window.storageMgr) return;
     const student = window.storageMgr.getStudentById(studentId);
     if (!student) return;
 
-    if (student.speciesKey) {
-      this.setShopMannequinSpecies(student.speciesKey);
-    }
+    // 1. 复制该学生当前穿着的全部装备（浅拷贝布尔值，绝不写回 student.equipped）
+    const eq = student.equipped || {};
+    const copied = {};
+    Object.keys(eq).forEach(k => {
+      if (eq[k] === true) copied[k] = true;
+    });
+    delete copied.fireworks; // 烟火由独立标记控制，避免混入试穿装备表
+    this.shopTryOnEquipped = copied;
 
+    // 2. 金冠 / 称号 / 台词 / 烟火
+    this.shopTryOnHasCrown = !!student.hasCrown;
+    this.shopTryOnTitle = student.titleBadge || '';
+    this.shopTryOnHasDialogue = !!student.customDialogue;
+    this.shopTryOnHasFireworks = !!eq.fireworks;
+
+    // 3. 物种与成长形态
+    if (student.speciesKey) {
+      this.shopMannequinSpecies = student.speciesKey;
+    }
     const stageObj = typeof getStageByScore === 'function' ? getStageByScore(student.score || 0) : null;
-    const stageKey = stageObj ? stageObj.key : 'legend';
-    this.setShopMannequinStage(stageKey);
+    this.shopMannequinStage = stageObj ? stageObj.key : 'legend';
+
+    const speciesSel = document.getElementById('select-shop-species');
+    if (speciesSel) speciesSel.value = this.shopMannequinSpecies;
+    const stageSel = document.getElementById('select-shop-stage');
+    if (stageSel) stageSel.value = this.shopMannequinStage;
 
     if (window.soundCtrl && typeof window.soundCtrl.playLevelUp === 'function') {
       window.soundCtrl.playLevelUp();
     }
+
+    // 4. 刷新右侧道具列表的「已试穿」标记，并重绘模特（内部会同步形态药丸按钮）
+    this.renderShopView();
   }
 
   // 👗 Render the single ultra-clear central dressing room mannequin
